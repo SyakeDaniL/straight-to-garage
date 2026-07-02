@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Straight to Garage — VRChatを拠点にUK Garageの魂を探求するサウンドコレクティブ。Speed Garage、2-Step、BasslineまでUKGカルチャーの全てを、VRChatから。">
+<meta name="theme-color" content="#060708">
+<meta property="og:title" content="Straight to Garage">
+<meta property="og:description" content="UK Garageを愛する人が集まるVRChatサウンドコレクティブ。">
+<meta property="og:type" content="website">
+<!-- ▼ 公開時に絶対URLへ差し替え(例 https://example.com/strage.png) -->
+<meta property="og:image" content="strage.png">
+<title>Straight to Garage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #060708;
+    --off-black: #0c0e10;
+    --dark: #14171a;
+    --ice: #9ec5d8;
+    --ice-dim: rgba(158,197,216,0.35);
+    --ice-faint: rgba(158,197,216,0.1);
+    --deep: #4a7fa0;
+    --muted: #4a4f54;
+    --mid: #8b9196;
+    --light: #c9cdd0;
+    --white: #eef1f3;
+    --line: rgba(158,197,216,0.09);
+    --nav-h: 64px;
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --jp: 'Zen Kaku Gothic New', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: auto; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow Condensed', var(--jp), sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--ice); color: var(--black); }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb {
+    background: #23282d;
+    border: 2px solid var(--black);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--deep); }
+
+  /* film grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    z-index: 300;
+    background: linear-gradient(90deg, var(--deep), var(--ice));
+    transform: scaleX(0);
+    transform-origin: left;
+    box-shadow: 0 0 12px rgba(158,197,216,0.5);
+  }
+
+  /* ── NAV ── */
+  /* 要素セレクタ(nav)だとフッター内の<nav>にも固定配置が効いて
+     ヘッダーのクリックを奪ってしまうため、#navに限定する */
+  #nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+                backdrop-filter 0.4s, transform 0.4s var(--ease),
+                height 0.4s var(--ease);
+  }
+  /* スクロール中はわずかに縮めて存在感を薄くする(Apple的な挙動) */
+  #nav.scrolled {
+    height: 54px;
+    background: rgba(6,7,8,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: var(--line);
+  }
+  #nav.hidden { transform: translateY(-100%); }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.16em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span { color: var(--ice); }
+  .nav-logo::after {
+    content: 'VRCHAT · UKG';
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 10px;
+    transform: translateY(1px);
+  }
+
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ice);
+    border: 1px solid var(--ice-dim);
+    background: var(--ice-faint);
+    padding: 7px 16px;
+    transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta:hover {
+    background: var(--ice);
+    border-color: var(--ice);
+    color: var(--black);
+    box-shadow: 0 0 18px rgba(158,197,216,0.35);
+  }
+
+  /* ── HERO (pinned) ── */
+  #hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 固定ナビと中央コンテンツ(eyebrow)の重なり防止 */
+    padding-top: calc(var(--nav-h) + 1.5rem);
+  }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+    filter: saturate(0.7) contrast(1.05);
+    will-change: transform, opacity;
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 55%, rgba(30,60,100,0.22) 0%, transparent 70%),
+      linear-gradient(to bottom, rgba(6,7,8,0.65) 0%, rgba(6,7,8,0.1) 40%, rgba(6,7,8,0.1) 60%, rgba(6,7,8,0.95) 100%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: -10%;
+    background-image:
+      linear-gradient(var(--ice-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ice-faint) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, black 20%, transparent 75%);
+    will-change: transform;
+  }
+
+  .hero-center {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.34em;
+    color: var(--ice);
+    text-transform: uppercase;
+    margin-bottom: 2.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ice-dim));
+  }
+  .hero-eyebrow::after { background: linear-gradient(90deg, var(--ice-dim), transparent); }
+
+  .hero-logo {
+    position: relative;
+    will-change: transform, opacity;
+  }
+  .hero-logo::before {
+    content: '';
+    position: absolute;
+    inset: -18% -12%;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(158,197,216,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-logo img {
+    width: min(940px, 94vw);
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    filter: drop-shadow(0 0 48px rgba(158,197,216,0.14));
+  }
+  /* ロゴの上を光が走るスペキュラー・スイープ(ロゴ画像のアルファでマスク) */
+  .hero-logo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(115deg, transparent 42%, rgba(238,241,243,0.4) 50%, transparent 58%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    background-position: 130% 0;
+    -webkit-mask-image: url('strage.png');
+    mask-image: url('strage.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    animation: logoSheen 8s var(--ease) 2.4s infinite;
+  }
+  @keyframes logoSheen {
+    0%        { background-position: -30% 0; }
+    16%, 100% { background-position: 130% 0; }
+  }
+
+  .hero-tagline {
+    font-size: 1.15rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    margin-top: 2.2rem;
+  }
+
+  .hero-frame {
+    position: absolute;
+    z-index: 2;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    user-select: none;
+  }
+  .hero-frame.left  { left: 2rem;  top: 50%; transform: translateY(-50%) rotate(180deg); }
+  .hero-frame.right { right: 2rem; top: 50%; transform: translateY(-50%); }
+
+  .hero-bottom {
+    position: absolute;
+    bottom: 2.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 42px;
+    background: rgba(158,197,216,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: 0;
+    width: 100%; height: 50%;
+    background: var(--ice);
+    animation: scrollDrop 2.2s var(--ease) infinite;
+  }
+  @keyframes scrollDrop {
+    0% { top: -50%; }
+    70%, 100% { top: 110%; }
+  }
+
+  /* ── MANIFESTO (pinned text) ── */
+  #manifesto { position: relative; background: var(--black); }
+  .mani-pin {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mani-pin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(30,60,100,0.14) 0%, transparent 70%);
+  }
+  .mani-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('undg.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    filter: saturate(0.55) contrast(1.08) brightness(0.85);
+    will-change: transform, opacity;
+  }
+  /* 端を黒に溶かして文字の可読性とシーンの繋ぎを確保 */
+  .mani-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 75% 65% at 50% 50%, transparent 35%, rgba(6,7,8,0.8) 80%, rgba(6,7,8,0.98) 100%),
+      linear-gradient(to bottom, rgba(6,7,8,0.92) 0%, transparent 18%, transparent 82%, rgba(6,7,8,0.92) 100%);
+  }
+  .mani-lines {
+    position: relative;
+    text-align: center;
+    padding: 0 2rem;
+    max-width: 1000px;
+  }
+  .mani-line {
+    will-change: transform, opacity, filter;
+  }
+  .mani-line.en {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .mani-line.en em { color: var(--ice); font-style: normal; }
+  /* Apple風:スクロールに合わせて文字が左から明るく満ちる(JSがbackground-positionをスクラブ) */
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .mani-line.en {
+      background-image: linear-gradient(100deg, var(--white) 44%, rgba(238,241,243,0.14) 56%);
+      background-size: 240% 100%;
+      background-position: 0% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .mani-line.en em {
+      background-image: linear-gradient(100deg, var(--ice) 44%, rgba(158,197,216,0.18) 56%);
+      background-size: 240% 100%;
+      background-position: 0% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  .mani-line.jp {
+    font-family: var(--jp);
+    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+    font-weight: 300;
+    line-height: 2.3;
+    letter-spacing: 0.04em;
+    color: var(--light);
+    margin-top: 2.2rem;
+  }
+  .mani-line.jp strong { color: var(--ice); font-weight: 500; }
+
+  /* ── STATS ── */
+  .stats-strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--off-black);
+  }
+  .stats-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    position: relative;
+  }
+  .stat + .stat::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 25%; bottom: 25%;
+    width: 1px;
+    background: var(--line);
+  }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 4.2rem);
+    line-height: 1;
+    color: var(--white);
+  }
+  /* 数字に白→アイスの微グラデーション(Appleのスペック数字の質感) */
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .stat-number {
+      background-image: linear-gradient(180deg, var(--white) 35%, var(--ice) 130%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+
+  /* ── KINETIC TYPE ── */
+  .kinetic {
+    padding: 7rem 0;
+    overflow: hidden;
+    background: var(--black);
+  }
+  .kinetic-row {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 11vw, 10rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    will-change: transform;
+    user-select: none;
+  }
+  .kinetic-row .solid { color: rgba(238,241,243,0.92); }
+  .kinetic-row .outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.3);
+  }
+  .kinetic-row .dot { color: var(--ice); padding: 0 0.25em; }
+
+  /* ── CREW (horizontal scroll) ── */
+  #members { position: relative; background: var(--off-black); }
+  .crew-pin {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: calc(var(--nav-h) + 2rem) 0 3rem;
+    position: relative;
+  }
+  /* 再生中の動画へのfilterは高負荷なので使わない(暗さはshadeで作る) */
+  .crew-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.13;
+    z-index: 0;
+  }
+  .crew-shade {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 75% 65% at 50% 50%, transparent 35%, rgba(6,7,8,0.8) 80%, rgba(6,7,8,0.98) 100%),
+      linear-gradient(to bottom, rgba(6,7,8,0.92) 0%, transparent 18%, transparent 82%, rgba(6,7,8,0.92) 100%);
+  }
+  .crew-head, .crew-track, .crew-note { position: relative; z-index: 1; }
+  .crew-head {
+    padding: 0 4rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  /* 03〜05と同じゴーストナンバーを背景に */
+  .crew-head::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -0.55em;
+    left: 3.6rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(7rem, 16vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.07);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .crew-head > * { position: relative; z-index: 1; }
+  .crew-head .section-label { margin-bottom: 0; }
+  .crew-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .crew-title em { color: var(--ice); font-style: normal; }
+  .crew-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .crew-track {
+    display: flex;
+    gap: 2rem;
+    padding: 0 4rem;
+    width: max-content;
+    will-change: transform;
+  }
+  .crew-card {
+    position: relative;
+    width: clamp(300px, 26vw, 400px);
+    height: min(62vh, 560px);
+    overflow: hidden;
+    background: var(--dark);
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .crew-photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+    background-color: #1d2227;
+    filter: grayscale(0.85) contrast(1.05);
+    transform: scale(1.03);
+    transition: filter 0.6s var(--ease), transform 0.6s var(--ease);
+  }
+  .crew-card:hover .crew-photo {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.08);
+  }
+  .crew-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(6,7,8,0.96) 0%, rgba(6,7,8,0.4) 38%, transparent 65%);
+    pointer-events: none;
+  }
+  .crew-num {
+    position: absolute;
+    top: 1.2rem; right: 1.4rem;
+    z-index: 2;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--ice-dim);
+  }
+  .crew-info {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 1.8rem;
+  }
+  .crew-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.7rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--white);
+  }
+  .crew-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--ice);
+    text-transform: uppercase;
+    margin: 0.6rem 0 1rem;
+  }
+  .crew-bio {
+    font-family: var(--jp);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--light);
+  }
+  .crew-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: var(--ice);
+    border: 1px solid var(--ice-dim);
+    background: rgba(6,7,8,0.5);
+    padding: 4px 9px;
+    text-transform: uppercase;
+  }
+
+  .crew-card.cta {
+    border: 1px dashed var(--ice-dim);
+    background: var(--ice-faint);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+    text-decoration: none;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .crew-card.cta::after { display: none; }
+  .crew-card.cta:hover {
+    background: rgba(158,197,216,0.16);
+    border-color: var(--ice);
+    box-shadow: 0 0 36px rgba(158,197,216,0.12);
+  }
+  .crew-cta-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: var(--white);
+    text-align: center;
+  }
+  .crew-cta-big em { color: var(--ice); font-style: normal; }
+  .crew-cta-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: var(--ice);
+    text-transform: uppercase;
+  }
+
+  .crew-note {
+    padding: 1.8rem 4rem 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── SHARED SECTION CHROME ── */
+  section.panel { padding: 130px 0 110px; position: relative; }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    position: relative;
+  }
+  .section-head { position: relative; margin-bottom: 3.5rem; }
+  .section-head::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -0.55em;
+    left: -0.08em;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(7rem, 16vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.07);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .section-head > * { position: relative; z-index: 1; }
+  .section-head.center { text-align: center; }
+  .section-head.center::before { left: 50%; transform: translateX(-50%); }
+  .section-head.center .section-label { justify-content: center; }
+  .section-head.center .section-label::after {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--deep);
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.3em;
+    color: var(--deep);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--deep);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .section-title em { color: var(--ice); font-style: normal; }
+  .section-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-sep {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent);
+    margin: 0;
+  }
+
+  /* ── SCHEDULE ── */
+  #schedule { background: var(--black); overflow: hidden; }
+  .sched-ghost {
+    position: absolute;
+    top: 8%;
+    right: -2%;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(8rem, 22vw, 20rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.06);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  .next-event-banner {
+    display: flex;
+    align-items: baseline;
+    gap: 1.8rem;
+    flex-wrap: wrap;
+    border: 1px solid var(--ice-dim);
+    border-left: 3px solid var(--ice);
+    background: var(--ice-faint);
+    padding: 1.4rem 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 0 24px rgba(158,197,216,0.06);
+  }
+  .ne-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    color: var(--ice);
+    text-transform: uppercase;
+    animation: badgePulse 3s ease-in-out infinite;
+  }
+  @keyframes badgePulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+  .ne-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--white);
+  }
+  .ne-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+  .ne-date span { color: var(--ice); }
+
+  .schedule-table-wrap { border: 1px solid var(--line); overflow-x: auto; }
+  .schedule-table { width: 100%; border-collapse: collapse; }
+  .schedule-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--deep);
+    text-transform: uppercase;
+    padding: 1rem 1.4rem;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    background: var(--off-black);
+    white-space: nowrap;
+  }
+  .schedule-table td {
+    padding: 1.15rem 1.4rem;
+    border-bottom: 1px solid rgba(158,197,216,0.05);
+    vertical-align: middle;
+    position: relative;
+  }
+  .schedule-table tbody tr { transition: background 0.2s; }
+  .schedule-table tbody tr:hover td { background: rgba(158,197,216,0.04); }
+  .schedule-table tbody tr td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--ice);
+    transform: scaleY(0);
+    transition: transform 0.25s var(--ease);
+  }
+  .schedule-table tbody tr:hover td:first-child::before { transform: scaleY(1); }
+  .time-cell {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ice);
+    white-space: nowrap;
+  }
+  .dj-cell {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+  .genre-cell {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  /* ── EVENTS ── */
+  #events { background: var(--off-black); }
+  .events-list {
+    border-top: 1px solid var(--line);
+  }
+  .event-item {
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 2.4rem;
+    align-items: center;
+    padding: 2.4rem 1rem;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s, padding-left 0.35s var(--ease);
+  }
+  .event-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--ice), var(--deep));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.35s var(--ease);
+  }
+  .event-item:hover {
+    background: rgba(158,197,216,0.03);
+    padding-left: 1.8rem;
+  }
+  .event-item:hover::before { transform: scaleY(1); }
+
+  .event-day {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 0.9;
+    color: var(--ice);
+    transition: text-shadow 0.3s;
+  }
+  .event-item:hover .event-day { text-shadow: 0 0 28px rgba(158,197,216,0.45); }
+  .event-month {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .event-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.7rem;
+  }
+  .event-meta { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+  .event-meta-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .event-meta-item span { color: var(--light); }
+  .event-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    padding: 7px 16px;
+    text-transform: uppercase;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .badge-upcoming {
+    color: var(--ice);
+    border-color: var(--ice-dim);
+    background: var(--ice-faint);
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(158,197,216,0.08); }
+    50% { box-shadow: 0 0 22px rgba(158,197,216,0.22); }
+  }
+  .badge-past { color: var(--muted); border-color: rgba(100,105,110,0.3); }
+
+  /* ── INTERLUDE (EVENTS → JOIN) ── */
+  .interlude {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0 0;
+  }
+  .interlude::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 55% 45% at 50% 60%, rgba(30,60,100,0.16) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .interlude-inner {
+    position: relative;
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+  .interlude-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.2rem, 9vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    will-change: transform, opacity;
+  }
+  .interlude-line.l1 { color: var(--white); }
+  .interlude-line.l1 em { color: var(--ice); font-style: normal; }
+  .interlude-line.l2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.45);
+  }
+  .interlude-line.l2 em {
+    color: var(--ice);
+    -webkit-text-stroke: 0;
+    font-style: normal;
+    text-shadow: 0 0 32px rgba(158,197,216,0.4);
+  }
+  .interlude-beam {
+    width: 1px;
+    height: 24vh;
+    margin: 3.5rem auto 0;
+    background: linear-gradient(to bottom, var(--ice), rgba(158,197,216,0.05));
+    transform-origin: top;
+    box-shadow: 0 0 14px rgba(158,197,216,0.4);
+    will-change: transform;
+  }
+
+  /* ── JOIN ── */
+  #join {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--black);
+    overflow: hidden;
+    padding: 130px 0;
+  }
+  #join::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 120vmin; height: 120vmin;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(30,60,100,0.22) 0%, rgba(158,197,216,0.05) 35%, transparent 65%);
+    animation: breathe 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  }
+
+  .join-box {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid var(--line);
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(158,197,216,0.05), transparent 70%);
+    padding: 4.5rem 3rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+  .join-box::before,
+  .join-box::after {
+    content: '';
+    position: absolute;
+    width: 32px; height: 32px;
+    pointer-events: none;
+  }
+  .join-box::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--ice);
+    border-left: 2px solid var(--ice);
+  }
+  .join-box::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--ice);
+    border-right: 2px solid var(--ice);
+  }
+  .join-catch {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 1.6rem;
+  }
+  .join-catch em { color: var(--ice); font-style: normal; }
+  .join-message {
+    font-family: var(--jp);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 2.1;
+    color: var(--light);
+    max-width: 540px;
+    margin: 0 auto 2.6rem;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ice);
+    border: 1px solid var(--ice-dim);
+    background: var(--ice-faint);
+    padding: 1.2rem 2.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.35s var(--ease), border-color 0.35s, box-shadow 0.35s;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ice);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease);
+  }
+  .cta-btn > * { position: relative; z-index: 1; }
+  .cta-btn svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
+  .cta-btn .btn-arrow { transition: transform 0.3s var(--ease); }
+  .cta-btn:hover {
+    color: var(--black);
+    border-color: var(--ice);
+    box-shadow: 0 0 36px rgba(158,197,216,0.3);
+  }
+  .cta-btn:hover::before { transform: scaleX(1); }
+  .cta-btn:hover .btn-arrow { transform: translateX(5px); }
+  .join-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  /* 2つのボタンを同じサイズに揃える(flexで等幅に分配) */
+  .join-actions .cta-btn {
+    flex: 1 1 280px;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    white-space: nowrap;
+  }
+  /* VRChatボタンは枠線のみのセカンダリ表示で差をつける */
+  .cta-btn.vrc { background: transparent; }
+  .join-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 1.8rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--off-black);
+    border-top: 1px solid var(--line);
+    padding: 4.5rem 2.5rem 3rem;
+    text-align: center;
+    position: relative;
+  }
+  footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: min(600px, 80vw);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ice), transparent);
+    opacity: 0.5;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+  }
+  .footer-logo span { color: var(--ice); }
+  .footer-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .footer-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    color: var(--mid);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  .footer-nav a:hover { color: var(--ice); }
+  .footer-copy {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(238,241,243,0.22);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-frame { display: none; }
+    .crew-head { padding: 0 1.5rem; }
+    .crew-head::before { left: 1.2rem; }
+    .crew-track {
+      flex-direction: column;
+      width: auto;
+      padding: 0 1.5rem;
+    }
+    .crew-card { width: 100%; height: 70vw; min-height: 340px; max-height: 480px; }
+    .crew-card.cta { height: auto; min-height: 0; padding: 3rem 1.5rem; }
+    .crew-pin { min-height: 0; padding-top: calc(var(--nav-h) + 3rem); }
+    .crew-hint { display: none; }
+    .crew-note { padding: 1.8rem 1.5rem 0; }
+  }
+  @media (max-width: 700px) {
+    #nav { padding: 0 1.5rem; }
+    .nav-logo::after { display: none; }
+    .nav-cta { padding: 5px 12px; }
+    .section-inner { padding: 0 1.5rem; }
+    section.panel { padding: 90px 0 70px; }
+    .event-item { grid-template-columns: 90px 1fr; gap: 1.4rem; }
+    .event-item .event-badge { display: none; }
+    .event-day { font-size: 3rem; }
+    .join-box { padding: 3rem 1.5rem 2.8rem; }
+    .cta-btn { padding: 1.1rem 1.8rem; letter-spacing: 0.18em; }
+    .footer-nav { gap: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-line::after, .ne-label, .badge-upcoming, #join::before,
+    .hero-logo::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">#STRAGE<span>.</span></a>
+  <a href="#join" class="nav-cta">Discord</a>
+</nav>
+
+<!-- HERO -->
+<header id="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="bg-video.mp4" type="video/mp4">
+  </video>
+  <div class="hero-shade"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-frame left">WORLD — STRAIGHT TO GARAGE</div>
+  <div class="hero-frame right">EST. 2026 — VRCHAT UNDERGROUND</div>
+
+  <div class="hero-center">
+    <p class="hero-eyebrow">Sound Collective — VRChat</p>
+    <div class="hero-logo">
+      <img src="strage.png" alt="Straight to Garage">
+    </div>
+    <p class="hero-tagline">Back to the roots. Forward to the floor.</p>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</header>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="mani-pin">
+    <div class="mani-bg"></div>
+    <div class="mani-shade"></div>
+    <div class="mani-lines">
+      <p class="mani-line en">THE <em>SOUND</em> OF</p>
+      <p class="mani-line en">THE UNDERGROUND…</p>
+      <p class="mani-line jp">Straight to Garage は、<strong>UKGの純粋な魂</strong>を守り続けるサウンドコレクティブ。<br>UKGの歴史の全てを探求し、深めることにこだわりを持っています。</p>
+      <p class="mani-line jp">アッパー系4/4の重厚なベースラインから、ミニマルでダークな2stepまで。全てのシーンをカバーするこの素晴らしいジャンル・カルチャーをもっと盛り上げるために。</p>
+      <p class="mani-line jp">パーティーのオーガナイズはもちろん、ジャンルを愛する人々の集う<strong>コミュニティの形成</strong>を、VRChatから。</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-number"><span class="count" data-to="2026">0</span></div>
+      <div class="stat-label">活動開始</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number"><span class="count" data-to="1">0</span></div>
+      <div class="stat-label">イベント開催数</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number"><span class="count" data-to="5">0</span></div>
+      <div class="stat-label">CREW</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">UKGへの愛</div>
+    </div>
+  </div>
+</div>
+
+<!-- KINETIC TYPE -->
+<div class="kinetic" aria-hidden="true">
+  <div class="kinetic-row" data-dir="-1">
+    <span class="solid">UK GARAGE</span><span class="dot">·</span><span class="outline">SPEED GARAGE</span><span class="dot">·</span><span class="solid">BASSLINE</span><span class="dot">·</span><span class="outline">2-STEP</span><span class="dot">·</span><span class="solid">DUBSTEP</span><span class="dot">·</span><span class="outline">NUKG</span><span class="dot">·</span><span class="solid">UK GARAGE</span><span class="dot">·</span><span class="outline">SPEED GARAGE</span><span class="dot">·</span>
+  </div>
+  <div class="kinetic-row" data-dir="1">
+    <span class="outline">STRAIGHT TO GARAGE</span><span class="dot">·</span><span class="solid">STRAIGHT TO GARAGE</span><span class="dot">·</span><span class="outline">STRAIGHT TO GARAGE</span><span class="dot">·</span><span class="solid">STRAIGHT TO GARAGE</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- CREW -->
+<section id="members">
+  <div class="crew-pin">
+    <video class="crew-video" autoplay muted loop playsinline>
+      <source src="ukuk_720p.mp4" type="video/mp4">
+    </video>
+    <div class="crew-shade"></div>
+    <div class="crew-head" data-num="02">
+      <p class="section-label">The Crew</p>
+      <h2 class="crew-title"><em>SELECTORS</em></h2>
+      <p class="crew-hint">Scroll →</p>
+    </div>
+
+    <div class="crew-track">
+
+      <article class="crew-card">
+        <div class="crew-photo" style="background-image:url('img/member1.png');"></div>
+        <div class="crew-num">01 / 05</div>
+        <div class="crew-info">
+          <div class="crew-name">SYNE.</div>
+          <div class="crew-role">Resident DJ · Organiser</div>
+          <div class="crew-bio">STRAGEオーナー。Dark GarageラインやSpeedGarageなど、オージースタイルをリスペクトしたサウンドを好む。</div>
+          <div class="crew-tags">
+            <span class="tag">UKG</span>
+            <span class="tag">2-Step</span>
+            <span class="tag">Speed Garage</span>
+            <span class="tag">Dubstep</span>
+            <span class="tag">House</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="crew-card">
+        <div class="crew-photo" style="background-image:url('img/member2.png');"></div>
+        <div class="crew-num">02 / 05</div>
+        <div class="crew-info">
+          <div class="crew-name">Lunarch</div>
+          <div class="crew-role">Resident DJ</div>
+          <div class="crew-bio"> CozyなNUKGからアッパーなBasslineまで、UKGarageの幅広いサウンドをプレイする。</div>
+          <div class="crew-tags">
+            <span class="tag">UKG</span>
+            <span class="tag">Speed Garage</span>
+            <span class="tag">NUKG</span>
+            <span class="tag">Bassline</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="crew-card">
+        <div class="crew-photo" style="background-image:url('img/member3.png');"></div>
+        <div class="crew-num">03 / 05</div>
+        <div class="crew-info">
+          <div class="crew-name">Stella</div>
+          <div class="crew-role">Resident DJ</div>
+          <div class="crew-bio">重厚なビートと透き通ったメロディーラインの両立が好き。うねるような熱波を生み出すDJプレイを目指しています</div>
+          <div class="crew-tags">
+            <span class="tag">Speed Garage</span>
+            <span class="tag">NUKG</span>
+            <span class="tag">Hardgroove</span>
+            <span class="tag">House</span>
+            <span class="tag">Drum'n'Bass/Jungle</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="crew-card">
+        <div class="crew-photo" style="background-image:url('img/member4.png');"></div>
+        <div class="crew-num">04 / 05</div>
+        <div class="crew-info">
+          <div class="crew-name">jokin0126</div>
+          <div class="crew-role">Resident DJ</div>
+          <div class="crew-bio">アッパーなNUKGやBass Musicを得意とし、UK Garageの垣根を越えたDJを目指し日々精進…。</div>
+          <div class="crew-tags">
+            <span class="tag">2-step</span>
+            <span class="tag">NUKG</span>
+            <span class="tag">Bassline</span>
+            <span class="tag">Instrumental Grime</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="crew-card">
+        <div class="crew-photo" style="background-image:url('img/member5.png');"></div>
+        <div class="crew-num">05 / 05</div>
+        <div class="crew-info">
+          <div class="crew-name">DJ NAME 05</div>
+          <div class="crew-role">Resident DJ</div>
+          <div class="crew-bio">メンバー紹介テキストをここに記入。ジャンルやスタイル、バックグラウンドなど。</div>
+          <div class="crew-tags">
+            <span class="tag">Bassline</span>
+            <span class="tag">House</span>
+          </div>
+        </div>
+      </article>
+
+      <a class="crew-card cta" href="#join">
+        <div class="crew-cta-big">AND <em>YOU?</em></div>
+        <div class="crew-cta-sub">Join via Discord →</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule" class="panel">
+  <div class="sched-ghost">SCHEDULE</div>
+  <div class="section-inner">
+    <div class="section-head" data-num="03">
+      <p class="section-label">Lineup</p>
+      <h2 class="section-title">NEXT EVENT<br><em>SCHEDULE</em></h2>
+    </div>
+
+    <div class="next-event-banner">
+      <div class="ne-label">Next Event</div>
+      <div class="ne-title">STRAIGHT TO GARAGE OPEN</div>
+      <div class="ne-date"><span>01 SEP 2026</span> — VRChat · Main Stage</div>
+    </div>
+
+    <div class="schedule-table-wrap">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>DJ / Artist</th>
+            <th>Genre</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body">
+          <tr>
+            <td class="time-cell">22:00 – 23:00</td>
+            <td class="dj-cell">DJ NAME 01</td>
+            <td class="genre-cell">Speed Garage / Warm Up</td>
+          </tr>
+          <tr>
+            <td class="time-cell">22:30 – 23:30</td>
+            <td class="dj-cell">DJ NAME 02</td>
+            <td class="genre-cell">2-Step / UKG</td>
+          </tr>
+          <tr>
+            <td class="time-cell">23:00 – 00:30</td>
+            <td class="dj-cell">DJ NAME 03</td>
+            <td class="genre-cell">Speed Garage</td>
+          </tr>
+          <tr>
+            <td class="time-cell">23:30 – 01:00</td>
+            <td class="dj-cell">GUEST DJ</td>
+            <td class="genre-cell">Bassline / House</td>
+          </tr>
+          <tr>
+            <td class="time-cell">00:30 – 02:30</td>
+            <td class="dj-cell">HEADLINER</td>
+            <td class="genre-cell">Speed Garage / Bassline</td>
+          </tr>
+          <tr>
+            <td class="time-cell">02:30 – 05:00</td>
+            <td class="dj-cell">MC NAME 01 + DJs</td>
+            <td class="genre-cell">UKG Classics / All Night</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="section-note" style="margin-top:1.8rem;">※ タイムテーブルは予告なく変更になる場合があります</p>
+  </div>
+</section>
+
+<hr class="section-sep">
+
+<!-- EVENTS -->
+<section id="events" class="panel">
+  <div class="section-inner">
+    <div class="section-head" data-num="04">
+      <p class="section-label">Upcoming &amp; Past</p>
+      <h2 class="section-title">EVENTS</h2>
+    </div>
+
+    <div class="events-list">
+
+      <div class="event-item">
+        <div class="event-date-box">
+          <div class="event-day">01</div>
+          <div class="event-month">SEP 2026</div>
+        </div>
+        <div class="event-info">
+          <div class="event-name">STRAIGHT TO GARAGE OPEN</div>
+          <div class="event-meta">
+            <div class="event-meta-item">TIME <span>TBA</span></div>
+            <div class="event-meta-item">VENUE <span>VRChat</span></div>
+          </div>
+        </div>
+        <div class="event-badge badge-upcoming">Upcoming</div>
+      </div>
+
+      <div class="event-item">
+        <div class="event-date-box">
+          <div class="event-day">15</div>
+          <div class="event-month">SEP 2026</div>
+        </div>
+        <div class="event-info">
+          <div class="event-name">STRAIGHT TO GARAGE VOL.1</div>
+          <div class="event-meta">
+            <div class="event-meta-item">TIME <span>TBA</span></div>
+            <div class="event-meta-item">VENUE <span>VRChat</span></div>
+          </div>
+        </div>
+        <div class="event-badge badge-upcoming">Upcoming</div>
+      </div>
+
+      <div class="event-item">
+        <div class="event-date-box">
+          <div class="event-day">––</div>
+          <div class="event-month">TBA</div>
+        </div>
+        <div class="event-info">
+          <div class="event-name">TBA</div>
+          <div class="event-meta">
+            <div class="event-meta-item">DETAILS <span>Coming Soon</span></div>
+          </div>
+        </div>
+        <div class="event-badge badge-past">TBA</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INTERLUDE -->
+<section class="interlude">
+  <div class="interlude-inner">
+    <p class="interlude-line l1">DON'T JUST <em>LISTEN.</em></p>
+    <p class="interlude-line l2">JOIN THE <em>SCENE.</em></p>
+    <div class="interlude-beam"></div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="section-inner">
+    <div class="section-head center" data-num="05">
+      <p class="section-label">Community</p>
+      <h2 class="section-title">JOIN THE <em>SERVER</em></h2>
+    </div>
+
+    <div class="join-box">
+      <p class="join-catch">READY TO HIT <em>THE FLOOR?</em></p>
+      <!-- ▼ ここの本文はあとで差し替え(仮テキスト) -->
+      <p class="join-message">
+        UK Garageを愛する人が集まる場所。<br>
+        音楽を語り、MIXをシェアし、同じ熱量を持つ仲間と繋がる。<br>
+       当イベントでDJをしたい方も、情報交換をしたい方も。<br>
+        お気軽にこちらからサーバー・グループへご参加ください。
+      </p>
+      <div class="join-actions">
+      <a class="cta-btn" href="https://discord.gg/GpRNhJnj" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+        <span>Join Discord Server</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      <!-- ▼ href をVRChatグループのURL(https://vrchat.com/home/group/grp_xxx)に差し替えてください -->
+      <a class="cta-btn vrc" href="https://vrchat.com/home/group/grp_88d53329-1533-427c-8b86-1388ff189109" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 5.5h-17A2.5 2.5 0 0 0 1 8v7a2.5 2.5 0 0 0 2.5 2.5h4.1c.78 0 1.5-.36 1.97-.98l1.03-1.36a.5.5 0 0 1 .8 0l1.03 1.36c.47.62 1.19.98 1.97.98h6.1A2.5 2.5 0 0 0 23 15V8a2.5 2.5 0 0 0-2.5-2.5zM7.25 13.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm9.5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+        <span>Join VRChat Group</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      </div>
+      <p class="join-note">Free to join · UKG Lovers Welcome</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">STRAIGHT TO GARAGE<span>.</span></div>
+  <div class="footer-sub">UK Garage · Speed Garage · Bassline · VRChat</div>
+  <nav class="footer-nav">
+    <a href="#manifesto">About</a>
+    <a href="#members">Crew</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#events">Events</a>
+    <a href="#join">Discord</a>
+  </nav>
+  <div class="footer-copy">© 2026 Straight to Garage. All rights reserved.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
+<script>
+(function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav = document.getElementById('nav');
+
+  // 画面外に出た動画は一時停止してデコード負荷を抑える
+  document.querySelectorAll('video').forEach(function (v) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { v.play().catch(function () {}); }
+        else { v.pause(); }
+      });
+    }, { rootMargin: '150px' }).observe(v);
+  });
+
+  // Plain fallback: no GSAP (CDN blocked / offline) — page stays fully readable
+  if (!window.gsap || !window.ScrollTrigger) {
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Smooth scroll (Lenis) ──
+  var lenis = null;
+  if (window.Lenis && !prefersReduced) {
+    lenis = new Lenis({ lerp: 0.09 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // Anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (id.length > 1 && document.querySelector(id)) {
+        e.preventDefault();
+        if (lenis) lenis.scrollTo(id, { offset: 0 });
+        else document.querySelector(id).scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+      }
+    });
+  });
+
+  // ── Nav: scrolled state + hide on scroll down ──
+  var lastY = 0;
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate: function (self) {
+      var y = self.scroll();
+      nav.classList.toggle('scrolled', y > 40);
+      nav.classList.toggle('hidden', y > 300 && y > lastY + 4);
+      if (y < lastY - 4 || y <= 300) nav.classList.remove('hidden');
+      lastY = y;
+    }
+  });
+
+  // ── Progress bar ──
+  gsap.to('.progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { start: 0, end: 'max', scrub: 0.3 }
+  });
+
+  // ── Intro (on load) ──
+  // 開始値を明示した fromTo + スクロール開始で即完了させ、
+  // ヒーローのスクラブアニメと opacity の取り合いにならないようにする
+  if (!prefersReduced) {
+    var introTween = gsap.fromTo(
+      ['.hero-eyebrow', '.hero-logo', '.hero-tagline', '.hero-bottom'],
+      { opacity: 0, y: 26 },
+      { opacity: 1, y: 0, duration: 1.1, stagger: 0.14, ease: 'power3.out', delay: 0.15 }
+    );
+    ScrollTrigger.create({
+      start: 10,
+      once: true,
+      onEnter: function () { if (introTween.isActive()) introTween.progress(1); }
+    });
+  }
+
+  // ── Stat counters (all viewports) ──
+  document.querySelectorAll('.count[data-to]').forEach(function (el) {
+    var to = parseInt(el.dataset.to, 10);
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 88%',
+      once: true,
+      onEnter: function () {
+        gsap.fromTo(el,
+          { textContent: 0 },
+          { textContent: to, duration: 1.6, ease: 'power2.out', snap: { textContent: 1 } });
+      }
+    });
+  });
+
+  var mm = gsap.matchMedia();
+
+  // ════ DESKTOP: full scroll-driven experience ════
+  mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', function () {
+
+    // Hero: pinned, logo scales away as you scroll
+    // ロゴは前半(〜55%)表示を保ち、後半でフェードアウトする
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: '+=160%',
+        scrub: true,
+        pin: true
+      }
+    })
+      .fromTo('.hero-logo', { scale: 1, opacity: 1 },
+        { scale: 1.16, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
+      .fromTo('.hero-eyebrow', { y: 0, opacity: 1 },
+        { y: -50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
+      .fromTo('.hero-tagline', { y: 0, opacity: 1 },
+        { y: 50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
+      .fromTo('.hero-video', { opacity: 0.25, scale: 1 },
+        { opacity: 0.06, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
+      .fromTo('.hero-grid', { scale: 1, opacity: 0.3 },
+        { scale: 1.15, opacity: 0.1, duration: 1, ease: 'none', immediateRender: false }, 0)
+      .fromTo(['.hero-bottom', '.hero-frame'], { opacity: 1 },
+        { opacity: 0, duration: 0.3, ease: 'none', immediateRender: false }, 0);
+
+    // Manifesto: pinned, lines surface one by one
+    var lines = gsap.utils.toArray('.mani-line');
+    var maniTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#manifesto',
+        start: 'top top',
+        end: '+=' + (lines.length * 70) + '%',
+        scrub: true,
+        pin: '.mani-pin',
+        pinSpacing: true
+      }
+    });
+    lines.forEach(function (line, i) {
+      var at = i * 0.85;
+      if (line.classList.contains('en')) {
+        // 英字はApple風に「常に見えたまま、フィルだけが左から満ちる」
+        var fill = [line].concat(gsap.utils.toArray(line.querySelectorAll('em')));
+        gsap.set(fill, { backgroundPosition: '100% 0' });
+        maniTl.fromTo(fill,
+          { backgroundPosition: '100% 0' },
+          { backgroundPosition: '0% 0', duration: 1, ease: 'none' },
+          at);
+      } else {
+        maniTl.fromTo(line,
+          { opacity: 0.07, y: 36, filter: 'blur(7px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, ease: 'none' },
+          at);
+      }
+    });
+    maniTl.to({}, { duration: 0.6 }); // hold at the end
+
+    // Manifesto bg image: ピン区間を通過する間ゆっくりズーム
+    gsap.fromTo('.mani-bg',
+      { scale: 1.0 },
+      {
+        scale: 1.18, ease: 'none',
+        scrollTrigger: {
+          trigger: '#manifesto',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+    // Kinetic rows: scrub horizontally, opposite directions
+    gsap.utils.toArray('.kinetic-row').forEach(function (row) {
+      var dir = parseFloat(row.dataset.dir) || -1;
+      gsap.fromTo(row,
+        { xPercent: dir > 0 ? -18 : 0 },
+        {
+          xPercent: dir > 0 ? 0 : -18,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.kinetic',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+    });
+
+    // Crew: pinned horizontal gallery
+    var track = document.querySelector('.crew-track');
+    var getDist = function () {
+      return Math.max(0, track.scrollWidth + 128 - window.innerWidth); // 128 = right padding allowance
+    };
+    var crewTween = gsap.to(track, {
+      x: function () { return -getDist(); },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#members',
+        start: 'top top',
+        end: function () { return '+=' + getDist(); },
+        scrub: true,
+        pin: '.crew-pin',
+        invalidateOnRefresh: true,
+        anticipatePin: 1
+      }
+    });
+    // 各カードは横スクロールに連動して右から浮かび上がる
+    gsap.utils.toArray('.crew-card').forEach(function (card) {
+      gsap.fromTo(card,
+        { opacity: 0.25, y: 36 },
+        {
+          opacity: 1, y: 0, ease: 'none',
+          scrollTrigger: {
+            trigger: card,
+            containerAnimation: crewTween,
+            start: 'left 100%',
+            end: 'left 62%',
+            scrub: true
+          }
+        });
+    });
+
+    // Schedule: ghost date drifts, rows cascade in
+    gsap.to('.sched-ghost', {
+      yPercent: 35,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#schedule',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+    gsap.from('.next-event-banner', {
+      opacity: 0, y: 36, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '.next-event-banner', start: 'top 82%', once: true }
+    });
+    gsap.from('.schedule-table tbody tr', {
+      opacity: 0, y: 24, stagger: 0.07, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '.schedule-table', start: 'top 78%', once: true }
+    });
+
+    // Events: items slide in
+    gsap.utils.toArray('.event-item').forEach(function (item) {
+      gsap.from(item, {
+        opacity: 0, x: -42, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: item, start: 'top 84%', once: true }
+      });
+    });
+
+    // Section heads everywhere
+    gsap.utils.toArray('.section-head').forEach(function (head) {
+      gsap.from(head, {
+        opacity: 0, y: 34, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: head, start: 'top 84%', once: true }
+      });
+    });
+
+    // Interlude: lines converge from left/right, beam draws down into JOIN
+    gsap.fromTo('.interlude-line.l1',
+      { xPercent: -16, opacity: 0.08 },
+      {
+        xPercent: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '.interlude', start: 'top 90%', end: 'center 55%', scrub: true }
+      });
+    gsap.fromTo('.interlude-line.l2',
+      { xPercent: 16, opacity: 0.08 },
+      {
+        xPercent: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '.interlude', start: 'top 90%', end: 'center 55%', scrub: true }
+      });
+    gsap.fromTo('.interlude-beam',
+      { scaleY: 0 },
+      {
+        scaleY: 1, ease: 'none',
+        scrollTrigger: { trigger: '.interlude', start: 'center 70%', end: 'bottom 45%', scrub: true }
+      });
+
+    // Join box: scales in
+    gsap.from('.join-box', {
+      opacity: 0, scale: 0.94, y: 40, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '#join', start: 'top 65%', once: true }
+    });
+  });
+
+  // ════ MOBILE / reduced motion: light reveals only ════
+  mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
+    if (prefersReduced) return;
+    gsap.utils.toArray(
+      '.mani-line, .stat, .crew-card, .section-head, .next-event-banner, .event-item, .interlude-line, .join-box'
+    ).forEach(function (el) {
+      gsap.from(el, {
+        opacity: 0, y: 26, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+      });
+    });
+  });
+
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>
