@@ -2092,7 +2092,8 @@
   mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', function () {
 
     // Hero: pinned, logo scales away as you scroll
-    // ロゴは前半(〜55%)表示を保ち、後半でフェードアウトする
+    // ロゴの不透明度はピン区間の終端(次セクションへの遷移)直前まで100%を保ち、
+    // 最後の12%だけで一気にフェードアウトする(拡大は従来どおり後半から)
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
@@ -2102,8 +2103,10 @@
         pin: true
       }
     })
-      .fromTo('.hero-logo', { scale: 1, opacity: 1 },
-        { scale: 1.16, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
+      .fromTo('.hero-logo', { scale: 1 },
+        { scale: 1.16, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
+      .fromTo('.hero-logo', { opacity: 1 },
+        { opacity: 0, duration: 0.12, ease: 'none', immediateRender: false }, 0.88)
       .fromTo('.hero-eyebrow', { y: 0, opacity: 1 },
         { y: -50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-countdown', { y: 0, opacity: 1 },
