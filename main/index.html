@@ -1087,6 +1087,76 @@
   }
   .ed-tba span { color: var(--ice); }
 
+  /* ── LINEUP TIMELINE (horizontal) ── */
+  .ed-lineup { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.2rem; }
+  .ed-timeline {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5rem 0 0.7rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tl-track {
+    display: inline-flex;
+    position: relative;
+    min-width: 100%;
+    padding: 0 0.4rem;
+  }
+  .tl-track::before {
+    content: '';
+    position: absolute;
+    left: calc(100% / 12);
+    right: calc(100% / 12);
+    top: 23px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--ice-dim), var(--line) 85%, var(--line));
+  }
+  .tl-stop {
+    flex: 1 0 92px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    position: relative;
+  }
+  .tl-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    font-variant-numeric: tabular-nums;
+  }
+  .tl-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--black);
+    border: 2px solid var(--ice-dim);
+    position: relative;
+    z-index: 1;
+    transition: background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+  .tl-stop:hover .tl-dot {
+    border-color: var(--ice);
+    background: var(--ice);
+    box-shadow: 0 0 12px rgba(158,197,216,0.55);
+  }
+  .tl-name {
+    font-family: var(--jp);
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--light);
+    white-space: nowrap;
+  }
+  .tl-end .tl-dot { border-color: var(--deep); }
+  .tl-end .tl-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--deep);
+    text-transform: uppercase;
+  }
+
   /* ── INTERLUDE (EVENTS → JOIN) ── */
   .interlude {
     min-height: 85vh;
@@ -1590,7 +1660,7 @@
       <div class="st-left">
         <div class="st-badge">Next Event</div>
         <div class="st-title" id="st-title">STRAIGHT TO GARAGE OPENING EVENT</div>
-        <div class="st-meta" id="st-meta"><span>SEP 08, 2026</span> · 22:00–01:00 · VRChat</div>
+        <div class="st-meta" id="st-meta"><span>SEP 08, 2026</span> · 21:00–00:45 · VRChat</div>
       </div>
       <div class="st-cta">View Schedule <span class="btn-arrow">→</span></div>
     </a>
@@ -1623,7 +1693,7 @@
           <div class="event-info">
             <div class="event-name">STRAIGHT TO GARAGE OPENING EVENT</div>
             <div class="event-meta">
-              <div class="event-meta-item">TIME <span>22:00–01:00</span></div>
+              <div class="event-meta-item">TIME <span>21:00–00:45</span></div>
               <div class="event-meta-item">VENUE <span>VRChat</span></div>
             </div>
           </div>
@@ -1635,14 +1705,50 @@
         <div class="event-detail" id="ed-opening" role="region">
           <div class="event-detail-inner">
             <div class="ed-timecol">
-              <div class="ed-time">22:00–01:00</div>
+              <div class="ed-time">21:00–00:45</div>
               <div class="ed-tz">JST · VRChat</div>
             </div>
             <div class="ed-body">
               <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>SEP 08, 2026</strong> (Tue)</span></div>
               <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat</span></div>
-              <div class="ed-row"><span class="ed-key">Lineup</span><span class="ed-val">Full crew — <strong>timetable TBA</strong></span></div>
-              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STRAGE 始動を飾るオープニングイベント。詳細は順次発表します。</span></div>
+              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STRAGE 始動を飾るオープニングイベント。全5枠、各45分持ち回りで駆け抜けます。</span></div>
+              <div class="ed-lineup">
+                <span class="ed-key">Lineup</span>
+                <div class="ed-timeline">
+                  <div class="tl-track">
+                    <div class="tl-stop">
+                      <span class="tl-time">21:00</span>
+                      <span class="tl-dot"></span>
+                      <span class="tl-name">ひがしぐち</span>
+                    </div>
+                    <div class="tl-stop">
+                      <span class="tl-time">21:45</span>
+                      <span class="tl-dot"></span>
+                      <span class="tl-name">Lunarch</span>
+                    </div>
+                    <div class="tl-stop">
+                      <span class="tl-time">22:30</span>
+                      <span class="tl-dot"></span>
+                      <span class="tl-name">jokin0126</span>
+                    </div>
+                    <div class="tl-stop">
+                      <span class="tl-time">23:15</span>
+                      <span class="tl-dot"></span>
+                      <span class="tl-name">Stella</span>
+                    </div>
+                    <div class="tl-stop">
+                      <span class="tl-time">00:00</span>
+                      <span class="tl-dot"></span>
+                      <span class="tl-name">SYNE.</span>
+                    </div>
+                    <div class="tl-stop tl-end">
+                      <span class="tl-time">00:45</span>
+                      <span class="tl-dot tl-dot-end"></span>
+                      <span class="tl-name">CLOSE</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1754,7 +1860,7 @@
   // ── Shared event data (single source of truth for the opening event) ──
   var OPENING = {
     name: 'STRAIGHT TO GARAGE OPENING EVENT',
-    target: '2026-09-08T22:00:00+09:00'
+    target: '2026-09-08T21:00:00+09:00'
   };
 
   // ── Hero countdown (pre-release hype; runs with or without GSAP) ──
