@@ -149,6 +149,60 @@
     box-shadow: 0 0 18px rgba(158,197,216,0.35);
   }
 
+  /* ── NAV LINKS ── */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .nav-links a {
+    color: var(--mid);
+    text-decoration: none;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.3s var(--ease);
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  /* 目立たせるリンク(Events / Schedule / Community) */
+  .nav-links a.hot { color: var(--ice); }
+  .nav-links a.hot:hover {
+    color: var(--white);
+    text-shadow: 0 0 14px rgba(158,197,216,0.45);
+  }
+
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  /* MEDIAボタン: Discordより控えめなゴースト調 */
+  .nav-cta--ghost {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--mid);
+  }
+  .nav-cta--ghost:hover {
+    background: var(--ice-faint);
+    border-color: var(--ice-dim);
+    color: var(--ice);
+    box-shadow: none;
+  }
+
+  @media (max-width: 1100px) {
+    .nav-links { display: none; }
+  }
+
   /* ── HERO (pinned) ── */
   #hero {
     height: 100vh;
@@ -1510,7 +1564,17 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">#STRAGE<span>.</span></a>
-  <a href="#join" class="nav-cta">Discord</a>
+  <div class="nav-links">
+    <a href="#manifesto">About</a>
+    <a href="#members">Crew</a>
+    <a href="#events" class="hot">Events</a>
+    <a href="#schedule" class="hot">Schedule</a>
+    <a href="#join" class="hot">Community</a>
+  </div>
+  <div class="nav-actions">
+    <a class="nav-cta nav-cta--ghost" href="media/">Media</a>
+    <a class="nav-cta" href="#join">Discord</a>
+  </div>
 </nav>
 
 <!-- HERO -->
