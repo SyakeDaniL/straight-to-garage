@@ -186,18 +186,6 @@
   }
 
   .nav-actions { display: flex; align-items: center; gap: 10px; }
-  /* MEDIAボタン: Discordより控えめなゴースト調 */
-  .nav-cta--ghost {
-    background: transparent;
-    border-color: var(--line);
-    color: var(--mid);
-  }
-  .nav-cta--ghost:hover {
-    background: var(--ice-faint);
-    border-color: var(--ice-dim);
-    color: var(--ice);
-    box-shadow: none;
-  }
 
   @media (max-width: 1100px) {
     .nav-links { display: none; }
@@ -1572,7 +1560,7 @@
     <a href="#join" class="hot">Community</a>
   </div>
   <div class="nav-actions">
-    <a class="nav-cta nav-cta--ghost" href="media/">Media</a>
+    <a class="nav-cta" href="media/">Media</a>
     <a class="nav-cta" href="#join">Discord</a>
   </div>
 </nav>
