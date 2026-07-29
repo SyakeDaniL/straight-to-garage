@@ -228,7 +228,7 @@
     pointer-events: none;
   }
   .hero-logo img {
-    width: min(940px, 94vw);
+    width: min(940px, 94vw, 58vh);
     height: auto;
     display: block;
     margin: 0 auto;
@@ -266,8 +266,79 @@
     font-style: italic;
     color: var(--mid);
     letter-spacing: 0.08em;
-    margin-top: 2.2rem;
+    margin-top: 1.4rem;
   }
+
+  /* ── HERO COUNTDOWN (pre-release hype) ── */
+  .hero-countdown {
+    margin-top: 1.4rem;
+    will-change: transform, opacity;
+  }
+  .hero-cd-event {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    color: var(--deep);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .hero-cd-timer {
+    display: inline-flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: clamp(0.7rem, 2.4vw, 1.8rem);
+  }
+  .hero-cd-unit { text-align: center; }
+  .hero-cd-num {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1;
+    color: var(--white);
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-cd-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.24em;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .hero-cd-sep {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    color: var(--ice-dim);
+    transform: translateY(-0.32em);
+    animation: cdBlink 2s infinite;
+  }
+  @keyframes cdBlink {
+    0%, 100% { opacity: 0.18; }
+    45% { opacity: 1; }
+  }
+  /* 数字に白→アイスの微グラデーション(統計数字と共通の質感) */
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .hero-cd-num {
+      background-image: linear-gradient(180deg, var(--white) 35%, var(--ice) 130%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  .hero-cd-done {
+    display: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    line-height: 1;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+  .hero-cd-done em { color: var(--ice); font-style: normal; }
+  /* done 表示に切り替わったらタイマー行とラベルを隠す */
+  .hero-countdown.is-done .hero-cd-timer,
+  .hero-countdown.is-done .hero-cd-event { display: none; }
+  .hero-countdown.is-done .hero-cd-done { display: block; }
 
   .hero-frame {
     position: absolute;
@@ -765,21 +836,34 @@
     will-change: transform;
   }
 
-  .next-event-banner {
+  /* Slim "next event" teaser that scroll-links into #events.
+     日時は #events のアコーディオンと同じJSデータから描画され重複しない。 */
+  .sched-teaser {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 1.8rem;
     flex-wrap: wrap;
+    text-decoration: none;
     border: 1px solid var(--ice-dim);
     border-left: 3px solid var(--ice);
     background: var(--ice-faint);
-    padding: 1.4rem 2rem;
-    margin-bottom: 2.5rem;
+    padding: 1.8rem 2.2rem;
+    position: relative;
+    overflow: hidden;
     box-shadow: 0 0 24px rgba(158,197,216,0.06);
+    transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
+                box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
   }
-  .ne-label {
+  .sched-teaser:hover {
+    background: rgba(158,197,216,0.14);
+    border-left-color: var(--ice);
+    box-shadow: 0 0 42px rgba(158,197,216,0.14);
+    transform: translateY(-2px);
+  }
+  .st-left { display: flex; flex-direction: column; gap: 0.5rem; }
+  .st-badge {
     font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     letter-spacing: 0.25em;
     color: var(--ice);
     text-transform: uppercase;
@@ -789,89 +873,50 @@
     0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
   }
-  .ne-title {
+  .st-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 0.06em;
+    font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+    letter-spacing: 0.05em;
     line-height: 1;
     color: var(--white);
   }
-  .ne-date {
+  .st-meta {
     font-family: 'Space Mono', monospace;
     font-size: 0.72rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.16em;
     color: var(--mid);
     text-transform: uppercase;
   }
-  .ne-date span { color: var(--ice); }
-
-  .schedule-table-wrap { border: 1px solid var(--line); overflow-x: auto; }
-  .schedule-table { width: 100%; border-collapse: collapse; }
-  .schedule-table th {
+  .st-meta span { color: var(--ice); }
+  .st-cta {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
     font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.66rem;
     letter-spacing: 0.22em;
-    color: var(--deep);
-    text-transform: uppercase;
-    padding: 1rem 1.4rem;
-    text-align: left;
-    border-bottom: 1px solid var(--line);
-    background: var(--off-black);
-    white-space: nowrap;
-  }
-  .schedule-table td {
-    padding: 1.15rem 1.4rem;
-    border-bottom: 1px solid rgba(158,197,216,0.05);
-    vertical-align: middle;
-    position: relative;
-  }
-  .schedule-table tbody tr { transition: background 0.2s; }
-  .schedule-table tbody tr:hover td { background: rgba(158,197,216,0.04); }
-  .schedule-table tbody tr td:first-child::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--ice);
-    transform: scaleY(0);
-    transition: transform 0.25s var(--ease);
-  }
-  .schedule-table tbody tr:hover td:first-child::before { transform: scaleY(1); }
-  .time-cell {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.78rem;
     color: var(--ice);
+    text-transform: uppercase;
     white-space: nowrap;
   }
-  .dj-cell {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.05em;
-    color: var(--white);
-  }
-  .genre-cell {
+  .st-cta .btn-arrow { transition: transform 0.3s var(--ease); }
+  .sched-teaser:hover .st-cta .btn-arrow { transform: translateX(6px); }
+
+  /* ── EVENTS (interactive accordion) ── */
+  #events { background: var(--off-black); }
+  .events-hint {
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: var(--mid);
+    letter-spacing: 0.15em;
+    color: var(--muted);
     text-transform: uppercase;
+    margin-bottom: 1.6rem;
   }
-
-  /* ── EVENTS ── */
-  #events { background: var(--off-black); }
-  .events-list {
-    border-top: 1px solid var(--line);
-  }
+  .events-list { border-top: 1px solid var(--line); }
   .event-item {
-    display: grid;
-    grid-template-columns: 150px 1fr auto;
-    gap: 2.4rem;
-    align-items: center;
-    padding: 2.4rem 1rem;
     border-bottom: 1px solid var(--line);
     position: relative;
-    overflow: hidden;
-    transition: background 0.3s, padding-left 0.35s var(--ease);
   }
   .event-item::before {
     content: '';
@@ -882,12 +927,33 @@
     transform: scaleY(0);
     transform-origin: top;
     transition: transform 0.35s var(--ease);
+    z-index: 1;
   }
-  .event-item:hover {
+  .event-item:hover::before,
+  .event-item.is-open::before { transform: scaleY(1); }
+
+  /* clickable header row */
+  .event-row {
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 2.4rem;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    padding: 2.4rem 1rem;
+    transition: background 0.3s, padding-left 0.35s var(--ease);
+  }
+  .event-row:hover,
+  .event-item.is-open > .event-row {
     background: rgba(158,197,216,0.03);
     padding-left: 1.8rem;
   }
-  .event-item:hover::before { transform: scaleY(1); }
+  .event-row:focus-visible { outline: 1px solid var(--ice-dim); outline-offset: -4px; }
 
   .event-day {
     font-family: 'Bebas Neue', sans-serif;
@@ -896,7 +962,8 @@
     color: var(--ice);
     transition: text-shadow 0.3s;
   }
-  .event-item:hover .event-day { text-shadow: 0 0 28px rgba(158,197,216,0.45); }
+  .event-row:hover .event-day,
+  .event-item.is-open .event-day { text-shadow: 0 0 28px rgba(158,197,216,0.45); }
   .event-month {
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem;
@@ -924,6 +991,8 @@
     gap: 7px;
   }
   .event-meta-item span { color: var(--light); }
+
+  .event-right { display: flex; align-items: center; gap: 1.4rem; }
   .event-badge {
     font-family: 'Space Mono', monospace;
     font-size: 0.58rem;
@@ -944,6 +1013,79 @@
     50% { box-shadow: 0 0 22px rgba(158,197,216,0.22); }
   }
   .badge-past { color: var(--muted); border-color: rgba(100,105,110,0.3); }
+  .event-chevron {
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+    color: var(--ice);
+    transition: transform 0.4s var(--ease);
+  }
+  .event-item.is-open .event-chevron { transform: rotate(180deg); }
+
+  /* collapsible detail panel (height + opacity accordion) */
+  .event-detail {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s var(--ease), opacity 0.45s var(--ease);
+  }
+  .event-item.is-open .event-detail { opacity: 1; }
+  .event-detail-inner {
+    padding: 0.4rem 1rem 2.6rem;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 2.4rem;
+    align-items: start;
+  }
+  .ed-timecol {
+    border-left: 2px solid var(--ice);
+    padding-left: 1.4rem;
+  }
+  .ed-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.1rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--white);
+  }
+  .ed-tz {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--deep);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .ed-body { display: flex; flex-direction: column; gap: 1.1rem; }
+  .ed-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    align-items: baseline;
+  }
+  .ed-key {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--deep);
+    text-transform: uppercase;
+    min-width: 84px;
+  }
+  .ed-val {
+    font-family: var(--jp);
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--light);
+  }
+  .ed-val strong { color: var(--ice); font-weight: 500; }
+  .ed-tba {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 0.6rem 0 2.6rem 1rem;
+  }
+  .ed-tba span { color: var(--ice); }
 
   /* ── INTERLUDE (EVENTS → JOIN) ── */
   .interlude {
@@ -1211,16 +1353,23 @@
     .nav-cta { padding: 5px 12px; }
     .section-inner { padding: 0 1.5rem; }
     section.panel { padding: 90px 0 70px; }
-    .event-item { grid-template-columns: 90px 1fr; gap: 1.4rem; }
-    .event-item .event-badge { display: none; }
-    .event-day { font-size: 3rem; }
+    .event-row { grid-template-columns: 72px 1fr auto; gap: 1.2rem; padding: 1.8rem 0.6rem; }
+    .event-day { font-size: 2.6rem; }
+    .event-name { font-size: 1.6rem; }
+    .event-badge { display: none; }
+    .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 2rem; }
+    .ed-timecol { padding-left: 1rem; }
+    .sched-teaser { padding: 1.4rem 1.4rem; gap: 1rem; }
+    .st-cta { margin-left: 0; }
+    .hero-cd-num { font-size: clamp(2.1rem, 12vw, 2.8rem); }
+    .hero-cd-timer { gap: 0.6rem; }
     .join-box { padding: 3rem 1.5rem 2.8rem; }
     .cta-btn { padding: 1.1rem 1.8rem; letter-spacing: 0.18em; }
     .footer-nav { gap: 1.5rem; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .scroll-line::after, .ne-label, .badge-upcoming, #join::before,
-    .hero-logo::after { animation: none; }
+    .scroll-line::after, .st-badge, .badge-upcoming, #join::before,
+    .hero-logo::after, .hero-cd-sep { animation: none; }
   }
 </style>
 </head>
@@ -1250,6 +1399,21 @@
     <div class="hero-logo">
       <img src="strage.png" alt="Straight to Garage">
     </div>
+
+    <div class="hero-countdown" id="hero-countdown">
+      <p class="hero-cd-event" id="hero-cd-event">STRAIGHT TO GARAGE OPENING EVENT</p>
+      <div class="hero-cd-timer" id="hero-cd-timer" role="timer" aria-label="Countdown to opening event">
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-d">00</span><span class="hero-cd-label">Days</span></div>
+        <span class="hero-cd-sep">:</span>
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-h">00</span><span class="hero-cd-label">Hours</span></div>
+        <span class="hero-cd-sep">:</span>
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-m">00</span><span class="hero-cd-label">Min</span></div>
+        <span class="hero-cd-sep">:</span>
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-s">00</span><span class="hero-cd-label">Sec</span></div>
+      </div>
+      <p class="hero-cd-done" id="hero-cd-done">SEE YOU ON <em>THE FLOOR.</em></p>
+    </div>
+
     <p class="hero-tagline">Where Culture Meets Community.</p>
   </div>
 
@@ -1412,123 +1576,99 @@
   </div>
 </section>
 
-<!-- SCHEDULE -->
+<!-- SCHEDULE (slim "next event" teaser → scroll-links into #events) -->
 <section id="schedule" class="panel">
-  <div class="sched-ghost">SCHEDULE</div>
+  <div class="sched-ghost">NEXT</div>
   <div class="section-inner">
     <div class="section-head" data-num="03">
-      <p class="section-label">Lineup</p>
-      <h2 class="section-title">NEXT EVENT<br><em>SCHEDULE</em></h2>
+      <p class="section-label">Next Event</p>
+      <h2 class="section-title">NEXT ON<br><em>THE FLOOR</em></h2>
     </div>
 
-    <div class="next-event-banner">
-      <div class="ne-label">Next Event</div>
-      <div class="ne-title">STRAIGHT TO GARAGE OPEN</div>
-      <div class="ne-date"><span>01 SEP 2026</span> — VRChat · Main Stage</div>
-    </div>
+    <!-- 日付・時刻は #events のアコーディオンと同じJSデータ源から描画される(重複ズレ防止) -->
+    <a class="sched-teaser" href="#events" data-open-event="opening">
+      <div class="st-left">
+        <div class="st-badge">Next Event</div>
+        <div class="st-title" id="st-title">STRAIGHT TO GARAGE OPENING EVENT</div>
+        <div class="st-meta" id="st-meta"><span>SEP 08, 2026</span> · 22:00–01:00 · VRChat</div>
+      </div>
+      <div class="st-cta">View Schedule <span class="btn-arrow">→</span></div>
+    </a>
 
-    <div class="schedule-table-wrap">
-      <table class="schedule-table">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>DJ / Artist</th>
-            <th>Genre</th>
-          </tr>
-        </thead>
-        <tbody id="schedule-body">
-          <tr>
-            <td class="time-cell">22:00 – 23:00</td>
-            <td class="dj-cell">DJ NAME 01</td>
-            <td class="genre-cell">Speed Garage / Warm Up</td>
-          </tr>
-          <tr>
-            <td class="time-cell">22:30 – 23:30</td>
-            <td class="dj-cell">DJ NAME 02</td>
-            <td class="genre-cell">2-Step / UKG</td>
-          </tr>
-          <tr>
-            <td class="time-cell">23:00 – 00:30</td>
-            <td class="dj-cell">DJ NAME 03</td>
-            <td class="genre-cell">Speed Garage</td>
-          </tr>
-          <tr>
-            <td class="time-cell">23:30 – 01:00</td>
-            <td class="dj-cell">GUEST DJ</td>
-            <td class="genre-cell">Bassline / House</td>
-          </tr>
-          <tr>
-            <td class="time-cell">00:30 – 02:30</td>
-            <td class="dj-cell">HEADLINER</td>
-            <td class="genre-cell">Speed Garage / Bassline</td>
-          </tr>
-          <tr>
-            <td class="time-cell">02:30 – 05:00</td>
-            <td class="dj-cell">MC NAME 01 + DJs</td>
-            <td class="genre-cell">UKG Classics / All Night</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="section-note" style="margin-top:1.8rem;">※ タイムテーブルは予告なく変更になる場合があります</p>
+    <p class="section-note" style="margin-top:1.8rem;">※ 以降のイベントは順次発表予定 / More events TBA</p>
   </div>
 </section>
 
 <hr class="section-sep">
 
-<!-- EVENTS -->
+<!-- EVENTS (select an event → its schedule expands) -->
 <section id="events" class="panel">
   <div class="section-inner">
     <div class="section-head" data-num="04">
-      <p class="section-label">Upcoming &amp; Past</p>
+      <p class="section-label">Select an Event</p>
       <h2 class="section-title">EVENTS</h2>
     </div>
 
-    <div class="events-list">
+    <p class="events-hint">イベントを選ぶとスケジュールが開きます — Tap an event to reveal its schedule</p>
 
-      <div class="event-item">
-        <div class="event-date-box">
-          <div class="event-day">01</div>
-          <div class="event-month">SEP 2026</div>
-        </div>
-        <div class="event-info">
-          <div class="event-name">STRAIGHT TO GARAGE OPEN</div>
-          <div class="event-meta">
-            <div class="event-meta-item">TIME <span>TBA</span></div>
-            <div class="event-meta-item">VENUE <span>VRChat</span></div>
+    <div class="events-list" id="events-list">
+
+      <!-- 唯一の確定イベント -->
+      <div class="event-item" data-event="opening">
+        <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-opening">
+          <div class="event-date-box">
+            <div class="event-day">08</div>
+            <div class="event-month">SEP 2026</div>
+          </div>
+          <div class="event-info">
+            <div class="event-name">STRAIGHT TO GARAGE OPENING EVENT</div>
+            <div class="event-meta">
+              <div class="event-meta-item">TIME <span>22:00–01:00</span></div>
+              <div class="event-meta-item">VENUE <span>VRChat</span></div>
+            </div>
+          </div>
+          <div class="event-right">
+            <div class="event-badge badge-upcoming">Upcoming</div>
+            <svg class="event-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="event-detail" id="ed-opening" role="region">
+          <div class="event-detail-inner">
+            <div class="ed-timecol">
+              <div class="ed-time">22:00–01:00</div>
+              <div class="ed-tz">JST · VRChat</div>
+            </div>
+            <div class="ed-body">
+              <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>SEP 08, 2026</strong> (Tue)</span></div>
+              <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat</span></div>
+              <div class="ed-row"><span class="ed-key">Lineup</span><span class="ed-val">Full crew — <strong>timetable TBA</strong></span></div>
+              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STRAGE 始動を飾るオープニングイベント。詳細は順次発表します。</span></div>
+            </div>
           </div>
         </div>
-        <div class="event-badge badge-upcoming">Upcoming</div>
       </div>
 
-      <div class="event-item">
-        <div class="event-date-box">
-          <div class="event-day">15</div>
-          <div class="event-month">SEP 2026</div>
-        </div>
-        <div class="event-info">
-          <div class="event-name">STRAIGHT TO GARAGE VOL.1</div>
-          <div class="event-meta">
-            <div class="event-meta-item">TIME <span>TBA</span></div>
-            <div class="event-meta-item">VENUE <span>VRChat</span></div>
+      <!-- 以降は未定 -->
+      <div class="event-item is-tba" data-event="tba">
+        <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-tba">
+          <div class="event-date-box">
+            <div class="event-day">––</div>
+            <div class="event-month">TBA</div>
           </div>
-        </div>
-        <div class="event-badge badge-upcoming">Upcoming</div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-date-box">
-          <div class="event-day">––</div>
-          <div class="event-month">TBA</div>
-        </div>
-        <div class="event-info">
-          <div class="event-name">TBA</div>
-          <div class="event-meta">
-            <div class="event-meta-item">DETAILS <span>Coming Soon</span></div>
+          <div class="event-info">
+            <div class="event-name">NEXT EVENT</div>
+            <div class="event-meta">
+              <div class="event-meta-item">DETAILS <span>Coming Soon</span></div>
+            </div>
           </div>
+          <div class="event-right">
+            <div class="event-badge badge-past">TBA</div>
+            <svg class="event-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="event-detail" id="ed-tba" role="region">
+          <div class="ed-tba">Details <span>coming soon</span> — 次回イベントは近日発表。</div>
         </div>
-        <div class="event-badge badge-past">TBA</div>
       </div>
 
     </div>
@@ -1611,6 +1751,86 @@
     }, { rootMargin: '150px' }).observe(v);
   });
 
+  // ── Shared event data (single source of truth for the opening event) ──
+  var OPENING = {
+    name: 'STRAIGHT TO GARAGE OPENING EVENT',
+    target: '2026-09-08T22:00:00+09:00'
+  };
+
+  // ── Hero countdown (pre-release hype; runs with or without GSAP) ──
+  (function () {
+    var wrap = document.getElementById('hero-countdown');
+    if (!wrap) return;
+    var evtEl = document.getElementById('hero-cd-event');
+    if (evtEl) evtEl.textContent = OPENING.name;
+    var D = document.getElementById('hcd-d'), H = document.getElementById('hcd-h'),
+        M = document.getElementById('hcd-m'), S = document.getElementById('hcd-s');
+    var targetMs = new Date(OPENING.target).getTime();
+    if (!isFinite(targetMs)) return;
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+    var timer = setInterval(tick, 1000);
+    function tick() {
+      var diff = targetMs - Date.now();
+      if (diff <= 0) {
+        clearInterval(timer);
+        wrap.classList.add('is-done');
+        return;
+      }
+      var s = Math.floor(diff / 1000);
+      D.textContent = pad(Math.floor(s / 86400));
+      H.textContent = pad(Math.floor(s % 86400 / 3600));
+      M.textContent = pad(Math.floor(s % 3600 / 60));
+      S.textContent = pad(s % 60);
+    }
+    tick();
+  })();
+
+  // ── Events accordion (select an event → its schedule expands) ──
+  (function () {
+    var list = document.getElementById('events-list');
+    if (!list) return;
+    var items = Array.prototype.slice.call(list.querySelectorAll('.event-item'));
+
+    function detailOf(item) { return item.querySelector('.event-detail'); }
+
+    function close(item) {
+      var d = detailOf(item);
+      item.classList.remove('is-open');
+      item.querySelector('.event-row').setAttribute('aria-expanded', 'false');
+      d.style.maxHeight = '0px';
+    }
+    function open(item) {
+      items.forEach(function (o) { if (o !== item) close(o); });
+      var d = detailOf(item);
+      item.classList.add('is-open');
+      item.querySelector('.event-row').setAttribute('aria-expanded', 'true');
+      d.style.maxHeight = d.scrollHeight + 'px';
+    }
+    function toggle(item) {
+      if (item.classList.contains('is-open')) close(item);
+      else open(item);
+    }
+
+    items.forEach(function (item) {
+      item.querySelector('.event-row').addEventListener('click', function () { toggle(item); });
+    });
+    // 開いたパネル内の高さ変化(フォント読込・リサイズ)に追従
+    window.addEventListener('resize', function () {
+      var openItem = list.querySelector('.event-item.is-open');
+      if (openItem) detailOf(openItem).style.maxHeight = detailOf(openItem).scrollHeight + 'px';
+    });
+
+    // teaser / any link with data-open-event deep-links & auto-opens
+    document.querySelectorAll('[data-open-event]').forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var id = trigger.getAttribute('data-open-event');
+        var target = list.querySelector('.event-item[data-event="' + id + '"]');
+        if (target) setTimeout(function () { open(target); }, 620);
+      });
+    });
+  })();
+
   // Plain fallback: no GSAP (CDN blocked / offline) — page stays fully readable
   if (!window.gsap || !window.ScrollTrigger) {
     window.addEventListener('scroll', function () {
@@ -1668,7 +1888,7 @@
   // ヒーローのスクラブアニメと opacity の取り合いにならないようにする
   if (!prefersReduced) {
     var introTween = gsap.fromTo(
-      ['.hero-eyebrow', '.hero-logo', '.hero-tagline', '.hero-bottom'],
+      ['.hero-eyebrow', '.hero-logo', '.hero-countdown', '.hero-tagline', '.hero-bottom'],
       { opacity: 0, y: 26 },
       { opacity: 1, y: 0, duration: 1.1, stagger: 0.14, ease: 'power3.out', delay: 0.15 }
     );
@@ -1714,6 +1934,8 @@
         { scale: 1.16, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
       .fromTo('.hero-eyebrow', { y: 0, opacity: 1 },
         { y: -50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
+      .fromTo('.hero-countdown', { y: 0, opacity: 1 },
+        { y: 40, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-tagline', { y: 0, opacity: 1 },
         { y: 50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-video', { opacity: 0.25, scale: 1 },
@@ -1829,13 +2051,9 @@
         scrub: true
       }
     });
-    gsap.from('.next-event-banner', {
+    gsap.from('.sched-teaser', {
       opacity: 0, y: 36, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: '.next-event-banner', start: 'top 82%', once: true }
-    });
-    gsap.from('.schedule-table tbody tr', {
-      opacity: 0, y: 24, stagger: 0.07, duration: 0.6, ease: 'power2.out',
-      scrollTrigger: { trigger: '.schedule-table', start: 'top 78%', once: true }
+      scrollTrigger: { trigger: '.sched-teaser', start: 'top 82%', once: true }
     });
 
     // Events: items slide in
@@ -1885,7 +2103,7 @@
   mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
     if (prefersReduced) return;
     gsap.utils.toArray(
-      '.mani-line, .stat, .crew-card, .section-head, .next-event-banner, .event-item, .interlude-line, .join-box'
+      '.mani-line, .stat, .crew-card, .section-head, .sched-teaser, .event-item, .interlude-line, .join-box'
     ).forEach(function (el) {
       gsap.from(el, {
         opacity: 0, y: 26, duration: 0.7, ease: 'power2.out',
