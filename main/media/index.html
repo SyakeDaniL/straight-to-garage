@@ -838,21 +838,21 @@
     </div>
     <hr class="head-rule">
 
-    <!-- ▼ フライヤー完成後: .coming-soon を削除して .flyer-grid のコメントを外し、
-         画像を img/ フォルダに置いて src とキャプションを差し替える -->
+    <!-- ▼ テスト登録中(undg.jpgは仮画像)。本番フライヤーができたら img/ に置いて src を差し替える -->
+    <div class="flyer-grid">
+      <figure class="flyer-item">
+        <img src="../undg.jpg" alt="STRAIGHT TO GARAGE OPENING EVENT フライヤー(仮)" loading="lazy">
+        <figcaption class="flyer-caption">OPENING EVENT <span>2026.09.08</span></figcaption>
+      </figure>
+    </div>
+
+    <!--
+    Coming Soon表示に戻す場合:
     <div class="coming-soon reveal">
       <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
       <p class="cs-status">Status — In Production</p>
       <p class="cs-label">COMING SOON</p>
       <p class="cs-sub">Flyer artwork on the way</p>
-    </div>
-
-    <!--
-    <div class="flyer-grid">
-      <figure class="flyer-item">
-        <img src="img/flyer-opening.jpg" alt="STRAIGHT TO GARAGE OPENING EVENT フライヤー" loading="lazy">
-        <figcaption class="flyer-caption">OPENING EVENT <span>2026.09.08</span></figcaption>
-      </figure>
     </div>
     -->
   </div>
@@ -873,6 +873,18 @@
              .movie-frame 内に blockquote を貼り、末尾の widgets.js のコメントを外す
          (B) mp4を直接置く場合 — video タグのコメントを外して src を差し替える -->
     <div class="movie-frame">
+      <!-- ▼ テスト登録中(ukuk_720p.mp4は仮動画)。本番はXポスト埋め込み(A)かmp4差し替えで -->
+      <video class="reveal" src="../ukuk_720p.mp4" controls playsinline preload="metadata"></video>
+
+      <!--
+      (A) Xポスト埋め込みの例(使うときは末尾のwidgets.jsのコメントも外す):
+      <blockquote class="twitter-tweet" data-theme="dark">
+        <a href="https://twitter.com/アカウント名/status/ポストID"></a>
+      </blockquote>
+      -->
+
+      <!--
+      Coming Soon表示に戻す場合:
       <div class="coming-soon reveal">
         <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
         <div class="cs-play" aria-hidden="true"></div>
@@ -880,17 +892,6 @@
         <p class="cs-label">COMING SOON</p>
         <p class="cs-sub">PR movie on the way</p>
       </div>
-
-      <!--
-      (A) Xポスト埋め込みの例:
-      <blockquote class="twitter-tweet" data-theme="dark">
-        <a href="https://twitter.com/アカウント名/status/ポストID"></a>
-      </blockquote>
-      -->
-
-      <!--
-      (B) mp4直接埋め込みの例:
-      <video src="pr-movie.mp4" controls playsinline preload="metadata"></video>
       -->
     </div>
   </div>
@@ -909,6 +910,18 @@
     <!-- ▼ mixをアップしたら: .coming-soon を削除して、アップ先に応じて
          (A) SoundCloud か (B) Mixcloud の .mix-item コメントを外して差し替える -->
     <div class="mix-list">
+      <!-- ▼ テスト登録中(SoundCloudの公開デモトラック)。本番mixのURLに差し替える -->
+      <div class="mix-item reveal">
+        <iframe height="166" scrolling="no" allow="autoplay" title="SoundCloud player"
+          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/forss/flickermood&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false"></iframe>
+        <div class="mix-caption">
+          <p class="mix-title">TEST MIX(仮)</p>
+          <p class="mix-meta">MIXED BY <span>TBA</span></p>
+        </div>
+      </div>
+
+      <!--
+      Coming Soon表示に戻す場合:
       <div class="coming-soon reveal">
         <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
         <div class="cs-wave" aria-hidden="true"></div>
@@ -916,6 +929,7 @@
         <p class="cs-label">COMING SOON</p>
         <p class="cs-sub">First mix on the way</p>
       </div>
+      -->
 
       <!--
       (A) SoundCloudの例 — トラックページ「Share > Embed」のiframe srcに差し替え
