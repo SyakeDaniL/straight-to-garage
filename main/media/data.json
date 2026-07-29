@@ -1,5 +1,12 @@
 {
   "flyers": [],
   "movies": [],
-  "mixes": []
+  "mixes": [
+    {
+      "platform": "mixcloud",
+      "url": "https://www.mixcloud.com/djsyneeeee/20251121_garagevibes/",
+      "title": "20251121_GarageVibes",
+      "by": "SYNE."
+    }
+  ]
 }
