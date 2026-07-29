@@ -228,10 +228,14 @@
     pointer-events: none;
   }
   .hero-logo img {
-    width: min(940px, 94vw, 58vh);
+    /* 画像(2000x2000)は上27%・下32%が透過余白。
+       余白ぶんをネガティブマージンで相殺し、ロゴの見た目サイズを保ったまま
+       レイアウト上の占有高さを抑える(countdown.htmlと同じ手法) */
+    --lw: min(940px, 94vw);
+    width: var(--lw);
     height: auto;
     display: block;
-    margin: 0 auto;
+    margin: calc(var(--lw) * -0.24) auto calc(var(--lw) * -0.27);
     position: relative;
     filter: drop-shadow(0 0 48px rgba(158,197,216,0.14));
   }
@@ -1540,7 +1544,7 @@
       <p class="hero-cd-done" id="hero-cd-done">SEE YOU ON <em>THE FLOOR.</em></p>
     </div>
 
-    <p class="hero-tagline">Where Culture Meets Community.</p>
+    <!-- 一旦非表示: <p class="hero-tagline">Where Culture Meets Community.</p> -->
   </div>
 
   <div class="hero-bottom">
@@ -2056,7 +2060,7 @@
   // ヒーローのスクラブアニメと opacity の取り合いにならないようにする
   if (!prefersReduced) {
     var introTween = gsap.fromTo(
-      ['.hero-eyebrow', '.hero-logo', '.hero-countdown', '.hero-tagline', '.hero-bottom'],
+      ['.hero-eyebrow', '.hero-logo', '.hero-countdown', '.hero-bottom'],
       { opacity: 0, y: 26 },
       { opacity: 1, y: 0, duration: 1.1, stagger: 0.14, ease: 'power3.out', delay: 0.15 }
     );
@@ -2104,8 +2108,6 @@
         { y: -50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-countdown', { y: 0, opacity: 1 },
         { y: 40, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
-      .fromTo('.hero-tagline', { y: 0, opacity: 1 },
-        { y: 50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-video', { opacity: 0.25, scale: 1 },
         { opacity: 0.06, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-grid', { scale: 1, opacity: 0.3 },
