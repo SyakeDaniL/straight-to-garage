@@ -1987,6 +1987,11 @@
     items.forEach(function (item) {
       item.querySelector('.event-row').addEventListener('click', function () { toggle(item); });
     });
+
+    // 最新イベントはデフォルトで開いた状態にする
+    var latest = list.querySelector('.event-item[data-event="opening"]') || items[0];
+    if (latest) open(latest);
+
     // 開いたパネル内の高さ変化(フォント読込・リサイズ)に追従
     window.addEventListener('resize', function () {
       var openItem = list.querySelector('.event-item.is-open');
