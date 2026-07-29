@@ -838,23 +838,16 @@
     </div>
     <hr class="head-rule">
 
-    <!-- ▼ テスト登録中(undg.jpgは仮画像)。本番フライヤーができたら img/ に置いて src を差し替える -->
-    <div class="flyer-grid">
-      <figure class="flyer-item">
-        <img src="../undg.jpg" alt="STRAIGHT TO GARAGE OPENING EVENT フライヤー(仮)" loading="lazy">
-        <figcaption class="flyer-caption">OPENING EVENT <span>2026.09.08</span></figcaption>
-      </figure>
+    <!-- ▼ 中身は data.json から描画される。登録はDiscordの登録チャンネルから(botがdata.jsonを更新)。
+         data.jsonが空(または読み込み失敗)の場合はComing Soon表示のまま -->
+    <div id="flyer-slot">
+      <div class="coming-soon reveal">
+        <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+        <p class="cs-status">Status — In Production</p>
+        <p class="cs-label">COMING SOON</p>
+        <p class="cs-sub">Flyer artwork on the way</p>
+      </div>
     </div>
-
-    <!--
-    Coming Soon表示に戻す場合:
-    <div class="coming-soon reveal">
-      <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
-      <p class="cs-status">Status — In Production</p>
-      <p class="cs-label">COMING SOON</p>
-      <p class="cs-sub">Flyer artwork on the way</p>
-    </div>
-    -->
   </div>
 </section>
 
@@ -872,19 +865,8 @@
          (A) Xポスト埋め込み — 投稿ページの「</> 埋め込む」からコードをコピーして
              .movie-frame 内に blockquote を貼り、末尾の widgets.js のコメントを外す
          (B) mp4を直接置く場合 — video タグのコメントを外して src を差し替える -->
-    <div class="movie-frame">
-      <!-- ▼ テスト登録中(ukuk_720p.mp4は仮動画)。本番はXポスト埋め込み(A)かmp4差し替えで -->
-      <video class="reveal" src="../ukuk_720p.mp4" controls playsinline preload="metadata"></video>
-
-      <!--
-      (A) Xポスト埋め込みの例(使うときは末尾のwidgets.jsのコメントも外す):
-      <blockquote class="twitter-tweet" data-theme="dark">
-        <a href="https://twitter.com/アカウント名/status/ポストID"></a>
-      </blockquote>
-      -->
-
-      <!--
-      Coming Soon表示に戻す場合:
+    <!-- ▼ 中身は data.json から描画される(Xポスト埋め込み or mp4)。登録はDiscordから -->
+    <div id="movie-slot" class="movie-frame">
       <div class="coming-soon reveal">
         <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
         <div class="cs-play" aria-hidden="true"></div>
@@ -892,7 +874,6 @@
         <p class="cs-label">COMING SOON</p>
         <p class="cs-sub">PR movie on the way</p>
       </div>
-      -->
     </div>
   </div>
 </section>
@@ -909,19 +890,8 @@
 
     <!-- ▼ mixをアップしたら: .coming-soon を削除して、アップ先に応じて
          (A) SoundCloud か (B) Mixcloud の .mix-item コメントを外して差し替える -->
-    <div class="mix-list">
-      <!-- ▼ テスト登録中(SoundCloudの公開デモトラック)。本番mixのURLに差し替える -->
-      <div class="mix-item reveal">
-        <iframe height="166" scrolling="no" allow="autoplay" title="SoundCloud player"
-          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/forss/flickermood&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false"></iframe>
-        <div class="mix-caption">
-          <p class="mix-title">TEST MIX(仮)</p>
-          <p class="mix-meta">MIXED BY <span>TBA</span></p>
-        </div>
-      </div>
-
-      <!--
-      Coming Soon表示に戻す場合:
+    <!-- ▼ 中身は data.json から描画される(SoundCloud / Mixcloud対応)。登録はDiscordから -->
+    <div id="mix-slot" class="mix-list">
       <div class="coming-soon reveal">
         <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
         <div class="cs-wave" aria-hidden="true"></div>
@@ -929,33 +899,6 @@
         <p class="cs-label">COMING SOON</p>
         <p class="cs-sub">First mix on the way</p>
       </div>
-      -->
-
-      <!--
-      (A) SoundCloudの例 — トラックページ「Share > Embed」のiframe srcに差し替え
-          (visual=false のプレーヤーが推奨・高さ166):
-      <div class="mix-item">
-        <iframe height="166" scrolling="no" allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/トラックID&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false"></iframe>
-        <div class="mix-caption">
-          <p class="mix-title">STRAIGHT TO GARAGE MIX VOL.1</p>
-          <p class="mix-meta">MIXED BY <span>DJ名</span></p>
-        </div>
-      </div>
-      -->
-
-      <!--
-      (B) Mixcloudの例 — feed= の後をアカウント名/トラックのスラッグに差し替え
-          (URLエンコード必須: / は %2F。例: feed=%2Fアカウント名%2Fmix-slug%2F):
-      <div class="mix-item">
-        <iframe height="120" scrolling="no" allow="autoplay"
-          src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=%2Fアカウント名%2Fmix-slug%2F"></iframe>
-        <div class="mix-caption">
-          <p class="mix-title">STRAIGHT TO GARAGE MIX VOL.1</p>
-          <p class="mix-meta">MIXED BY <span>DJ名</span></p>
-        </div>
-      </div>
-      -->
     </div>
 
     <p class="section-note" style="margin-top:2rem;">※ MIXは順次追加予定 / More mixes coming soon</p>
@@ -979,9 +922,6 @@
   <div class="footer-copy">© 2026 Straight to Garage. All rights reserved.</div>
 </footer>
 
-<!-- ▼ Xポスト埋め込み(A)を使うときにコメントを外す -->
-<!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
-
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
@@ -990,6 +930,104 @@
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav = document.getElementById('nav');
 
+  // ── data.json からメディアを描画(空・読み込み失敗時はComing Soonのまま) ──
+  function el(tag, cls) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    return e;
+  }
+
+  function renderMedia(data) {
+    if (Array.isArray(data.flyers) && data.flyers.length) {
+      var grid = el('div', 'flyer-grid');
+      data.flyers.forEach(function (f) {
+        var fig = el('figure', 'flyer-item');
+        var img = el('img');
+        img.src = f.img;
+        img.alt = f.title || 'flyer';
+        img.loading = 'lazy';
+        var cap = el('figcaption', 'flyer-caption');
+        cap.textContent = f.title || '';
+        var d = el('span');
+        d.textContent = f.date || '';
+        cap.appendChild(d);
+        fig.appendChild(img);
+        fig.appendChild(cap);
+        grid.appendChild(fig);
+      });
+      var slot = document.getElementById('flyer-slot');
+      slot.innerHTML = '';
+      slot.appendChild(grid);
+    }
+
+    if (Array.isArray(data.movies) && data.movies.length) {
+      var mslot = document.getElementById('movie-slot');
+      mslot.innerHTML = '';
+      var needsTwitter = false;
+      data.movies.forEach(function (m) {
+        if (m.type === 'x') {
+          needsTwitter = true;
+          var bq = el('blockquote', 'twitter-tweet reveal');
+          bq.setAttribute('data-theme', 'dark');
+          var a = el('a');
+          a.href = m.url;
+          bq.appendChild(a);
+          mslot.appendChild(bq);
+        } else if (m.type === 'mp4') {
+          var v = el('video', 'reveal');
+          v.src = m.src;
+          v.controls = true;
+          v.playsInline = true;
+          v.preload = 'metadata';
+          mslot.appendChild(v);
+        }
+      });
+      if (needsTwitter) {
+        var tw = el('script');
+        tw.async = true;
+        tw.src = 'https://platform.twitter.com/widgets.js';
+        document.body.appendChild(tw);
+      }
+    }
+
+    if (Array.isArray(data.mixes) && data.mixes.length) {
+      var xslot = document.getElementById('mix-slot');
+      xslot.innerHTML = '';
+      data.mixes.forEach(function (m) {
+        var item = el('div', 'mix-item reveal');
+        var ifr = el('iframe');
+        ifr.setAttribute('scrolling', 'no');
+        ifr.setAttribute('allow', 'autoplay');
+        ifr.title = m.title || 'mix player';
+        if (m.platform === 'mixcloud') {
+          var path = '';
+          try { path = new URL(m.url).pathname; } catch (e) {}
+          if (path && path.slice(-1) !== '/') path += '/';
+          ifr.height = 120;
+          ifr.src = 'https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=' + encodeURIComponent(path);
+        } else {
+          ifr.height = 166;
+          ifr.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(m.url) +
+            '&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false';
+        }
+        var cap = el('div', 'mix-caption');
+        var t = el('p', 'mix-title');
+        t.textContent = m.title || 'MIX';
+        var meta = el('p', 'mix-meta');
+        meta.textContent = 'MIXED BY ';
+        var by = el('span');
+        by.textContent = m.by || 'TBA';
+        meta.appendChild(by);
+        cap.appendChild(t);
+        cap.appendChild(meta);
+        item.appendChild(ifr);
+        item.appendChild(cap);
+        xslot.appendChild(item);
+      });
+    }
+  }
+
+  function init() {
   // 疑似ウェーブフォームのバー生成(高さ・遅延をランダムに)
   document.querySelectorAll('.cs-wave').forEach(function (wave) {
     for (var i = 0; i < 42; i++) {
@@ -1145,6 +1183,14 @@
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }
     });
   });
+  }
+
+  // 描画完了(または失敗)後にアニメーション初期化。GitHub Pagesのキャッシュ対策でクエリを付与
+  fetch('data.json?t=' + Date.now())
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(renderMedia)
+    .catch(function () {})
+    .then(init, init);
 })();
 </script>
 

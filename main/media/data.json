@@ -1,0 +1,11 @@
+{
+  "flyers": [
+    { "img": "../undg.jpg", "title": "OPENING EVENT", "date": "2026.09.08" }
+  ],
+  "movies": [
+    { "type": "mp4", "src": "../ukuk_720p.mp4" }
+  ],
+  "mixes": [
+    { "platform": "soundcloud", "url": "https://soundcloud.com/forss/flickermood", "title": "TEST MIX(仮)", "by": "TBA" }
+  ]
+}
