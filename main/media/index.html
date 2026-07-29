@@ -651,6 +651,59 @@
     align-self: center;
   }
   .mix-meta span { color: var(--ice); }
+  /* 音量スライダー(Widget API経由でプレーヤーを操作) */
+  .mix-vol {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.2rem 0.85rem;
+    border-top: 1px solid var(--line);
+  }
+  .mix-vol-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mix-vol input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, var(--ice) 50%, #23282d 50%);
+    outline: none;
+    cursor: pointer;
+  }
+  .mix-vol input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ice);
+    border: none;
+    box-shadow: 0 0 10px rgba(158,197,216,0.6);
+    transition: transform 0.2s var(--ease);
+  }
+  .mix-vol input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+  .mix-vol input[type="range"]::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ice);
+    border: none;
+    box-shadow: 0 0 10px rgba(158,197,216,0.6);
+  }
+  .mix-vol-out {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--ice);
+    min-width: 3.2em;
+    text-align: right;
+  }
   /* 疑似ウェーブフォーム(JSでバー生成) */
   .cs-wave {
     display: flex;
@@ -993,6 +1046,7 @@
     if (Array.isArray(data.mixes) && data.mixes.length) {
       var xslot = document.getElementById('mix-slot');
       xslot.innerHTML = '';
+      var volEntries = [];
       data.mixes.forEach(function (m) {
         var item = el('div', 'mix-item reveal');
         var ifr = el('iframe');
@@ -1022,7 +1076,86 @@
         cap.appendChild(meta);
         item.appendChild(ifr);
         item.appendChild(cap);
+
+        // 音量スライダー(デフォルト50%)
+        var vol = el('div', 'mix-vol');
+        var vlabel = el('span', 'mix-vol-label');
+        vlabel.textContent = 'VOL';
+        var slider = el('input');
+        slider.type = 'range';
+        slider.min = 0;
+        slider.max = 100;
+        slider.value = 50;
+        slider.setAttribute('aria-label', '音量');
+        var vout = el('span', 'mix-vol-out');
+        vout.textContent = '50%';
+        vol.appendChild(vlabel);
+        vol.appendChild(slider);
+        vol.appendChild(vout);
+        item.appendChild(vol);
+
         xslot.appendChild(item);
+        volEntries.push({ platform: m.platform, iframe: ifr, slider: slider, out: vout });
+      });
+      initMixVolume(volEntries);
+    }
+  }
+
+  // ── 音量スライダーとプレーヤーのWidget APIを接続 ──
+  var loadedScripts = {};
+  function loadScript(src, onload) {
+    if (loadedScripts[src]) { loadedScripts[src].then(onload); return; }
+    loadedScripts[src] = new Promise(function (resolve) {
+      var s = el('script');
+      s.src = src;
+      s.onload = resolve;
+      document.body.appendChild(s);
+    });
+    loadedScripts[src].then(onload);
+  }
+
+  function bindSlider(entry, apply) {
+    var update = function () {
+      var v = parseInt(entry.slider.value, 10);
+      entry.out.textContent = v + '%';
+      entry.slider.style.background =
+        'linear-gradient(90deg, var(--ice) ' + v + '%, #23282d ' + v + '%)';
+      apply(v);
+    };
+    entry.slider.addEventListener('input', update);
+    apply(parseInt(entry.slider.value, 10));
+  }
+
+  function initMixVolume(entries) {
+    var sc = entries.filter(function (e) { return e.platform !== 'mixcloud'; });
+    var mc = entries.filter(function (e) { return e.platform === 'mixcloud'; });
+
+    if (sc.length) {
+      loadScript('https://w.soundcloud.com/player/api.js', function () {
+        sc.forEach(function (e) {
+          var widget = SC.Widget(e.iframe);
+          // READY前のsetVolumeは無視されるため、READY時にも現在値を適用する
+          widget.bind(SC.Widget.Events.READY, function () {
+            widget.setVolume(parseInt(e.slider.value, 10));
+          });
+          bindSlider(e, function (v) { widget.setVolume(v); });
+        });
+      });
+    }
+
+    if (mc.length) {
+      loadScript('https://widget.mixcloud.com/media/js/widgetApi.js', function () {
+        mc.forEach(function (e) {
+          var widget = window.Mixcloud && Mixcloud.PlayerWidget(e.iframe);
+          if (!widget) { e.slider.closest('.mix-vol').style.display = 'none'; return; }
+          widget.ready.then(function () {
+            if (typeof widget.setVolume !== 'function') {
+              e.slider.closest('.mix-vol').style.display = 'none';
+              return;
+            }
+            bindSlider(e, function (v) { widget.setVolume(v / 100); });
+          });
+        });
       });
     }
   }
