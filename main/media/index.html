@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Straight to Garage — フライヤー・PR動画・DJ MIXなどのメディアアーカイブ。VRChat発のUK Garageサウンドコレクティブ。">
+<meta name="theme-color" content="#060708">
+<meta property="og:title" content="Media — Straight to Garage">
+<meta property="og:description" content="フライヤー・PR動画・DJ MIX。Straight to Garageのメディアアーカイブ。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://straight-to-garage.com/main/strage.png">
+<title>Media — Straight to Garage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #060708;
+    --off-black: #0c0e10;
+    --dark: #14171a;
+    --ice: #9ec5d8;
+    --ice-dim: rgba(158,197,216,0.35);
+    --ice-faint: rgba(158,197,216,0.1);
+    --deep: #4a7fa0;
+    --muted: #4a4f54;
+    --mid: #8b9196;
+    --light: #c9cdd0;
+    --white: #eef1f3;
+    --line: rgba(158,197,216,0.09);
+    --nav-h: 64px;
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --jp: 'Zen Kaku Gothic New', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow Condensed', var(--jp), sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--ice); color: var(--black); }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb {
+    background: #23282d;
+    border: 2px solid var(--black);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--deep); }
+
+  /* film grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+                backdrop-filter 0.4s, height 0.4s var(--ease);
+  }
+  #nav.scrolled {
+    height: 54px;
+    background: rgba(6,7,8,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: var(--line);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.16em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span { color: var(--ice); }
+  .nav-logo::after {
+    content: 'VRCHAT · UKG';
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 10px;
+    transform: translateY(1px);
+  }
+
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ice);
+    border: 1px solid var(--ice-dim);
+    background: var(--ice-faint);
+    padding: 7px 16px;
+    transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .nav-cta:hover {
+    background: var(--ice);
+    border-color: var(--ice);
+    color: var(--black);
+    box-shadow: 0 0 18px rgba(158,197,216,0.35);
+  }
+
+  /* ── PAGE HERO (compact) ── */
+  #media-hero {
+    position: relative;
+    overflow: hidden;
+    padding: calc(var(--nav-h) + 90px) 0 70px;
+    text-align: center;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: -10%;
+    background-image:
+      linear-gradient(var(--ice-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ice-faint) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 40%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 40%, black 20%, transparent 75%);
+  }
+  .media-hero-inner { position: relative; z-index: 1; padding: 0 1.5rem; }
+  .media-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.34em;
+    color: var(--ice);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .media-eyebrow::before,
+  .media-eyebrow::after {
+    content: '';
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ice-dim));
+  }
+  .media-eyebrow::after { background: linear-gradient(90deg, var(--ice-dim), transparent); }
+  .media-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .media-title em { color: var(--ice); font-style: normal; }
+  .media-sub {
+    margin-top: 1.6rem;
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+  }
+
+  /* ── SECTIONS ── */
+  section.panel { padding: 110px 0 95px; position: relative; }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    position: relative;
+  }
+  .section-head { position: relative; margin-bottom: 3rem; }
+  .section-head::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -0.55em;
+    left: -0.08em;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(7rem, 16vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.07);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .section-head > * { position: relative; z-index: 1; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.3em;
+    color: var(--deep);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--deep);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .section-title em { color: var(--ice); font-style: normal; }
+  .section-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── COMING SOON placeholder ── */
+  .coming-soon {
+    border: 1px dashed rgba(158,197,216,0.22);
+    background: var(--ice-faint);
+    padding: 4.5rem 2rem;
+    text-align: center;
+  }
+  .coming-soon .cs-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: 0.1em;
+    color: var(--ice-dim);
+  }
+  .coming-soon .cs-sub {
+    margin-top: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── FLYER ── */
+  #flyer { background: var(--off-black); }
+  .flyer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .flyer-item {
+    position: relative;
+    border: 1px solid var(--line);
+    background: var(--dark);
+    overflow: hidden;
+  }
+  .flyer-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: saturate(0.92);
+    transition: transform 0.5s var(--ease), filter 0.4s;
+  }
+  .flyer-item:hover img { transform: scale(1.03); filter: saturate(1); }
+  .flyer-caption {
+    padding: 0.9rem 1rem;
+    border-top: 1px solid var(--line);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .flyer-caption span { color: var(--ice); }
+
+  /* ── PR MOVIE ── */
+  #movie { background: var(--black); }
+  .movie-frame {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .movie-frame video,
+  .movie-frame iframe {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--dark);
+  }
+  .movie-frame video { height: auto; }
+  /* Xポスト埋め込みを中央寄せ */
+  .movie-frame .twitter-tweet { margin: 0 auto !important; }
+
+  /* ── MIX ── */
+  #mix { background: var(--off-black); }
+  .mix-list { display: grid; gap: 2.5rem; max-width: 780px; }
+  .mix-item { border: 1px solid var(--line); background: var(--dark); }
+  .mix-item iframe { display: block; width: 100%; border: 0; }
+  .mix-caption {
+    padding: 1rem 1.2rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.6rem 1.5rem;
+  }
+  .mix-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+  .mix-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    align-self: center;
+  }
+  .mix-meta span { color: var(--ice); }
+
+  /* ── BACK LINK ── */
+  .back-row { text-align: center; padding: 40px 0 110px; background: var(--off-black); }
+  .back-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--mid);
+    border: 1px solid var(--line);
+    padding: 12px 28px;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .back-link:hover { color: var(--ice); border-color: var(--ice-dim); background: var(--ice-faint); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--line);
+    padding: 60px 2rem 40px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.14em;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--ice); }
+  .footer-sub {
+    margin-top: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-nav {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.2rem;
+  }
+  .footer-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--mid);
+    transition: color 0.3s;
+  }
+  .footer-nav a:hover { color: var(--ice); }
+  .footer-copy {
+    margin-top: 2.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    #nav { padding: 0 1.2rem; }
+    .nav-logo::after { display: none; }
+    section.panel { padding: 80px 0 65px; }
+    .section-inner { padding: 0 1.4rem; }
+    .footer-nav { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="../" class="nav-logo">#STRAGE<span>.</span></a>
+  <a href="../" class="nav-cta">Back to Site</a>
+</nav>
+
+<!-- PAGE HERO -->
+<header id="media-hero">
+  <div class="hero-grid"></div>
+  <div class="media-hero-inner">
+    <p class="media-eyebrow">Flyer · PR Movie · Mix</p>
+    <h1 class="media-title">MEDIA<em>.</em></h1>
+    <p class="media-sub">Straight to Garage のフライヤー・PR動画・DJ MIXをまとめたページです。</p>
+  </div>
+</header>
+
+<!-- 01 FLYER -->
+<section id="flyer" class="panel">
+  <div class="section-inner">
+    <div class="section-head" data-num="01">
+      <p class="section-label">Artwork</p>
+      <h2 class="section-title">FLYER</h2>
+    </div>
+
+    <!-- ▼ フライヤー完成後: .coming-soon を削除して .flyer-grid のコメントを外し、
+         画像を img/ フォルダに置いて src とキャプションを差し替える -->
+    <div class="coming-soon">
+      <p class="cs-label">COMING SOON</p>
+      <p class="cs-sub">Flyer in production</p>
+    </div>
+
+    <!--
+    <div class="flyer-grid">
+      <figure class="flyer-item">
+        <img src="img/flyer-opening.jpg" alt="STRAIGHT TO GARAGE OPENING EVENT フライヤー" loading="lazy">
+        <figcaption class="flyer-caption">OPENING EVENT <span>2026.09.08</span></figcaption>
+      </figure>
+    </div>
+    -->
+  </div>
+</section>
+
+<!-- 02 PR MOVIE -->
+<section id="movie" class="panel">
+  <div class="section-inner">
+    <div class="section-head" data-num="02">
+      <p class="section-label">Promotion</p>
+      <h2 class="section-title">PR <em>MOVIE</em></h2>
+    </div>
+
+    <!-- ▼ PR動画をXに投稿したら: .coming-soon を削除して下のどちらかを使う
+         (A) Xポスト埋め込み — 投稿ページの「</> 埋め込む」からコードをコピーして
+             .movie-frame 内に blockquote を貼り、末尾の widgets.js のコメントを外す
+         (B) mp4を直接置く場合 — video タグのコメントを外して src を差し替える -->
+    <div class="movie-frame">
+      <div class="coming-soon">
+        <p class="cs-label">COMING SOON</p>
+        <p class="cs-sub">PR movie in production</p>
+      </div>
+
+      <!--
+      (A) Xポスト埋め込みの例:
+      <blockquote class="twitter-tweet" data-theme="dark">
+        <a href="https://twitter.com/アカウント名/status/ポストID"></a>
+      </blockquote>
+      -->
+
+      <!--
+      (B) mp4直接埋め込みの例:
+      <video src="pr-movie.mp4" controls playsinline preload="metadata"></video>
+      -->
+    </div>
+  </div>
+</section>
+
+<!-- 03 MIX -->
+<section id="mix" class="panel">
+  <div class="section-inner">
+    <div class="section-head" data-num="03">
+      <p class="section-label">Sound</p>
+      <h2 class="section-title">MIX</h2>
+    </div>
+
+    <!-- ▼ mixをアップしたら: .coming-soon を削除して、アップ先に応じて
+         (A) SoundCloud か (B) Mixcloud の .mix-item コメントを外して差し替える -->
+    <div class="mix-list">
+      <div class="coming-soon">
+        <p class="cs-label">COMING SOON</p>
+        <p class="cs-sub">Mix in production</p>
+      </div>
+
+      <!--
+      (A) SoundCloudの例 — トラックページ「Share > Embed」のiframe srcに差し替え
+          (visual=false のプレーヤーが推奨・高さ166):
+      <div class="mix-item">
+        <iframe height="166" scrolling="no" allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/トラックID&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false"></iframe>
+        <div class="mix-caption">
+          <p class="mix-title">STRAIGHT TO GARAGE MIX VOL.1</p>
+          <p class="mix-meta">MIXED BY <span>DJ名</span></p>
+        </div>
+      </div>
+      -->
+
+      <!--
+      (B) Mixcloudの例 — feed= の後をアカウント名/トラックのスラッグに差し替え
+          (URLエンコード必須: / は %2F。例: feed=%2Fアカウント名%2Fmix-slug%2F):
+      <div class="mix-item">
+        <iframe height="120" scrolling="no" allow="autoplay"
+          src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=%2Fアカウント名%2Fmix-slug%2F"></iframe>
+        <div class="mix-caption">
+          <p class="mix-title">STRAIGHT TO GARAGE MIX VOL.1</p>
+          <p class="mix-meta">MIXED BY <span>DJ名</span></p>
+        </div>
+      </div>
+      -->
+    </div>
+
+    <p class="section-note" style="margin-top:2rem;">※ MIXは順次追加予定 / More mixes coming soon</p>
+  </div>
+</section>
+
+<div class="back-row">
+  <a class="back-link" href="../">← Back to Main Site</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">STRAIGHT TO GARAGE<span>.</span></div>
+  <div class="footer-sub">UK Garage · Speed Garage · Bassline · VRChat</div>
+  <nav class="footer-nav">
+    <a href="../#manifesto">About</a>
+    <a href="../#members">Crew</a>
+    <a href="../#events">Events</a>
+    <a href="../#join">Discord</a>
+  </nav>
+  <div class="footer-copy">© 2026 Straight to Garage. All rights reserved.</div>
+</footer>
+
+<!-- ▼ Xポスト埋め込み(A)を使うときにコメントを外す -->
+<!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+
+<script>
+(function () {
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
