@@ -34,6 +34,10 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html { scroll-behavior: auto; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
   body {
     background: var(--black);
     color: var(--white);
@@ -63,6 +67,18 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  /* ── PROGRESS BAR ── */
+  .progress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    z-index: 300;
+    background: linear-gradient(90deg, var(--deep), var(--ice));
+    transform: scaleX(0);
+    transform-origin: left;
+    box-shadow: 0 0 12px rgba(158,197,216,0.5);
+  }
+
   /* ── NAV ── */
   #nav {
     position: fixed;
@@ -76,7 +92,8 @@
     background: transparent;
     border-bottom: 1px solid transparent;
     transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
-                backdrop-filter 0.4s, height 0.4s var(--ease);
+                backdrop-filter 0.4s, transform 0.4s var(--ease),
+                height 0.4s var(--ease);
   }
   #nav.scrolled {
     height: 54px;
@@ -85,6 +102,7 @@
     -webkit-backdrop-filter: blur(16px);
     border-bottom-color: var(--line);
   }
+  #nav.hidden { transform: translateY(-100%); }
 
   .nav-logo {
     font-family: 'Bebas Neue', sans-serif;
@@ -127,12 +145,15 @@
     box-shadow: 0 0 18px rgba(158,197,216,0.35);
   }
 
-  /* ── PAGE HERO (compact) ── */
+  /* ── HERO ── */
   #media-hero {
     position: relative;
+    min-height: 92vh;
     overflow: hidden;
-    padding: calc(var(--nav-h) + 90px) 0 70px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--nav-h) + 3rem) 0 4rem;
   }
   .hero-grid {
     position: absolute;
@@ -142,70 +163,247 @@
       linear-gradient(90deg, var(--ice-faint) 1px, transparent 1px);
     background-size: 64px 64px;
     opacity: 0.3;
-    mask-image: radial-gradient(ellipse 70% 65% at 50% 40%, black 20%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 40%, black 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, black 20%, transparent 75%);
+    will-change: transform;
   }
-  .media-hero-inner { position: relative; z-index: 1; padding: 0 1.5rem; }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(30,60,100,0.16) 0%, transparent 70%),
+      linear-gradient(to bottom, rgba(6,7,8,0.4) 0%, transparent 30%, transparent 70%, var(--black) 100%);
+  }
+  /* 背面を漂う巨大アウトライン文字 */
+  .hero-ghost {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16rem, 42vw, 34rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.05);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    will-change: transform;
+  }
+
+  .media-hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
   .media-eyebrow {
     font-family: 'Space Mono', monospace;
     font-size: 0.66rem;
     letter-spacing: 0.34em;
     color: var(--ice);
     text-transform: uppercase;
-    margin-bottom: 2rem;
+    margin-bottom: 2.6rem;
     display: inline-flex;
     align-items: center;
     gap: 1.2rem;
   }
-  .media-eyebrow::before,
-  .media-eyebrow::after {
+  .media-eyebrow::before {
     content: '';
     width: 48px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--ice-dim));
+    background: linear-gradient(90deg, var(--ice-dim), transparent);
   }
-  .media-eyebrow::after { background: linear-gradient(90deg, var(--ice-dim), transparent); }
+
+  /* 1文字ずつマスク下から立ち上がるタイトル */
   .media-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 12vw, 9rem);
-    line-height: 0.92;
-    letter-spacing: 0.04em;
+    font-size: clamp(5rem, 17vw, 13.5rem);
+    line-height: 0.88;
+    letter-spacing: 0.03em;
     color: var(--white);
+    display: flex;
+    flex-wrap: wrap;
   }
-  .media-title em { color: var(--ice); font-style: normal; }
+  .media-title .ch-mask {
+    display: inline-block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+  .media-title .ch {
+    display: inline-block;
+    will-change: transform;
+  }
+  .media-title .ch.accent { color: var(--ice); }
+
   .media-sub {
-    margin-top: 1.6rem;
+    margin-top: 2.2rem;
     font-family: var(--jp);
     font-weight: 300;
     font-size: 0.95rem;
     letter-spacing: 0.08em;
     color: var(--mid);
+    max-width: 30em;
   }
 
+  /* ヒーロー内インデックス(アンカー) */
+  .hero-index {
+    margin-top: 3.4rem;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hero-index a {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 1.4rem 0.4rem 1.3rem;
+    text-decoration: none;
+    border-right: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero-index a:last-child { border-right: none; }
+  .hero-index a::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: var(--ice);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease);
+  }
+  .hero-index a:hover::before { transform: scaleX(1); }
+  .hero-index .idx-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--deep);
+    transition: color 0.3s;
+  }
+  .hero-index .idx-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    transition: color 0.3s, transform 0.45s var(--ease);
+  }
+  .hero-index .idx-arrow {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transform: translateX(-6px);
+    opacity: 0;
+    transition: transform 0.45s var(--ease), opacity 0.3s;
+  }
+  .hero-index a:hover .idx-name { color: var(--white); transform: translateX(4px); }
+  .hero-index a:hover .idx-num { color: var(--ice); }
+  .hero-index a:hover .idx-arrow { transform: translateX(0); opacity: 1; color: var(--ice); }
+
+  .hero-bottom {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(to bottom, transparent, var(--ice-dim));
+    overflow: hidden;
+    position: relative;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    left: 0; top: -50%;
+    width: 1px;
+    height: 50%;
+    background: var(--ice);
+    animation: scrollbeam 2.2s var(--ease) infinite;
+  }
+  @keyframes scrollbeam {
+    0% { top: -50%; }
+    100% { top: 110%; }
+  }
+  .scroll-word {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── KINETIC MARQUEE(常時ループ + スクラブ) ── */
+  .kinetic {
+    padding: 4.5rem 0;
+    overflow: hidden;
+    background: var(--black);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .kinetic-row {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    display: flex;
+    will-change: transform;
+    user-select: none;
+  }
+  .kinetic-row .loop {
+    display: inline-flex;
+    flex-shrink: 0;
+    animation: marquee 26s linear infinite;
+  }
+  .kinetic-row[data-dir="1"] .loop { animation-direction: reverse; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+  .kinetic-row .solid { color: rgba(238,241,243,0.92); }
+  .kinetic-row .outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(158,197,216,0.28);
+  }
+  .kinetic-row .dot { color: var(--deep); padding: 0 2.2rem; }
+
   /* ── SECTIONS ── */
-  section.panel { padding: 110px 0 95px; position: relative; }
+  section.panel { padding: 130px 0 110px; position: relative; overflow: hidden; }
   .section-inner {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 2.5rem;
     position: relative;
   }
-  .section-head { position: relative; margin-bottom: 3rem; }
-  .section-head::before {
-    content: attr(data-num);
+  .section-head { position: relative; margin-bottom: 3.5rem; }
+  .ghost-num {
     position: absolute;
-    top: -0.55em;
-    left: -0.08em;
+    top: -0.45em;
+    right: -0.05em;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(7rem, 16vw, 13rem);
+    font-size: clamp(9rem, 22vw, 17rem);
     line-height: 1;
     color: transparent;
     -webkit-text-stroke: 1px rgba(158,197,216,0.07);
     pointer-events: none;
     user-select: none;
     z-index: 0;
+    will-change: transform;
   }
-  .section-head > * { position: relative; z-index: 1; }
+  .section-head > *:not(.ghost-num) { position: relative; z-index: 1; }
   .section-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.66rem;
@@ -237,22 +435,101 @@
     color: var(--muted);
     text-transform: uppercase;
   }
+  /* セクション頭のヘアライン(スクロールで左から引かれる) */
+  .head-rule {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, var(--ice-dim), var(--line) 55%, transparent);
+    margin: 0 0 3rem;
+    transform-origin: left;
+  }
 
-  /* ── COMING SOON placeholder ── */
+  /* ── COMING SOON アートボード ── */
   .coming-soon {
-    border: 1px dashed rgba(158,197,216,0.22);
-    background: var(--ice-faint);
-    padding: 4.5rem 2rem;
+    position: relative;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(rgba(158,197,216,0.03), rgba(158,197,216,0.01)),
+      var(--off-black);
+    padding: 5rem 2rem;
     text-align: center;
+    overflow: hidden;
+    transition: border-color 0.4s;
+  }
+  .coming-soon:hover { border-color: var(--ice-dim); }
+  /* 四隅のティックマーク */
+  .coming-soon .tick {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--ice-dim);
+    border-style: solid;
+    border-width: 0;
+    transition: border-color 0.4s;
+  }
+  .coming-soon:hover .tick { border-color: var(--ice); }
+  .coming-soon .tick.tl { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+  .coming-soon .tick.tr { top: 8px; right: 8px; border-top-width: 1px; border-right-width: 1px; }
+  .coming-soon .tick.bl { bottom: 8px; left: 8px; border-bottom-width: 1px; border-left-width: 1px; }
+  .coming-soon .tick.br { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+  /* 走査線 */
+  .coming-soon::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: -20%;
+    height: 34%;
+    background: linear-gradient(to bottom, transparent, rgba(158,197,216,0.045), transparent);
+    animation: scanline 5s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes scanline {
+    from { top: -40%; }
+    to { top: 110%; }
+  }
+  .coming-soon .cs-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--deep);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.6rem;
+  }
+  .coming-soon .cs-status::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ice);
+    box-shadow: 0 0 10px rgba(158,197,216,0.8);
+    animation: blink 1.8s var(--ease) infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
   }
   .coming-soon .cs-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
     letter-spacing: 0.1em;
-    color: var(--ice-dim);
+    line-height: 1;
+    color: transparent;
+    background: linear-gradient(100deg,
+      var(--ice-dim) 0%, var(--ice-dim) 42%,
+      var(--white) 50%,
+      var(--ice-dim) 58%, var(--ice-dim) 100%);
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmer 4.5s var(--ease) infinite;
+  }
+  @keyframes shimmer {
+    from { background-position: 120% 0; }
+    to { background-position: -120% 0; }
   }
   .coming-soon .cs-sub {
-    margin-top: 0.8rem;
+    margin-top: 1rem;
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem;
     letter-spacing: 0.2em;
@@ -278,9 +555,9 @@
     width: 100%;
     height: auto;
     filter: saturate(0.92);
-    transition: transform 0.5s var(--ease), filter 0.4s;
+    transition: transform 0.6s var(--ease), filter 0.4s;
   }
-  .flyer-item:hover img { transform: scale(1.03); filter: saturate(1); }
+  .flyer-item:hover img { transform: scale(1.04); filter: saturate(1); }
   .flyer-caption {
     padding: 0.9rem 1rem;
     border-top: 1px solid var(--line);
@@ -297,10 +574,7 @@
 
   /* ── PR MOVIE ── */
   #movie { background: var(--black); }
-  .movie-frame {
-    max-width: 780px;
-    margin: 0 auto;
-  }
+  .movie-frame { max-width: 780px; margin: 0 auto; }
   .movie-frame video,
   .movie-frame iframe {
     display: block;
@@ -309,8 +583,45 @@
     background: var(--dark);
   }
   .movie-frame video { height: auto; }
-  /* Xポスト埋め込みを中央寄せ */
   .movie-frame .twitter-tweet { margin: 0 auto !important; }
+  /* プレースホルダーは16:9で「まだ無い映像」の画角を見せる */
+  .movie-frame .coming-soon {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .cs-play {
+    width: 58px; height: 58px;
+    border: 1px solid var(--ice-dim);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+    position: relative;
+  }
+  .cs-play::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent transparent transparent var(--ice-dim);
+    margin-left: 3px;
+  }
+  .cs-play::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border: 1px solid var(--ice-dim);
+    border-radius: 50%;
+    animation: pulse-ring 2.6s var(--ease) infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.65); opacity: 0; }
+  }
 
   /* ── MIX ── */
   #mix { background: var(--off-black); }
@@ -340,6 +651,24 @@
     align-self: center;
   }
   .mix-meta span { color: var(--ice); }
+  /* 疑似ウェーブフォーム(JSでバー生成) */
+  .cs-wave {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    height: 54px;
+    margin-bottom: 1.8rem;
+  }
+  .cs-wave i {
+    width: 2px;
+    background: var(--ice-dim);
+    animation: wave 1.6s ease-in-out infinite alternate;
+  }
+  @keyframes wave {
+    from { transform: scaleY(0.25); opacity: 0.5; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
 
   /* ── BACK LINK ── */
   .back-row { text-align: center; padding: 40px 0 110px; background: var(--off-black); }
@@ -352,9 +681,14 @@
     color: var(--mid);
     border: 1px solid var(--line);
     padding: 12px 28px;
-    transition: color 0.3s, border-color 0.3s, background 0.3s;
+    transition: color 0.3s, border-color 0.3s, background 0.3s, box-shadow 0.3s;
   }
-  .back-link:hover { color: var(--ice); border-color: var(--ice-dim); background: var(--ice-faint); }
+  .back-link:hover {
+    color: var(--ice);
+    border-color: var(--ice-dim);
+    background: var(--ice-faint);
+    box-shadow: 0 0 18px rgba(158,197,216,0.15);
+  }
 
   /* ── FOOTER ── */
   footer {
@@ -386,6 +720,7 @@
     gap: 2.2rem;
   }
   .footer-nav a {
+    position: relative;
     font-family: 'Space Mono', monospace;
     font-size: 0.64rem;
     letter-spacing: 0.2em;
@@ -393,8 +728,20 @@
     text-decoration: none;
     color: var(--mid);
     transition: color 0.3s;
+    padding-bottom: 3px;
+  }
+  .footer-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--ice);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s var(--ease);
   }
   .footer-nav a:hover { color: var(--ice); }
+  .footer-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
   .footer-copy {
     margin-top: 2.4rem;
     font-family: 'Space Mono', monospace;
@@ -406,13 +753,29 @@
   @media (max-width: 640px) {
     #nav { padding: 0 1.2rem; }
     .nav-logo::after { display: none; }
-    section.panel { padding: 80px 0 65px; }
+    section.panel { padding: 85px 0 70px; }
     .section-inner { padding: 0 1.4rem; }
+    .media-hero-inner { padding: 0 1.4rem; }
+    .hero-index { grid-template-columns: 1fr; }
+    .hero-index a { border-right: none; border-bottom: 1px solid var(--line); }
+    .hero-index a:last-child { border-bottom: none; }
     .footer-nav { gap: 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kinetic-row .loop,
+    .coming-soon::before,
+    .coming-soon .cs-status::before,
+    .coming-soon .cs-label,
+    .cs-play::after,
+    .cs-wave i,
+    .scroll-line::after { animation: none; }
   }
 </style>
 </head>
 <body>
+
+<div class="progress"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -420,29 +783,68 @@
   <a href="../" class="nav-cta">Back to Site</a>
 </nav>
 
-<!-- PAGE HERO -->
+<!-- HERO -->
 <header id="media-hero">
   <div class="hero-grid"></div>
+  <div class="hero-shade"></div>
+  <div class="hero-ghost" aria-hidden="true">PRESS</div>
+
   <div class="media-hero-inner">
-    <p class="media-eyebrow">Flyer · PR Movie · Mix</p>
-    <h1 class="media-title">MEDIA<em>.</em></h1>
-    <p class="media-sub">Straight to Garage のフライヤー・PR動画・DJ MIXをまとめたページです。</p>
+    <p class="media-eyebrow">Straight to Garage — Archive</p>
+    <h1 class="media-title" aria-label="MEDIA">
+      <span class="ch-mask"><span class="ch">M</span></span><span class="ch-mask"><span class="ch">E</span></span><span class="ch-mask"><span class="ch">D</span></span><span class="ch-mask"><span class="ch">I</span></span><span class="ch-mask"><span class="ch">A</span></span><span class="ch-mask"><span class="ch accent">.</span></span>
+    </h1>
+    <p class="media-sub">フライヤー、PR動画、DJ MIX。<br>Straight to Garage のビジュアルとサウンドのアーカイブ。</p>
+
+    <nav class="hero-index" aria-label="Media sections">
+      <a href="#flyer">
+        <span class="idx-num">01</span>
+        <span class="idx-name">FLYER</span>
+        <span class="idx-arrow">→</span>
+      </a>
+      <a href="#movie">
+        <span class="idx-num">02</span>
+        <span class="idx-name">PR MOVIE</span>
+        <span class="idx-arrow">→</span>
+      </a>
+      <a href="#mix">
+        <span class="idx-num">03</span>
+        <span class="idx-name">MIX</span>
+        <span class="idx-arrow">→</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="scroll-line"></div>
+    <span class="scroll-word">Scroll</span>
   </div>
 </header>
+
+<!-- KINETIC MARQUEE -->
+<div class="kinetic" aria-hidden="true">
+  <div class="kinetic-row" data-dir="-1">
+    <span class="loop"><span class="solid">FLYER</span><span class="dot">·</span><span class="outline">PR MOVIE</span><span class="dot">·</span><span class="solid">MIX</span><span class="dot">·</span><span class="outline">FLYER</span><span class="dot">·</span><span class="solid">PR MOVIE</span><span class="dot">·</span><span class="outline">MIX</span><span class="dot">·</span></span><span class="loop"><span class="solid">FLYER</span><span class="dot">·</span><span class="outline">PR MOVIE</span><span class="dot">·</span><span class="solid">MIX</span><span class="dot">·</span><span class="outline">FLYER</span><span class="dot">·</span><span class="solid">PR MOVIE</span><span class="dot">·</span><span class="outline">MIX</span><span class="dot">·</span></span>
+  </div>
+</div>
 
 <!-- 01 FLYER -->
 <section id="flyer" class="panel">
   <div class="section-inner">
-    <div class="section-head" data-num="01">
+    <div class="section-head">
+      <div class="ghost-num" aria-hidden="true">01</div>
       <p class="section-label">Artwork</p>
       <h2 class="section-title">FLYER</h2>
     </div>
+    <hr class="head-rule">
 
     <!-- ▼ フライヤー完成後: .coming-soon を削除して .flyer-grid のコメントを外し、
          画像を img/ フォルダに置いて src とキャプションを差し替える -->
-    <div class="coming-soon">
+    <div class="coming-soon reveal">
+      <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+      <p class="cs-status">Status — In Production</p>
       <p class="cs-label">COMING SOON</p>
-      <p class="cs-sub">Flyer in production</p>
+      <p class="cs-sub">Flyer artwork on the way</p>
     </div>
 
     <!--
@@ -459,19 +861,24 @@
 <!-- 02 PR MOVIE -->
 <section id="movie" class="panel">
   <div class="section-inner">
-    <div class="section-head" data-num="02">
+    <div class="section-head">
+      <div class="ghost-num" aria-hidden="true">02</div>
       <p class="section-label">Promotion</p>
       <h2 class="section-title">PR <em>MOVIE</em></h2>
     </div>
+    <hr class="head-rule">
 
     <!-- ▼ PR動画をXに投稿したら: .coming-soon を削除して下のどちらかを使う
          (A) Xポスト埋め込み — 投稿ページの「</> 埋め込む」からコードをコピーして
              .movie-frame 内に blockquote を貼り、末尾の widgets.js のコメントを外す
          (B) mp4を直接置く場合 — video タグのコメントを外して src を差し替える -->
     <div class="movie-frame">
-      <div class="coming-soon">
+      <div class="coming-soon reveal">
+        <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+        <div class="cs-play" aria-hidden="true"></div>
+        <p class="cs-status">Status — In Production</p>
         <p class="cs-label">COMING SOON</p>
-        <p class="cs-sub">PR movie in production</p>
+        <p class="cs-sub">PR movie on the way</p>
       </div>
 
       <!--
@@ -492,17 +899,22 @@
 <!-- 03 MIX -->
 <section id="mix" class="panel">
   <div class="section-inner">
-    <div class="section-head" data-num="03">
+    <div class="section-head">
+      <div class="ghost-num" aria-hidden="true">03</div>
       <p class="section-label">Sound</p>
       <h2 class="section-title">MIX</h2>
     </div>
+    <hr class="head-rule">
 
     <!-- ▼ mixをアップしたら: .coming-soon を削除して、アップ先に応じて
          (A) SoundCloud か (B) Mixcloud の .mix-item コメントを外して差し替える -->
     <div class="mix-list">
-      <div class="coming-soon">
+      <div class="coming-soon reveal">
+        <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+        <div class="cs-wave" aria-hidden="true"></div>
+        <p class="cs-status">Status — In Production</p>
         <p class="cs-label">COMING SOON</p>
-        <p class="cs-sub">Mix in production</p>
+        <p class="cs-sub">First mix on the way</p>
       </div>
 
       <!--
@@ -556,12 +968,169 @@
 <!-- ▼ Xポスト埋め込み(A)を使うときにコメントを外す -->
 <!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
 <script>
 (function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav = document.getElementById('nav');
-  window.addEventListener('scroll', function () {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
+
+  // 疑似ウェーブフォームのバー生成(高さ・遅延をランダムに)
+  document.querySelectorAll('.cs-wave').forEach(function (wave) {
+    for (var i = 0; i < 42; i++) {
+      var bar = document.createElement('i');
+      bar.style.height = (18 + Math.random() * 82) + '%';
+      bar.style.animationDelay = (Math.random() * -1.6) + 's';
+      bar.style.animationDuration = (1.1 + Math.random() * 1.1) + 's';
+      wave.appendChild(bar);
+    }
+  });
+
+  // GSAPが読めない環境でも全要素が見えるように、初期状態はJS側でのみ設定する
+  if (!window.gsap || !window.ScrollTrigger) {
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Smooth scroll (Lenis) ──
+  var lenis = null;
+  if (window.Lenis && !prefersReduced) {
+    lenis = new Lenis({ lerp: 0.09 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // Anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (id.length > 1 && document.querySelector(id)) {
+        e.preventDefault();
+        if (lenis) lenis.scrollTo(id, { offset: 0 });
+        else document.querySelector(id).scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+      }
+    });
+  });
+
+  // ── Nav: scrolled state + hide on scroll down ──
+  var lastY = 0;
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate: function (self) {
+      var y = self.scroll();
+      nav.classList.toggle('scrolled', y > 40);
+      nav.classList.toggle('hidden', y > 300 && y > lastY + 4);
+      if (y < lastY - 4 || y <= 300) nav.classList.remove('hidden');
+      lastY = y;
+    }
+  });
+
+  // ── Progress bar ──
+  gsap.to('.progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { start: 0, end: 'max', scrub: 0.3 }
+  });
+
+  if (prefersReduced) return;
+
+  // ── Intro: タイトル1文字ずつマスク下から、他要素は順に浮上 ──
+  var introTl = gsap.timeline({ delay: 0.1 });
+  introTl
+    .from('.media-eyebrow', { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' })
+    .from('.media-title .ch', {
+      yPercent: 110,
+      duration: 1.05,
+      stagger: 0.07,
+      ease: 'power4.out'
+    }, 0.15)
+    .from('.media-sub', { opacity: 0, y: 24, duration: 0.9, ease: 'power3.out' }, 0.7)
+    .from('.hero-index a', { opacity: 0, y: 26, duration: 0.8, stagger: 0.1, ease: 'power3.out' }, 0.85)
+    .from('.hero-bottom', { opacity: 0, duration: 0.8, ease: 'power3.out' }, 1.2);
+  ScrollTrigger.create({
+    start: 10,
+    once: true,
+    onEnter: function () { if (introTl.isActive()) introTl.progress(1); }
+  });
+
+  // ── Hero: スクロールで背景が奥へ引いていく ──
+  gsap.to('.hero-ghost', {
+    yPercent: 30,
+    ease: 'none',
+    scrollTrigger: { trigger: '#media-hero', start: 'top top', end: 'bottom top', scrub: true }
+  });
+  gsap.to('.hero-grid', {
+    scale: 1.12,
+    opacity: 0.12,
+    ease: 'none',
+    scrollTrigger: { trigger: '#media-hero', start: 'top top', end: 'bottom top', scrub: true }
+  });
+  gsap.to('.media-hero-inner', {
+    yPercent: -8,
+    opacity: 0.25,
+    ease: 'none',
+    scrollTrigger: { trigger: '#media-hero', start: 'top top', end: 'bottom 30%', scrub: true }
+  });
+
+  // ── Kinetic marquee: スクロールで全体もわずかに流す ──
+  gsap.fromTo('.kinetic-row',
+    { xPercent: 0 },
+    {
+      xPercent: -6,
+      ease: 'none',
+      scrollTrigger: { trigger: '.kinetic', start: 'top bottom', end: 'bottom top', scrub: true }
+    });
+
+  // ── Section heads: blur + y で浮上(本サイトのManifestoと同じ言語) ──
+  gsap.utils.toArray('.section-head').forEach(function (head) {
+    gsap.from(head, {
+      opacity: 0,
+      y: 40,
+      filter: 'blur(7px)',
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: head, start: 'top 84%', once: true }
+    });
+  });
+
+  // ── ヘアライン: 左から引く ──
+  gsap.utils.toArray('.head-rule').forEach(function (rule) {
+    gsap.from(rule, {
+      scaleX: 0,
+      duration: 1.1,
+      ease: 'power3.inOut',
+      scrollTrigger: { trigger: rule, start: 'top 86%', once: true }
+    });
+  });
+
+  // ── Ghost numbers: パララックスドリフト ──
+  gsap.utils.toArray('.ghost-num').forEach(function (num) {
+    gsap.fromTo(num,
+      { yPercent: -18 },
+      {
+        yPercent: 22,
+        ease: 'none',
+        scrollTrigger: { trigger: num.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+  });
+
+  // ── Coming soon / flyer / mix items: 浮上リビール ──
+  gsap.utils.toArray('.reveal, .flyer-item, .mix-item, .movie-frame .twitter-tweet, .back-link').forEach(function (el) {
+    gsap.from(el, {
+      opacity: 0,
+      y: 44,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    });
+  });
 })();
 </script>
 
