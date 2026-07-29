@@ -1030,7 +1030,7 @@
   }
   .event-item.is-open .event-detail { opacity: 1; }
   .event-detail-inner {
-    padding: 0.4rem 1rem 2.6rem;
+    padding: 0.4rem 1rem 1.6rem;
     display: grid;
     grid-template-columns: 150px 1fr;
     gap: 2.4rem;
@@ -1087,75 +1087,101 @@
   }
   .ed-tba span { color: var(--ice); }
 
-  /* ── LINEUP TIMELINE (horizontal) ── */
-  .ed-lineup { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.2rem; }
+  /* ── LINEUP TIMELINE (horizontal cards) ── */
+  .ed-lineup {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 0 1rem 2.6rem;
+  }
   .ed-timeline {
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 0.5rem 0 0.7rem;
+    padding: 0.2rem 0 0.9rem;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--deep) transparent;
   }
   .tl-track {
-    display: inline-flex;
+    display: flex;
+    gap: 10px;
+    min-width: max-content;
+    counter-reset: none;
+  }
+  .tl-slot {
     position: relative;
-    min-width: 100%;
-    padding: 0 0.4rem;
-  }
-  .tl-track::before {
-    content: '';
-    position: absolute;
-    left: calc(100% / 12);
-    right: calc(100% / 12);
-    top: 23px;
-    height: 1px;
-    background: linear-gradient(90deg, var(--ice-dim), var(--line) 85%, var(--line));
-  }
-  .tl-stop {
-    flex: 1 0 92px;
+    flex: 1 0 auto;
+    min-width: 140px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.6rem;
-    position: relative;
+    gap: 0.55rem;
+    padding: 1.1rem 1.2rem 1.3rem;
+    background: linear-gradient(180deg, rgba(158,197,216,0.05) 0%, rgba(158,197,216,0.015) 100%);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    transition: border-color 0.35s var(--ease), background 0.35s var(--ease),
+                transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
   }
-  .tl-time {
+  .tl-slot:hover {
+    border-color: var(--ice-dim);
+    background: linear-gradient(180deg, rgba(158,197,216,0.1) 0%, rgba(158,197,216,0.03) 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.4), 0 0 24px rgba(158,197,216,0.08);
+  }
+  .tl-no {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+    color: var(--deep);
+  }
+  .tl-range {
     font-family: 'Space Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
     color: var(--mid);
     font-variant-numeric: tabular-nums;
-  }
-  .tl-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--black);
-    border: 2px solid var(--ice-dim);
-    position: relative;
-    z-index: 1;
-    transition: background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
-  }
-  .tl-stop:hover .tl-dot {
-    border-color: var(--ice);
-    background: var(--ice);
-    box-shadow: 0 0 12px rgba(158,197,216,0.55);
-  }
-  .tl-name {
-    font-family: var(--jp);
-    font-size: 0.82rem;
-    font-weight: 300;
-    color: var(--light);
     white-space: nowrap;
   }
-  .tl-end .tl-dot { border-color: var(--deep); }
-  .tl-end .tl-name {
+  .tl-range em {
+    font-style: normal;
+    color: var(--ice);
+    font-weight: 700;
+  }
+  .tl-name {
+    font-family: 'Bebas Neue', var(--jp), sans-serif;
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.05;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    white-space: nowrap;
+  }
+  /* 下辺のアクセントバー: hoverで伸びる */
+  .tl-bar {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--deep), var(--ice));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease);
+  }
+  .tl-slot:hover .tl-bar { transform: scaleX(1); }
+  .tl-close {
+    flex: 0 0 auto;
+    min-width: 96px;
+    background: transparent;
+    border-style: dashed;
+    justify-content: flex-start;
+  }
+  .tl-close .tl-name {
     font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
+    font-size: 0.66rem;
+    letter-spacing: 0.26em;
     color: var(--deep);
     text-transform: uppercase;
+    margin-top: 0.3rem;
   }
+  .tl-close .tl-bar { background: var(--muted); }
 
   /* ── INTERLUDE (EVENTS → JOIN) ── */
   .interlude {
@@ -1427,8 +1453,11 @@
     .event-day { font-size: 2.6rem; }
     .event-name { font-size: 1.6rem; }
     .event-badge { display: none; }
-    .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 2rem; }
+    .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 1.2rem; }
     .ed-timecol { padding-left: 1rem; }
+    .ed-lineup { padding: 0 0.6rem 2rem; }
+    .tl-slot { min-width: 124px; padding: 0.9rem 1rem 1.1rem; }
+    .tl-name { font-size: 1.25rem; }
     .sched-teaser { padding: 1.4rem 1.4rem; gap: 1rem; }
     .st-cta { margin-left: 0; }
     .hero-cd-num { font-size: clamp(2.1rem, 12vw, 2.8rem); }
@@ -1712,41 +1741,47 @@
               <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>SEP 08, 2026</strong> (Tue)</span></div>
               <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat</span></div>
               <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STRAGE 始動を飾るオープニングイベント。全5枠、各45分持ち回りで駆け抜けます。</span></div>
-              <div class="ed-lineup">
-                <span class="ed-key">Lineup</span>
-                <div class="ed-timeline">
-                  <div class="tl-track">
-                    <div class="tl-stop">
-                      <span class="tl-time">21:00</span>
-                      <span class="tl-dot"></span>
-                      <span class="tl-name">ひがしぐち</span>
-                    </div>
-                    <div class="tl-stop">
-                      <span class="tl-time">21:45</span>
-                      <span class="tl-dot"></span>
-                      <span class="tl-name">Lunarch</span>
-                    </div>
-                    <div class="tl-stop">
-                      <span class="tl-time">22:30</span>
-                      <span class="tl-dot"></span>
-                      <span class="tl-name">jokin0126</span>
-                    </div>
-                    <div class="tl-stop">
-                      <span class="tl-time">23:15</span>
-                      <span class="tl-dot"></span>
-                      <span class="tl-name">Stella</span>
-                    </div>
-                    <div class="tl-stop">
-                      <span class="tl-time">00:00</span>
-                      <span class="tl-dot"></span>
-                      <span class="tl-name">SYNE.</span>
-                    </div>
-                    <div class="tl-stop tl-end">
-                      <span class="tl-time">00:45</span>
-                      <span class="tl-dot tl-dot-end"></span>
-                      <span class="tl-name">CLOSE</span>
-                    </div>
-                  </div>
+            </div>
+          </div>
+          <div class="ed-lineup">
+            <span class="ed-key">Timetable</span>
+            <div class="ed-timeline">
+              <div class="tl-track">
+                <div class="tl-slot">
+                  <span class="tl-no">01</span>
+                  <span class="tl-range"><em>21:00</em> – 21:45</span>
+                  <span class="tl-name">ひがしぐち</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">02</span>
+                  <span class="tl-range"><em>21:45</em> – 22:30</span>
+                  <span class="tl-name">Lunarch</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">03</span>
+                  <span class="tl-range"><em>22:30</em> – 23:15</span>
+                  <span class="tl-name">jokin0126</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">04</span>
+                  <span class="tl-range"><em>23:15</em> – 00:00</span>
+                  <span class="tl-name">Stella</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">05</span>
+                  <span class="tl-range"><em>00:00</em> – 00:45</span>
+                  <span class="tl-name">SYNE.</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot tl-close">
+                  <span class="tl-no">—</span>
+                  <span class="tl-range"><em>00:45</em></span>
+                  <span class="tl-name">CLOSE</span>
+                  <span class="tl-bar"></span>
                 </div>
               </div>
             </div>
