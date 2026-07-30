@@ -704,80 +704,19 @@
     min-width: 3.2em;
     text-align: right;
   }
-  /* ── MIX: YouTube(プレイヤー風サムネ + 展開で動画表示) ── */
+  /* ── MIX: YouTube埋め込み ── */
   .yt-stage {
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--dark);
   }
-  .yt-thumb {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.85) brightness(0.75);
-    transition: filter 0.4s, transform 0.6s var(--ease);
-  }
-  .yt-stage::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(6,7,8,0.55) 0%, transparent 45%);
-    pointer-events: none;
-  }
-  .yt-play {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 62px; height: 62px;
-    border: 1px solid var(--ice-dim);
-    border-radius: 50%;
-    background: rgba(6,7,8,0.5);
-    backdrop-filter: blur(2px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1;
-    transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease);
-  }
-  .yt-play::before {
-    content: '';
-    border-style: solid;
-    border-width: 9px 0 9px 15px;
-    border-color: transparent transparent transparent var(--ice);
-    margin-left: 4px;
-  }
-  .yt-item:hover .yt-thumb { filter: saturate(1) brightness(0.85); transform: scale(1.03); }
-  .yt-item:hover .yt-play { border-color: var(--ice); background: rgba(6,7,8,0.7); transform: translate(-50%, -50%) scale(1.06); }
   .yt-stage iframe {
     display: block;
     width: 100%;
     height: 100%;
     border: 0;
   }
-  .yt-expand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    width: 100%;
-    padding: 0.7rem 1.2rem;
-    border: 0;
-    border-top: 1px solid var(--line);
-    background: transparent;
-    color: var(--mid);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.3s, background 0.3s;
-  }
-  .yt-expand:hover { color: var(--ice); background: var(--ice-faint); }
-  .yt-expand-arrow { display: inline-block; font-size: 0.7rem; }
 
   /* 疑似ウェーブフォーム(JSでバー生成) */
   .cs-wave {
@@ -1019,8 +958,7 @@
     <!-- ▼ mixをアップしたら: .coming-soon を削除して、アップ先に応じて
          (A) SoundCloud か (B) Mixcloud の .mix-item コメントを外して差し替える -->
     <!-- ▼ 中身は data.json から描画される(SoundCloud / Mixcloud / YouTube対応)。登録はDiscordから
-         YouTubeは platform:"youtube" で登録するとサムネ+再生ボタンの「プレイヤー風」表示になり、
-         下の「動画を表示」ボタンを押すと実際の埋め込み動画に切り替わる -->
+         YouTubeは platform:"youtube" で登録すると16:9で動画を直接埋め込み表示する -->
     <div id="mix-slot" class="mix-list">
       <div class="coming-soon reveal">
         <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
@@ -1078,21 +1016,21 @@
     } catch (e) { return null; }
   }
 
-  // MIXのYouTube項目: サムネ+再生ボタンの「プレイヤー風」表示 → 展開ボタンで実際の動画に差し替え
+  // MIXのYouTube項目: SoundCloud/Mixcloudと同様、常時16:9で動画を直接埋め込む
   function buildYouTubeMixItem(m) {
     var id = parseYouTubeId(m.url);
     var item = el('div', 'mix-item yt-item reveal');
 
     var stage = el('div', 'yt-stage');
-    var thumb = el('img', 'yt-thumb');
-    thumb.loading = 'lazy';
-    thumb.alt = m.title || 'YouTube mix';
-    thumb.src = id ? ('https://img.youtube.com/vi/' + id + '/maxresdefault.jpg') : '';
-    var play = el('button', 'yt-play');
-    play.type = 'button';
-    play.setAttribute('aria-label', '動画を再生');
-    stage.appendChild(thumb);
-    stage.appendChild(play);
+    if (id) {
+      var ifr = el('iframe');
+      ifr.src = 'https://www.youtube.com/embed/' + id + '?rel=0';
+      ifr.title = m.title || 'YouTube video player';
+      ifr.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      ifr.setAttribute('allowfullscreen', '');
+      ifr.loading = 'lazy';
+      stage.appendChild(ifr);
+    }
 
     var cap = el('div', 'mix-caption');
     var t = el('p', 'mix-title');
@@ -1105,32 +1043,8 @@
     cap.appendChild(t);
     cap.appendChild(meta);
 
-    var expand = el('button', 'yt-expand');
-    expand.type = 'button';
-    var label = el('span', 'yt-expand-label');
-    label.textContent = '動画を表示';
-    var arrow = el('span', 'yt-expand-arrow');
-    arrow.textContent = '▾';
-    expand.appendChild(label);
-    expand.appendChild(arrow);
-
-    function reveal() {
-      if (!id) return;
-      stage.innerHTML = '';
-      var ifr = el('iframe');
-      ifr.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
-      ifr.title = m.title || 'YouTube video player';
-      ifr.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
-      ifr.setAttribute('allowfullscreen', '');
-      stage.appendChild(ifr);
-      expand.remove();
-    }
-    play.addEventListener('click', reveal);
-    expand.addEventListener('click', reveal);
-
     item.appendChild(stage);
     item.appendChild(cap);
-    item.appendChild(expand);
     return item;
   }
 
