@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Straight to Garage — フライヤー・PR動画・DJ MIXなどのメディアアーカイブ。VRChat発のUK Garageサウンドコレクティブ。">
-<meta name="theme-color" content="#060708">
+<meta name="theme-color" content="#0a0607">
 <meta property="og:title" content="Media — Straight to Garage">
 <meta property="og:description" content="フライヤー・PR動画・DJ MIX。Straight to Garageのメディアアーカイブ。">
 <meta property="og:type" content="website">
@@ -15,18 +15,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #060708;
-    --off-black: #0c0e10;
-    --dark: #14171a;
-    --ice: #9ec5d8;
-    --ice-dim: rgba(158,197,216,0.35);
-    --ice-faint: rgba(158,197,216,0.1);
-    --deep: #4a7fa0;
-    --muted: #4a4f54;
-    --mid: #8b9196;
-    --light: #c9cdd0;
-    --white: #eef1f3;
-    --line: rgba(158,197,216,0.09);
+    --black: #0a0607;
+    --off-black: #130b0d;
+    --dark: #1c1215;
+    --ice: #c73e54;
+    --ice-dim: rgba(199,62,84,0.45);
+    --ice-faint: rgba(199,62,84,0.13);
+    --deep: #96354a;
+    --muted: #54484b;
+    --mid: #968b8e;
+    --light: #d0c8ca;
+    --white: #f3eeef;
+    --line: rgba(199,62,84,0.14);
     --nav-h: 64px;
     --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --jp: 'Zen Kaku Gothic New', sans-serif;
@@ -50,7 +50,7 @@
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: var(--black); }
   ::-webkit-scrollbar-thumb {
-    background: #23282d;
+    background: #2d2326;
     border: 2px solid var(--black);
     border-radius: 5px;
   }
@@ -76,7 +76,7 @@
     background: linear-gradient(90deg, var(--deep), var(--ice));
     transform: scaleX(0);
     transform-origin: left;
-    box-shadow: 0 0 12px rgba(158,197,216,0.5);
+    box-shadow: 0 0 12px rgba(199,62,84,0.5);
   }
 
   /* ── NAV ── */
@@ -97,7 +97,7 @@
   }
   #nav.scrolled {
     height: 54px;
-    background: rgba(6,7,8,0.82);
+    background: rgba(10,6,7,0.82);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom-color: var(--line);
@@ -142,7 +142,7 @@
     background: var(--ice);
     border-color: var(--ice);
     color: var(--black);
-    box-shadow: 0 0 18px rgba(158,197,216,0.35);
+    box-shadow: 0 0 18px rgba(199,62,84,0.35);
   }
 
   /* ── HERO ── */
@@ -171,8 +171,8 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(30,60,100,0.16) 0%, transparent 70%),
-      linear-gradient(to bottom, rgba(6,7,8,0.4) 0%, transparent 30%, transparent 70%, var(--black) 100%);
+      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(110,18,40,0.16) 0%, transparent 70%),
+      linear-gradient(to bottom, rgba(10,6,7,0.4) 0%, transparent 30%, transparent 70%, var(--black) 100%);
   }
   /* 背面を漂う巨大アウトライン文字 */
   .hero-ghost {
@@ -185,7 +185,7 @@
     line-height: 1;
     letter-spacing: 0.02em;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(158,197,216,0.05);
+    -webkit-text-stroke: 1px rgba(199,62,84,0.05);
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
@@ -373,10 +373,10 @@
     from { transform: translateX(0); }
     to { transform: translateX(-100%); }
   }
-  .kinetic-row .solid { color: rgba(238,241,243,0.92); }
+  .kinetic-row .solid { color: rgba(243,238,239,0.92); }
   .kinetic-row .outline {
     color: transparent;
-    -webkit-text-stroke: 1px rgba(158,197,216,0.28);
+    -webkit-text-stroke: 1px rgba(199,62,84,0.28);
   }
   .kinetic-row .dot { color: var(--deep); padding: 0 2.2rem; }
 
@@ -397,7 +397,7 @@
     font-size: clamp(9rem, 22vw, 17rem);
     line-height: 1;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(158,197,216,0.07);
+    -webkit-text-stroke: 1px rgba(199,62,84,0.07);
     pointer-events: none;
     user-select: none;
     z-index: 0;
@@ -449,7 +449,7 @@
     position: relative;
     border: 1px solid var(--line);
     background:
-      linear-gradient(rgba(158,197,216,0.03), rgba(158,197,216,0.01)),
+      linear-gradient(rgba(199,62,84,0.03), rgba(199,62,84,0.01)),
       var(--off-black);
     padding: 5rem 2rem;
     text-align: center;
@@ -478,7 +478,7 @@
     left: 0; right: 0;
     top: -20%;
     height: 34%;
-    background: linear-gradient(to bottom, transparent, rgba(158,197,216,0.045), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(199,62,84,0.045), transparent);
     animation: scanline 5s linear infinite;
     pointer-events: none;
   }
@@ -502,7 +502,7 @@
     width: 6px; height: 6px;
     border-radius: 50%;
     background: var(--ice);
-    box-shadow: 0 0 10px rgba(158,197,216,0.8);
+    box-shadow: 0 0 10px rgba(199,62,84,0.8);
     animation: blink 1.8s var(--ease) infinite;
   }
   @keyframes blink {
@@ -672,7 +672,7 @@
     flex: 1;
     height: 2px;
     border-radius: 1px;
-    background: linear-gradient(90deg, var(--ice) 50%, #23282d 50%);
+    background: linear-gradient(90deg, var(--ice) 50%, #2d2326 50%);
     outline: none;
     cursor: pointer;
   }
@@ -684,7 +684,7 @@
     border-radius: 50%;
     background: var(--ice);
     border: none;
-    box-shadow: 0 0 10px rgba(158,197,216,0.6);
+    box-shadow: 0 0 10px rgba(199,62,84,0.6);
     transition: transform 0.2s var(--ease);
   }
   .mix-vol input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
@@ -694,7 +694,7 @@
     border-radius: 50%;
     background: var(--ice);
     border: none;
-    box-shadow: 0 0 10px rgba(158,197,216,0.6);
+    box-shadow: 0 0 10px rgba(199,62,84,0.6);
   }
   .mix-vol-out {
     font-family: 'Space Mono', monospace;
@@ -754,7 +754,7 @@
     color: var(--ice);
     border-color: var(--ice-dim);
     background: var(--ice-faint);
-    box-shadow: 0 0 18px rgba(158,197,216,0.15);
+    box-shadow: 0 0 18px rgba(199,62,84,0.15);
   }
 
   /* ── FOOTER ── */
@@ -1124,7 +1124,7 @@
         } else {
           ifr.height = 166;
           ifr.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(m.url) +
-            '&color=%239ec5d8&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false';
+            '&color=%23c73e54&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false';
         }
         var cap = el('div', 'mix-caption');
         var t = el('p', 'mix-title');
@@ -1181,7 +1181,7 @@
       var v = parseInt(entry.slider.value, 10);
       entry.out.textContent = v + '%';
       entry.slider.style.background =
-        'linear-gradient(90deg, var(--ice) ' + v + '%, #23282d ' + v + '%)';
+        'linear-gradient(90deg, var(--ice) ' + v + '%, #2d2326 ' + v + '%)';
       apply(v);
     };
     entry.slider.addEventListener('input', update);
