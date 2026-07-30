@@ -9,12 +9,6 @@
   "movies": [],
   "mixes": [
     {
-      "platform": "youtube",
-      "url": "https://www.youtube.com/watch?v=LiRtuDBg0h8",
-      "title": "TEST UPLOAD",
-      "by": "mr.TEST"
-    },
-    {
       "platform": "mixcloud",
       "url": "https://www.mixcloud.com/djsyneeeee/20251121_garagevibes/",
       "title": "20251121_GarageVibes",
