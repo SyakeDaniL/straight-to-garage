@@ -211,7 +211,10 @@
     opacity: 0.25;
     filter: saturate(0.7) contrast(1.05);
     will-change: transform, opacity;
+    transition: opacity 1.2s var(--ease);
   }
+  /* 一回再生し終えたら消したままにする(スクロール連動のopacity操作より優先) */
+  .hero-video.is-done { opacity: 0 !important; }
   .hero-shade {
     position: absolute;
     inset: 0;
@@ -1567,7 +1570,7 @@
 
 <!-- HERO -->
 <header id="hero">
-  <video class="hero-video" autoplay muted loop playsinline>
+  <video class="hero-video" id="hero-video" autoplay muted playsinline>
     <source src="bg-video.mp4" type="video/mp4">
   </video>
   <div class="hero-shade"></div>
@@ -1975,6 +1978,14 @@
       });
     }, { rootMargin: '150px' }).observe(v);
   });
+
+  // ヒーロー動画は一回再生したら消してシェードのみ残す(ループさせない)
+  var heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.addEventListener('ended', function () {
+      heroVideo.classList.add('is-done');
+    });
+  }
 
   // ── Shared event data (single source of truth for the opening event) ──
   var OPENING = {
