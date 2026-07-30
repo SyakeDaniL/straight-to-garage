@@ -1570,9 +1570,11 @@
 
 <!-- HERO -->
 <header id="hero">
+  <!-- 動画は一旦未使用(bg-video.mp4削除済み)。挿入する場合は下記を復活させる:
   <video class="hero-video" id="hero-video" autoplay muted playsinline>
     <source src="bg-video.mp4" type="video/mp4">
   </video>
+  -->
   <div class="hero-shade"></div>
   <div class="hero-grid"></div>
 
@@ -1978,14 +1980,6 @@
       });
     }, { rootMargin: '150px' }).observe(v);
   });
-
-  // ヒーロー動画は一回再生したら消してシェードのみ残す(ループさせない)
-  var heroVideo = document.getElementById('hero-video');
-  if (heroVideo) {
-    heroVideo.addEventListener('ended', function () {
-      heroVideo.classList.add('is-done');
-    });
-  }
 
   // ── Shared event data (single source of truth for the opening event) ──
   var OPENING = {
