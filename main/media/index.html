@@ -777,8 +777,7 @@
     transition: color 0.3s, background 0.3s;
   }
   .yt-expand:hover { color: var(--ice); background: var(--ice-faint); }
-  .yt-expand-arrow { display: inline-block; font-size: 0.7rem; transition: transform 0.35s var(--ease); }
-  .yt-expand[aria-expanded="true"] .yt-expand-arrow { transform: rotate(180deg); }
+  .yt-expand-arrow { display: inline-block; font-size: 0.7rem; }
 
   /* 疑似ウェーブフォーム(JSでバー生成) */
   .cs-wave {
@@ -1108,7 +1107,6 @@
 
     var expand = el('button', 'yt-expand');
     expand.type = 'button';
-    expand.setAttribute('aria-expanded', 'false');
     var label = el('span', 'yt-expand-label');
     label.textContent = '動画を表示';
     var arrow = el('span', 'yt-expand-arrow');
@@ -1116,28 +1114,19 @@
     expand.appendChild(label);
     expand.appendChild(arrow);
 
-    var expanded = false;
-    function toggle() {
+    function reveal() {
       if (!id) return;
-      expanded = !expanded;
-      expand.setAttribute('aria-expanded', String(expanded));
-      label.textContent = expanded ? '動画を閉じる' : '動画を表示';
-      if (expanded) {
-        stage.innerHTML = '';
-        var ifr = el('iframe');
-        ifr.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
-        ifr.title = m.title || 'YouTube video player';
-        ifr.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
-        ifr.setAttribute('allowfullscreen', '');
-        stage.appendChild(ifr);
-      } else {
-        stage.innerHTML = '';
-        stage.appendChild(thumb);
-        stage.appendChild(play);
-      }
+      stage.innerHTML = '';
+      var ifr = el('iframe');
+      ifr.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+      ifr.title = m.title || 'YouTube video player';
+      ifr.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      ifr.setAttribute('allowfullscreen', '');
+      stage.appendChild(ifr);
+      expand.remove();
     }
-    play.addEventListener('click', toggle);
-    expand.addEventListener('click', toggle);
+    play.addEventListener('click', reveal);
+    expand.addEventListener('click', reveal);
 
     item.appendChild(stage);
     item.appendChild(cap);
