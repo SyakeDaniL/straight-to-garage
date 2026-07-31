@@ -292,33 +292,11 @@
     line-height: 1;
     letter-spacing: 0.015em;
     white-space: nowrap;
+    /* ステッカー式:白ソリッド+黒縁+ワインのハードシャドウ */
     color: var(--white);
-    /* ブートレグ印刷感:濃ワインの強めハードシャドウ+控えめの赤グロー */
+    -webkit-text-stroke: 1.5px rgba(10,6,7,0.55);
     filter: drop-shadow(0.055em 0.06em 0 rgba(80,10,26,0.95))
             drop-shadow(0 0 26px rgba(199,62,84,0.22));
-  }
-  /* Y2Kクローム:地平線で分かれるメタリックグラデーション+スペキュラー・スイープ */
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .ht-word {
-      background-image:
-        linear-gradient(115deg, transparent 42%, rgba(255,252,253,0.55) 50%, transparent 58%),
-        linear-gradient(180deg,
-          #fdfbfc 0%, #eadfe2 30%, #9d8b90 46%,
-          #43272e 50%,
-          #8d767c 55%, #dccfd3 75%, #fff8fa 100%);
-      background-size: 250% 100%, 100% 100%;
-      background-repeat: no-repeat;
-      background-position: 130% 0, 0 0;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1.5px rgba(10,6,7,0.5);
-      animation: logoSheen 8s var(--ease) 2.4s infinite;
-    }
-  }
-  @keyframes logoSheen {
-    0%        { background-position: -30% 0, 0 0; }
-    16%, 100% { background-position: 130% 0, 0 0; }
   }
   /* 文字数差(8字/6字)を埋めて両ワードの横幅を揃えるサイズ比 */
   .ht-straight { font-size: clamp(3.2rem, 10.2vw, 8.2rem); }
