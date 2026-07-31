@@ -13,7 +13,7 @@
 <title>Straight to Garage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Michroma&family=Sarpanch:wght@800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Michroma&family=Squada+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #0a0607;
@@ -287,15 +287,15 @@
     transform: skewX(-7deg);
   }
   .ht-word {
-    font-family: 'Sarpanch', 'Michroma', sans-serif;
-    font-weight: 900;
+    font-family: 'Squada One', 'Michroma', sans-serif;
+    font-weight: 400; /* Squada Oneは単一ウェイト(極太) */
     line-height: 1;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.015em;
     white-space: nowrap;
     color: var(--white);
-    /* 印刷フライヤーのステッカー感:濃ワインのハードシャドウ+赤グロー */
-    filter: drop-shadow(0.045em 0.05em 0 rgba(80,10,26,0.9))
-            drop-shadow(0 0 30px rgba(199,62,84,0.28));
+    /* ブートレグ印刷感:濃ワインの強めハードシャドウ+控えめの赤グロー */
+    filter: drop-shadow(0.055em 0.06em 0 rgba(80,10,26,0.95))
+            drop-shadow(0 0 26px rgba(199,62,84,0.22));
   }
   /* Y2Kクローム:地平線で分かれるメタリックグラデーション+スペキュラー・スイープ */
   @supports ((-webkit-background-clip: text) or (background-clip: text)) {
@@ -312,7 +312,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1px rgba(10,6,7,0.35);
+      -webkit-text-stroke: 1.5px rgba(10,6,7,0.5);
       animation: logoSheen 8s var(--ease) 2.4s infinite;
     }
   }
@@ -321,8 +321,8 @@
     16%, 100% { background-position: 130% 0, 0 0; }
   }
   /* 文字数差(8字/6字)を埋めて両ワードの横幅を揃えるサイズ比 */
-  .ht-straight { font-size: clamp(2.8rem, 8.8vw, 7.1rem); }
-  .ht-garage   { font-size: clamp(3.6rem, 11.4vw, 9.2rem); }
+  .ht-straight { font-size: clamp(3.2rem, 10.2vw, 8.2rem); }
+  .ht-garage   { font-size: clamp(4.1rem, 13.2vw, 10.6rem); }
   .ht-to {
     display: inline-flex;
     align-items: center;
