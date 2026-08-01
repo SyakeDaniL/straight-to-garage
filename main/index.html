@@ -13,7 +13,7 @@
 <title>Straight to Garage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #0a0607;
@@ -332,35 +332,17 @@
     mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 28%, transparent 72%);
     pointer-events: none;
   }
-  /* ── テキストロゴ(モダン・エディトリアル:特大グロテスクのタイトな左揃えスタック。
-        fill/outline混在+ワインの色収差+ソフトリフトで背景と分離する) ── */
-  .hero-title {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: max-content;
-    margin: 0 auto;
-    text-align: left;
-  }
-  .ht-word {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: clamp(3.4rem, 11.5vw, 9.5rem);
-    line-height: 0.88;
-    letter-spacing: -0.03em;
-    white-space: nowrap;
-    color: var(--white);
-    /* ワインの色収差(左下にズレた残像)+背景から浮かせる深い落ち影 */
-    text-shadow:
-      -0.028em 0.018em 0 rgba(199,62,84,0.55),
-      0 20px 55px rgba(10,6,7,0.7);
-  }
-  /* TOはアウトラインのみ:重い2ワードの間に「抜け」を作る */
-  .ht-to {
-    color: transparent;
-    -webkit-text-stroke: 2px var(--ice);
-    text-shadow: none;
-    filter: drop-shadow(0 0 26px rgba(199,62,84,0.35));
+  .hero-logo img {
+    /* 画像(2000x2000)は上27%・下32%が透過余白。
+       余白ぶんをネガティブマージンで相殺し、ロゴの見た目サイズを保ったまま
+       レイアウト上の占有高さを抑える(countdown.htmlと同じ手法) */
+    --lw: min(940px, 94vw);
+    width: var(--lw);
+    height: auto;
+    display: block;
+    margin: calc(var(--lw) * -0.24) auto calc(var(--lw) * -0.27);
+    position: relative;
+    filter: drop-shadow(0 0 48px rgba(199,62,84,0.14));
   }
 
   .hero-tagline {
@@ -1639,11 +1621,7 @@
   <div class="hero-center">
     <p class="hero-eyebrow">Sound Collective — VRChat</p>
     <div class="hero-logo">
-      <h1 class="hero-title" aria-label="Straight to Garage">
-        <span class="ht-word ht-straight">STRAIGHT</span>
-        <span class="ht-word ht-to">TO</span>
-        <span class="ht-word ht-garage">GARAGE</span>
-      </h1>
+      <img src="strage.png" alt="Straight to Garage">
     </div>
 
     <div class="hero-countdown" id="hero-countdown">
