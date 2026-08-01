@@ -250,21 +250,6 @@
     /* 四隅のビネット(静的) */
     background: radial-gradient(ellipse 95% 92% at 50% 50%, transparent 62%, rgba(10,6,7,0.55) 100%);
   }
-  /* 下降するロールバンド:background-positionアニメは毎フレーム再描画になるので
-     transform(GPU合成)で動かす */
-  .crt-roll {
-    position: absolute;
-    left: 0; right: 0;
-    top: -32%;
-    height: 30%;
-    background: linear-gradient(180deg, transparent 0%, rgba(243,238,239,0.05) 45%, rgba(243,238,239,0.02) 55%, transparent 100%);
-    will-change: transform;
-    animation: crtRoll 7s linear infinite;
-  }
-  @keyframes crtRoll {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(550%); }
-  }
   /* 走査線 */
   .hero-crt::before {
     content: '';
@@ -273,28 +258,6 @@
     background: repeating-linear-gradient(0deg,
       rgba(10,6,7,0.3) 0 1px, transparent 1px 3px);
     opacity: 0.5;
-  }
-  /* 砂嵐:feTurbulenceのタイルをステップ状にジッターさせる */
-  .hero-crt::after {
-    content: '';
-    position: absolute;
-    inset: -12%;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.11;
-    animation: crtStatic 0.55s steps(1, end) infinite;
-  }
-  @keyframes crtStatic {
-    0%   { transform: translate(0, 0); }
-    14%  { transform: translate(-2.4%, 1.6%); }
-    28%  { transform: translate(1.8%, -2.2%); }
-    42%  { transform: translate(-1.2%, -1.4%); }
-    56%  { transform: translate(2.6%, 1.1%); }
-    70%  { transform: translate(-2%, 2.4%); }
-    84%  { transform: translate(1.4%, -1.8%); }
-    100% { transform: translate(0, 0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-crt::after, .crt-roll { animation: none; }
   }
 
   .hero-center {
@@ -1619,7 +1582,7 @@
   -->
   <div class="hero-shade"></div>
   <div class="hero-grid"></div>
-  <div class="hero-crt" aria-hidden="true"><span class="crt-roll"></span></div>
+  <div class="hero-crt" aria-hidden="true"></div>
 
   <div class="hero-frame left">WORLD — STRAIGHT TO GARAGE</div>
   <div class="hero-frame right">EST. 2026 — VRCHAT UNDERGROUND</div>
