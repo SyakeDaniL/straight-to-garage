@@ -1144,20 +1144,20 @@
     text-transform: uppercase;
     margin-top: 8px;
   }
-  .ed-body { display: flex; flex-direction: column; gap: 1.1rem; }
-  .ed-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1rem;
+  .ed-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.4rem;
+    row-gap: 1.1rem;
     align-items: baseline;
   }
+  .ed-row { display: contents; }
   .ed-key {
     font-family: 'Space Mono', monospace;
     font-size: 0.58rem;
     letter-spacing: 0.22em;
     color: var(--deep);
     text-transform: uppercase;
-    min-width: 84px;
   }
   .ed-val {
     font-family: var(--jp);
@@ -1566,6 +1566,8 @@
     .event-badge { display: none; }
     .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 1.2rem; }
     .ed-timecol { padding-left: 1rem; }
+    .ed-body { display: flex; flex-direction: column; gap: 1.1rem; }
+    .ed-row { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
     .ed-lineup { padding: 0 0.6rem 2rem; }
     .tl-track { padding-left: 18px; }
     .tl-track::before { left: 2px; }
