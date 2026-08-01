@@ -342,7 +342,9 @@
     display: block;
     margin: calc(var(--lw) * -0.24) auto calc(var(--lw) * -0.27);
     position: relative;
-    filter: drop-shadow(0 0 48px rgba(199,62,84,0.14));
+    /* ネイビーの押し出し影をテーマの濃ワインへ回す(白/グレー部は低彩度なのでほぼ不変) */
+    filter: hue-rotate(125deg) saturate(1.25)
+            drop-shadow(0 0 48px rgba(199,62,84,0.18));
   }
 
   .hero-tagline {
