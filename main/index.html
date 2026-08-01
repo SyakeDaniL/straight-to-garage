@@ -247,16 +247,23 @@
     z-index: 3;
     pointer-events: none;
     overflow: hidden;
-    /* 下降するロールバンド+四隅のビネット */
-    background:
-      linear-gradient(180deg, transparent 0%, rgba(243,238,239,0.05) 45%, rgba(243,238,239,0.02) 52%, transparent 62%) no-repeat,
-      radial-gradient(ellipse 95% 92% at 50% 50%, transparent 62%, rgba(10,6,7,0.55) 100%);
-    background-size: 100% 32%, 100% 100%;
+    /* 四隅のビネット(静的) */
+    background: radial-gradient(ellipse 95% 92% at 50% 50%, transparent 62%, rgba(10,6,7,0.55) 100%);
+  }
+  /* 下降するロールバンド:background-positionアニメは毎フレーム再描画になるので
+     transform(GPU合成)で動かす */
+  .crt-roll {
+    position: absolute;
+    left: 0; right: 0;
+    top: -32%;
+    height: 30%;
+    background: linear-gradient(180deg, transparent 0%, rgba(243,238,239,0.05) 45%, rgba(243,238,239,0.02) 55%, transparent 100%);
+    will-change: transform;
     animation: crtRoll 7s linear infinite;
   }
   @keyframes crtRoll {
-    0%   { background-position: 0 -60%, 0 0; }
-    100% { background-position: 0 165%, 0 0; }
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(550%); }
   }
   /* 走査線 */
   .hero-crt::before {
@@ -271,7 +278,7 @@
   .hero-crt::after {
     content: '';
     position: absolute;
-    inset: -45%;
+    inset: -12%;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: 0.11;
     animation: crtStatic 0.55s steps(1, end) infinite;
@@ -287,7 +294,7 @@
     100% { transform: translate(0, 0); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hero-crt, .hero-crt::after { animation: none; }
+    .hero-crt::after, .crt-roll { animation: none; }
   }
 
   .hero-center {
@@ -320,16 +327,13 @@
     position: relative;
     will-change: transform, opacity;
   }
-  /* ロゴ背後を減光+ぼかして背景のグリッド/シェードから分離するプール */
+  /* ロゴ背後を減光して背景のグリッド/シェードから分離するプール
+     (backdrop-filterはコスト高のため不使用、単純なグラデーションのみ) */
   .hero-logo::before {
     content: '';
     position: absolute;
     inset: -22% -18%;
     background: radial-gradient(ellipse 58% 58% at 50% 50%, rgba(10,6,7,0.55) 0%, transparent 72%);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 28%, transparent 72%);
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 28%, transparent 72%);
     pointer-events: none;
   }
   .hero-logo img {
@@ -342,9 +346,7 @@
     display: block;
     margin: calc(var(--lw) * -0.24) auto calc(var(--lw) * -0.27);
     position: relative;
-    /* ネイビーの押し出し影をテーマの濃ワインへ回す(白/グレー部は低彩度なのでほぼ不変) */
-    filter: hue-rotate(120deg) saturate(0.85)
-            drop-shadow(0 0 48px rgba(199,62,84,0.14));
+    /* 色味はstrage-wine.pngに焼き込み済み(実行時filterはコスト高のため不使用) */
   }
 
   .hero-tagline {
@@ -1615,7 +1617,7 @@
   -->
   <div class="hero-shade"></div>
   <div class="hero-grid"></div>
-  <div class="hero-crt" aria-hidden="true"></div>
+  <div class="hero-crt" aria-hidden="true"><span class="crt-roll"></span></div>
 
   <div class="hero-frame left">WORLD — STRAIGHT TO GARAGE</div>
   <div class="hero-frame right">EST. 2026 — VRCHAT UNDERGROUND</div>
@@ -1623,7 +1625,7 @@
   <div class="hero-center">
     <p class="hero-eyebrow">Sound Collective — VRChat</p>
     <div class="hero-logo">
-      <img src="strage.png" alt="Straight to Garage">
+      <img src="strage-wine.png" alt="Straight to Garage">
     </div>
 
     <div class="hero-countdown" id="hero-countdown">
