@@ -1,5 +1,11 @@
 {
-  "flyers": [],
+  "flyers": [
+    {
+      "img": "img/flyer-20260804042813.png",
+      "title": "STRAGE FLYER no.0",
+      "date": "202608"
+    }
+  ],
   "movies": [],
   "mixes": [
     {
