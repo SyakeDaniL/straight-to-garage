@@ -1594,8 +1594,8 @@
     </div>
 
     <div class="hero-countdown" id="hero-countdown">
-      <p class="hero-cd-event" id="hero-cd-event">STRAIGHT TO GARAGE OPENING EVENT</p>
-      <div class="hero-cd-timer" id="hero-cd-timer" role="timer" aria-label="Countdown to opening event">
+      <p class="hero-cd-event" id="hero-cd-event">STRAGE VOL.2</p>
+      <div class="hero-cd-timer" id="hero-cd-timer" role="timer" aria-label="Countdown to next event">
         <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-d">00</span><span class="hero-cd-label">Days</span></div>
         <span class="hero-cd-sep">:</span>
         <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-h">00</span><span class="hero-cd-label">Hours</span></div>
@@ -1757,11 +1757,11 @@
     </div>
 
     <!-- 日付・時刻は #events のアコーディオンと同じJSデータ源から描画される(重複ズレ防止) -->
-    <a class="sched-teaser" href="#events" data-open-event="opening">
+    <a class="sched-teaser" href="#events" data-open-event="vol2">
       <div class="st-left">
         <div class="st-badge">Next Event</div>
-        <div class="st-title" id="st-title">STRAIGHT TO GARAGE OPENING EVENT</div>
-        <div class="st-meta" id="st-meta"><span>2026/09/08</span> · 21:00–00:45 · VRChat</div>
+        <div class="st-title" id="st-title">STRAGE VOL.2</div>
+        <div class="st-meta" id="st-meta"><span>2026/10/13(yyyy/mm/dd)</span> · 22:00–01:00 · VRChat</div>
       </div>
       <div class="st-cta">View Schedule <span class="btn-arrow">→</span></div>
     </a>
@@ -1784,7 +1784,78 @@
 
     <div class="events-list" id="events-list">
 
-      <!-- 唯一の確定イベント -->
+      <!-- 次回イベント(演者は後日発表) -->
+      <div class="event-item" data-event="vol2">
+        <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-vol2">
+          <div class="event-date-box">
+            <div class="event-day">13</div>
+            <div class="event-month">OCT 2026</div>
+          </div>
+          <div class="event-info">
+            <div class="event-name">STRAGE VOL.2</div>
+            <div class="event-meta">
+              <div class="event-meta-item">TIME(JST) <span>22:00–01:00</span></div>
+              <div class="event-meta-item">VENUE <span>VRChat</span></div>
+            </div>
+          </div>
+          <div class="event-right">
+            <div class="event-badge badge-upcoming">Upcoming</div>
+            <svg class="event-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="event-detail" id="ed-vol2" role="region">
+          <div class="event-detail-inner">
+            <div class="ed-timecol">
+              <div class="ed-time">22:00–01:00</div>
+              <div class="ed-tz">JST・VRChat</div>
+            </div>
+            <div class="ed-body">
+              <div class="ed-row"><span class="ed-key">Date(yyyy/mm/dd)</span><span class="ed-val"><strong>2026/10/13</strong> (Tue)</span></div>
+              <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat</span></div>
+              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">全4枠、各45分持ち回り。出演者は Coming Soon — 近日発表。</span></div>
+            </div>
+          </div>
+          <div class="ed-lineup">
+            <span class="ed-key">Timetable</span>
+            <div class="ed-timeline">
+              <div class="tl-track">
+                <div class="tl-slot">
+                  <span class="tl-no">01</span>
+                  <span class="tl-range"><em>22:00</em> – 22:45</span>
+                  <span class="tl-name">Coming Soon</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">02</span>
+                  <span class="tl-range"><em>22:45</em> – 23:30</span>
+                  <span class="tl-name">Coming Soon</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">03</span>
+                  <span class="tl-range"><em>23:30</em> – 00:15</span>
+                  <span class="tl-name">Coming Soon</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">04</span>
+                  <span class="tl-range"><em>00:15</em> – 01:00</span>
+                  <span class="tl-name">Coming Soon</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot tl-close">
+                  <span class="tl-no">—</span>
+                  <span class="tl-range"><em>01:00</em></span>
+                  <span class="tl-name">CLOSE</span>
+                  <span class="tl-bar"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 開催済み -->
       <div class="event-item" data-event="opening">
         <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-opening">
           <div class="event-date-box">
@@ -1799,7 +1870,7 @@
             </div>
           </div>
           <div class="event-right">
-            <div class="event-badge badge-upcoming">Upcoming</div>
+            <div class="event-badge badge-past">Finished</div>
             <svg class="event-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </button>
@@ -1965,10 +2036,10 @@
     }, { rootMargin: '150px' }).observe(v);
   });
 
-  // ── Shared event data (single source of truth for the opening event) ──
+  // ── Shared event data (single source of truth for the next event) ──
   var OPENING = {
-    name: 'STRAIGHT TO GARAGE OPENING EVENT',
-    target: '2026-09-08T21:00:00+09:00'
+    name: 'STRAGE VOL.2',
+    target: '2026-10-13T22:00:00+09:00'
   };
 
   // ── Hero countdown (pre-release hype; runs with or without GSAP) ──
@@ -2031,7 +2102,7 @@
     });
 
     // 最新イベントはデフォルトで開いた状態にする
-    var latest = list.querySelector('.event-item[data-event="opening"]') || items[0];
+    var latest = list.querySelector('.event-item[data-event="vol2"]') || items[0];
     if (latest) open(latest);
 
     // 開いたパネル内の高さ変化(フォント読込・リサイズ)に追従
