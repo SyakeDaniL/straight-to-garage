@@ -11,7 +11,12 @@
       "date": "202608"
     }
   ],
-  "movies": [],
+  "movies": [
+    {
+      "type": "x",
+      "url": "https://x.com/strage0fficial/status/2087125980477603842"
+    }
+  ],
   "mixes": [
     {
       "platform": "youtube",
