@@ -578,7 +578,20 @@
 
   /* ── PR MOVIE ── */
   #movie { background: var(--black); }
-  .movie-frame { max-width: 780px; margin: 0 auto; }
+  .movie-frame {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 2.2rem 1.8rem;
+    align-items: start;
+  }
+  /* 1件だけのとき(Coming Soon含む)は1カラムで大きく見せる */
+  .movie-frame:has(> :only-child) {
+    max-width: 780px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .movie-frame > * { width: 100%; }
   .movie-frame video,
   .movie-frame iframe {
     display: block;
@@ -587,7 +600,8 @@
     background: var(--dark);
   }
   .movie-frame video { height: auto; }
-  .movie-frame .twitter-tweet { margin: 0 auto !important; }
+  .movie-frame .twitter-tweet,
+  .movie-frame .twitter-tweet-rendered { margin: 0 auto !important; width: 100% !important; }
   /* プレースホルダーは16:9で「まだ無い映像」の画角を見せる */
   .movie-frame .coming-soon {
     aspect-ratio: 16 / 9;
