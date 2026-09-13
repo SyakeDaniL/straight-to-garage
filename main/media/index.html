@@ -591,7 +591,8 @@
     max-width: 780px;
     grid-template-columns: minmax(0, 1fr);
   }
-  .movie-frame > * { width: 100%; }
+  .movie-frame > * { width: 100%; min-width: 0; }
+  .movie-item { display: flex; flex-direction: column; }
   .movie-frame video,
   .movie-frame iframe {
     display: block;
@@ -1094,21 +1095,26 @@
       mslot.innerHTML = '';
       var needsTwitter = false;
       data.movies.forEach(function (m) {
+        // 1件 = 1セル。ラッパーで包むことで埋め込み失敗時も
+        // 空のグリッドセルができないようにする
+        var cell = el('div', 'movie-item reveal');
         if (m.type === 'x') {
           needsTwitter = true;
-          var bq = el('blockquote', 'twitter-tweet reveal');
+          var bq = el('blockquote', 'twitter-tweet');
           bq.setAttribute('data-theme', 'dark');
           var a = el('a');
           a.href = m.url;
           bq.appendChild(a);
-          mslot.appendChild(bq);
+          cell.appendChild(bq);
+          mslot.appendChild(cell);
         } else if (m.type === 'mp4') {
-          var v = el('video', 'reveal');
+          var v = el('video');
           v.src = m.src;
           v.controls = true;
           v.playsInline = true;
           v.preload = 'metadata';
-          mslot.appendChild(v);
+          cell.appendChild(v);
+          mslot.appendChild(cell);
         }
       });
       if (needsTwitter) {
@@ -1387,7 +1393,7 @@
   });
 
   // ── Coming soon / flyer / mix items: 浮上リビール ──
-  gsap.utils.toArray('.reveal, .flyer-item, .mix-item, .movie-frame .twitter-tweet, .back-link').forEach(function (el) {
+  gsap.utils.toArray('.reveal, .flyer-item, .mix-item, .movie-item, .back-link').forEach(function (el) {
     gsap.from(el, {
       opacity: 0,
       y: 44,
