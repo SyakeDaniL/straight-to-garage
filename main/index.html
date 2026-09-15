@@ -1272,6 +1272,44 @@
     color: var(--white);
     border-bottom: 1px solid var(--ice-dim);
   }
+  /* 応募条件。手順より先に目に入るようにする */
+  .entry-req {
+    display: flex;
+    gap: 1.4rem;
+    align-items: flex-start;
+    padding: 1.5rem 1.7rem;
+    margin-bottom: 2.4rem;
+    background: linear-gradient(90deg, rgba(199,62,84,0.09), rgba(199,62,84,0.02) 70%, transparent);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ice);
+  }
+  .req-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+    white-space: nowrap;
+    padding-top: 0.35rem;
+  }
+  .req-text {
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 0.97rem;
+    line-height: 1.85;
+    color: var(--light);
+  }
+  .req-text strong {
+    font-weight: 500;
+    color: var(--white);
+    border-bottom: 1px solid var(--ice);
+  }
+  @media (max-width: 700px) {
+    .entry-req { flex-direction: column; gap: 0.7rem; padding: 1.3rem 1.2rem; }
+    .req-mark { padding-top: 0; }
+    .req-text { font-size: 0.92rem; }
+  }
+
   .entry-steps {
     list-style: none;
     display: grid;
@@ -2170,9 +2208,17 @@
     </div>
 
     <p class="entry-lead">
-      STRAGE VR では出演DJを<strong>通年募集</strong>しています。締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
+      STRAGE VR では出演DJを<strong>通年募集</strong>しています。<br>
+      締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
       UK Garage / Speed Garage / Bassline を軸に回せる方歓迎です！
     </p>
+
+    <div class="entry-req">
+      <p class="req-mark">Entry<br>Requirement</p>
+      <p class="req-text">
+        応募条件 — <strong>STRAGE のイベントに1度以上 遊びに来たことがある方</strong>を対象にしています。
+      </p>
+    </div>
 
     <div class="entry-cta">
       <button class="cta-btn" type="button" id="entry-how-open" aria-haspopup="dialog">
@@ -2265,6 +2311,13 @@
     </div>
 
     <div class="emodal-body">
+      <div class="entry-req">
+        <p class="req-mark">Entry<br>Requirement</p>
+        <p class="req-text">
+          応募条件 — <strong>STRAGE のイベントに1度以上 遊びに来たことがある方</strong>を対象にしています。
+        </p>
+      </div>
+
       <ol class="entry-steps">
         <li class="entry-step">
           <span class="es-no">01</span>
@@ -2274,12 +2327,12 @@
         <li class="entry-step">
           <span class="es-no">02</span>
           <h3 class="es-title">「mixを応募する」ボタンを押す</h3>
-          <p class="es-desc"><b>出演エントリー</b> <code>entry-for-performing</code> チャンネルに表示されている <b>「mixを応募する」</b> ボタンを押すと、入力フォームが出てきます。</p>
+          <p class="es-desc"><b>出演エントリー</b> <code>entry-for-performing</code> チャンネルに表示されている <b>「mixを応募する」</b> ボタンを押すと、応募条件の確認が出てきます。</p>
         </li>
         <li class="entry-step">
           <span class="es-no">03</span>
-          <h3 class="es-title">項目を入力して送信</h3>
-          <p class="es-desc">フォームに下記の項目を入力して送信するだけ。内容は運営にだけ届き、他の応募者には見えません。</p>
+          <h3 class="es-title">条件を確認して項目を入力</h3>
+          <p class="es-desc"><b>「来場したことがある」</b>を押すと入力フォームが開きます。下記の項目を入力して送信するだけ。内容は運営にだけ届き、他の応募者には見えません。</p>
         </li>
       </ol>
 
