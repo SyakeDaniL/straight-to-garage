@@ -2286,7 +2286,7 @@
 <!-- ENTRY HOW-TO (「エントリー方法」ボタンから開くポップアップ) -->
 <div class="emodal" id="entry-modal" hidden>
   <div class="emodal-backdrop" data-emodal-close></div>
-  <div class="emodal-panel" role="dialog" aria-modal="true" aria-labelledby="emodal-title">
+  <div class="emodal-panel" role="dialog" aria-modal="true" aria-labelledby="emodal-title" data-lenis-prevent tabindex="-1">
     <button class="emodal-x" type="button" data-emodal-close aria-label="閉じる">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
     </button>
@@ -2748,7 +2748,7 @@
       void modal.offsetWidth;
       modal.classList.add('is-open');
       panel.scrollTop = 0;
-      closeBtn.focus();
+      panel.focus();
     }
 
     function close() {
@@ -2760,6 +2760,15 @@
       else window.setTimeout(done, 350);
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
+
+    // パネルの外(背景)でのホイール/タッチは裏のページに流さない。
+    // html の overflow:hidden だけでは合成ホイールで裏がスクロールしてしまう。
+    // パネル内は data-lenis-prevent で native スクロールに任せる
+    function blockOutside(e) {
+      if (!panel.contains(e.target)) e.preventDefault();
+    }
+    modal.addEventListener('wheel', blockOutside, { passive: false });
+    modal.addEventListener('touchmove', blockOutside, { passive: false });
 
     opener.addEventListener('click', open);
     modal.querySelectorAll('[data-emodal-close]').forEach(function (el) {
