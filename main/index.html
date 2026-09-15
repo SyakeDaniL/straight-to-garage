@@ -991,6 +991,79 @@
     50% { box-shadow: 0 0 22px rgba(199,62,84,0.22); }
   }
   .badge-past { color: var(--muted); border-color: rgba(110,100,104,0.3); }
+
+  /* ── 次回イベントの強調 (#schedule を削除したぶんここで目立たせる) ── */
+  .event-item.is-next {
+    background: linear-gradient(90deg, rgba(199,62,84,0.075), rgba(199,62,84,0.02) 55%, transparent);
+  }
+  /* 左のアクセントバーは hover/open 待ちにせず常に出す */
+  .event-item.is-next::before {
+    transform: scaleY(1);
+    width: 3px;
+    box-shadow: 0 0 16px rgba(199,62,84,0.45);
+  }
+  .event-item.is-next .event-day {
+    font-size: 5.2rem;
+    text-shadow: 0 0 30px rgba(199,62,84,0.45);
+  }
+  .event-item.is-next .event-name { font-size: 2.3rem; }
+  .event-next-tag {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 0.6rem;
+  }
+  .ent-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ice);
+    flex-shrink: 0;
+    animation: nextPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes nextPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(199,62,84,0.55); }
+    50% { opacity: 0.55; box-shadow: 0 0 0 7px rgba(199,62,84,0); }
+  }
+  .ent-jp {
+    font-family: var(--jp);
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--light);
+  }
+  .ent-jp::before {
+    content: '';
+    display: inline-block;
+    width: 18px; height: 1px;
+    background: var(--ice-dim);
+    vertical-align: middle;
+    margin-right: 9px;
+  }
+  /* 開催まであと何日。JSが値を入れるまでは出さない */
+  .event-dleft {
+    display: none;
+    margin-top: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .event-dleft.is-shown { display: block; }
+  .event-dleft em {
+    font-family: 'Bebas Neue', sans-serif;
+    font-style: normal;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    color: var(--ice);
+    margin: 0 4px;
+    vertical-align: -2px;
+  }
   .event-chevron {
     width: 22px; height: 22px;
     flex-shrink: 0;
@@ -1669,6 +1742,11 @@
     section.panel { padding: 90px 0 70px; }
     .event-row { grid-template-columns: 72px 1fr auto; gap: 1.2rem; padding: 1.8rem 0.6rem; }
     .event-day { font-size: 2.6rem; }
+    .event-item.is-next .event-day { font-size: 3.2rem; }
+    .event-item.is-next .event-name { font-size: 1.75rem; }
+    .event-next-tag { font-size: 0.54rem; letter-spacing: 0.2em; gap: 7px; }
+    .ent-jp { font-size: 0.66rem; }
+    .ent-jp::before { width: 12px; margin-right: 7px; }
     .event-name { font-size: 1.6rem; }
     .event-badge { display: none; }
     .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 1.2rem; }
@@ -1690,7 +1768,7 @@
     .footer-nav { gap: 1.5rem; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .scroll-line::after, .badge-upcoming, #join::before,
+    .scroll-line::after, .badge-upcoming, .ent-dot, #join::before,
     .hero-logo::after, .hero-cd-sep { animation: none; }
   }
 </style>
@@ -1905,18 +1983,20 @@
     <div class="events-list" id="events-list">
 
       <!-- 次回イベント(演者は後日発表) -->
-      <div class="event-item" data-event="vol2">
+      <div class="event-item is-next" data-event="vol2">
         <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-vol2">
           <div class="event-date-box">
             <div class="event-day">13</div>
             <div class="event-month">OCT 2026</div>
           </div>
           <div class="event-info">
+            <div class="event-next-tag"><span class="ent-dot" aria-hidden="true"></span>Next<span class="ent-jp">次回開催</span></div>
             <div class="event-name">STRAGE VOL.2</div>
             <div class="event-meta">
               <div class="event-meta-item">TIME(JST) <span>22:00–01:00</span></div>
               <div class="event-meta-item">VENUE <span>VRChat</span></div>
             </div>
+            <p class="event-dleft" id="event-dleft">開催まで あと<em>--</em>日</p>
           </div>
           <div class="event-right">
             <div class="event-badge badge-upcoming">Upcoming</div>
@@ -2060,7 +2140,7 @@
             <div class="event-month">TBA</div>
           </div>
           <div class="event-info">
-            <div class="event-name">NEXT EVENT</div>
+            <div class="event-name">MORE TO COME</div>
             <div class="event-meta">
               <div class="event-meta-item">DETAILS <span>Coming Soon</span></div>
             </div>
@@ -2071,7 +2151,7 @@
           </div>
         </button>
         <div class="event-detail" id="ed-tba" role="region">
-          <div class="ed-tba">Details <span>coming soon</span> — 次回イベントは近日発表。</div>
+          <div class="ed-tba">Details <span>coming soon</span> — 以降のイベントは順次発表予定。</div>
         </div>
       </div>
 
@@ -2091,7 +2171,7 @@
 
     <p class="entry-lead">
       STRAGE VR では出演DJを<strong>通年募集</strong>しています。締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
-      UK Garage / Speed Garage / Bassline を軸に回せる方、VRChatでのDJが初めての方も歓迎です。
+      UK Garage / Speed Garage / Bassline を軸に回せる方歓迎です！
     </p>
 
     <div class="entry-cta">
@@ -2281,6 +2361,23 @@
       S.textContent = pad(s % 60);
     }
     tick();
+  })();
+
+  // ── 次回イベントの「開催まであとN日」(ヒーローのカウントダウンと同じ OPENING を使う) ──
+  (function () {
+    var el = document.getElementById('event-dleft');
+    if (!el) return;
+    var targetMs = new Date(OPENING.target).getTime();
+    if (!isFinite(targetMs)) return;
+    var diff = targetMs - Date.now();
+    if (diff <= 0) return;  // 開催済み/当日は出さない
+    // ヒーローのカウントダウンと同じ数え方(切り捨て)にする。
+    // ceil にすると同じページ内で1日ズレて見える
+    var days = Math.floor(diff / 86400000);
+    el.innerHTML = days >= 1
+      ? '開催まで あと<em>' + days + '</em>日'
+      : 'まもなく<em>開催</em>';
+    el.classList.add('is-shown');
   })();
 
   // ── Events accordion (select an event → its schedule expands) ──
