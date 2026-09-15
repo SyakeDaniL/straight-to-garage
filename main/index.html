@@ -1268,6 +1268,137 @@
   }
   .tl-close .tl-bar { background: var(--muted); }
 
+  /* ── ENTRY (出演DJ 通年募集) ── */
+  #entry { background: var(--off-black); overflow: hidden; }
+  .entry-lead {
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--light);
+    max-width: 62ch;
+    margin-bottom: 3.2rem;
+  }
+  .entry-lead strong {
+    font-weight: 400;
+    color: var(--white);
+    border-bottom: 1px solid var(--ice-dim);
+  }
+  .entry-steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 3.2rem;
+  }
+  .entry-step {
+    background: var(--black);
+    padding: 2.2rem 1.8rem 2rem;
+    position: relative;
+  }
+  .es-no {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--deep);
+    margin-bottom: 1.1rem;
+  }
+  .es-title {
+    font-family: var(--jp);
+    font-weight: 400;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: var(--white);
+    margin-bottom: 0.7rem;
+  }
+  .es-desc {
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--mid);
+  }
+  .es-desc b {
+    font-weight: 400;
+    color: var(--light);
+  }
+  .es-desc code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ice);
+    background: var(--ice-faint);
+    padding: 1px 6px;
+    white-space: nowrap;
+  }
+  .entry-fields { margin-bottom: 2.8rem; }
+  .entry-fields .section-label { margin-bottom: 1.4rem; }
+  .ef-list {
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .ef-list li {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 0.95rem 0.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .ef-key {
+    font-family: var(--jp);
+    font-weight: 400;
+    font-size: 0.92rem;
+    color: var(--white);
+  }
+  .ef-val {
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--mid);
+  }
+  .ef-val em { color: var(--ice); font-style: normal; }
+  .entry-notes {
+    list-style: none;
+    margin-bottom: 3rem;
+  }
+  .entry-notes li {
+    position: relative;
+    padding-left: 1.5rem;
+    font-family: var(--jp);
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--mid);
+  }
+  .entry-notes li + li { margin-top: 0.5rem; }
+  .entry-notes li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.85em;
+    width: 8px; height: 1px;
+    background: var(--deep);
+  }
+  .entry-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  @media (max-width: 900px) {
+    .entry-steps { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .entry-lead { font-size: 0.94rem; line-height: 1.95; }
+    .ef-list li { grid-template-columns: 1fr; gap: 0.3rem; }
+    .entry-cta .cta-btn { width: 100%; justify-content: center; }
+  }
+
   /* ── INTERLUDE (EVENTS → JOIN) ── */
   .interlude {
     min-height: 85vh;
@@ -1576,6 +1707,7 @@
     <a href="#members">Crew</a>
     <a href="#schedule" class="hot">Schedule</a>
     <a href="#events" class="hot">Events</a>
+    <a href="#entry" class="hot">Entry</a>
     <a href="#join" class="hot">Community</a>
   </div>
   <div class="nav-actions">
@@ -1971,6 +2103,68 @@
   </div>
 </section>
 
+<hr class="section-sep">
+
+<!-- ENTRY (出演DJ 通年募集。応募の受け口は Discord bot の /entry モーダル) -->
+<section id="entry" class="panel">
+  <div class="section-inner">
+    <div class="section-head" data-num="05">
+      <p class="section-label">Open Call — Always Open</p>
+      <h2 class="section-title">PLAY AT<br><em>STRAGE</em></h2>
+    </div>
+
+    <p class="entry-lead">
+      STRAGE では出演DJを<strong>通年募集</strong>しています。締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
+      UK Garage / Speed Garage / Bassline を軸に回せる方、VRChatでのDJが初めての方も歓迎です。
+    </p>
+
+    <ol class="entry-steps">
+      <li class="entry-step">
+        <span class="es-no">01</span>
+        <h3 class="es-title">Discordサーバーに参加</h3>
+        <p class="es-desc">応募の受付はすべてDiscord上で行っています。まずは下のボタンからサーバーへ。</p>
+      </li>
+      <li class="entry-step">
+        <span class="es-no">02</span>
+        <h3 class="es-title">応募フォームを開く</h3>
+        <p class="es-desc">応募チャンネルにピン留めされた <b>「🎧 mixを応募する」</b> ボタンを押すとフォームが開きます。<code>/entry</code> または <code>/mix応募</code> と打っても同じです。</p>
+      </li>
+      <li class="entry-step">
+        <span class="es-no">03</span>
+        <h3 class="es-title">5項目を入力して送信</h3>
+        <p class="es-desc">その場で入力して送信するだけ。内容は運営にだけ届き、他の応募者には見えません。</p>
+      </li>
+    </ol>
+
+    <div class="entry-fields">
+      <p class="section-label">What You'll Send — 入力する項目</p>
+      <ul class="ef-list">
+        <li><span class="ef-key">DJ名</span><span class="ef-val">表記したい名前</span></li>
+        <li><span class="ef-key">VRCID</span><span class="ef-val">VRChatのユーザー名</span></li>
+        <li><span class="ef-key">SNSアカウント</span><span class="ef-val">X / Bluesky / Instagram のURL、または <em>@ユーザー名</em></span></li>
+        <li><span class="ef-key">mixのURL</span><span class="ef-val"><em>尺は1時間まで</em> — SoundCloud / Mixcloud / YouTube / Google Drive など</span></li>
+        <li><span class="ef-key">一言（任意）</span><span class="ef-val">ジャンル、意気込みなど</span></li>
+      </ul>
+    </div>
+
+    <ul class="entry-notes">
+      <li>入力内容は運営にだけ届きます。他の応募者には見えません。</li>
+      <li>間違えたら出し直しでOKです。新しいものを有効として扱います。</li>
+      <li>Google Drive のリンクは「リンクを知っている全員が閲覧可」に設定してください。</li>
+    </ul>
+
+    <div class="entry-cta">
+      <a class="cta-btn" href="https://discord.gg/HdpQkAUbmz" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+        <span>Entry on Discord</span>
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
+
+    <p class="section-note" style="margin-top:1.8rem;">※ 選考結果・ラインナップの告知はDiscordで / Results announced on Discord</p>
+  </div>
+</section>
+
 <!-- INTERLUDE -->
 <section class="interlude">
   <div class="interlude-inner">
@@ -1983,7 +2177,7 @@
 <!-- JOIN -->
 <section id="join">
   <div class="section-inner">
-    <div class="section-head center" data-num="05">
+    <div class="section-head center" data-num="06">
       <p class="section-label">Community</p>
       <h2 class="section-title">JOIN THE <em>SERVER</em></h2>
     </div>
@@ -2024,6 +2218,7 @@
     <a href="#members">Crew</a>
     <a href="#schedule">Schedule</a>
     <a href="#events">Events</a>
+    <a href="#entry">Entry</a>
     <a href="media/">Media</a>
     <a href="#join">Discord</a>
   </nav>
@@ -2408,7 +2603,7 @@
   mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
     if (prefersReduced) return;
     gsap.utils.toArray(
-      '.mani-line, .stat, .crew-card, .section-head, .sched-teaser, .event-item, .interlude-line, .join-box'
+      '.mani-line, .stat, .crew-card, .section-head, .sched-teaser, .event-item, .interlude-line, .join-box, .entry-step'
     ).forEach(function (el) {
       gsap.from(el, {
         opacity: 0, y: 26, duration: 0.7, ease: 'power2.out',
