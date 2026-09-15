@@ -2761,14 +2761,25 @@
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
 
-    // パネルの外(背景)でのホイール/タッチは裏のページに流さない。
-    // html の overflow:hidden だけでは合成ホイールで裏がスクロールしてしまう。
-    // パネル内は data-lenis-prevent で native スクロールに任せる
-    function blockOutside(e) {
-      if (!panel.contains(e.target)) e.preventDefault();
+    // ホイールは自前で処理する。Lenis が stop() 中もホイールを
+    // preventDefault するため native スクロールに任せると動かない。
+    // data-lenis-prevent も併用しているが、実装差に左右されないよう
+    // scrollTop を直接動かして確実にスクロールさせる
+    function wheelScroll(e) {
+      if (!panel.contains(e.target)) { e.preventDefault(); return; }  // 背景は裏に流さない
+      var max = panel.scrollHeight - panel.clientHeight;
+      if (max <= 0) { e.preventDefault(); return; }
+      var d = e.deltaY;
+      if (e.deltaMode === 1) d *= 16;                    // DOM_DELTA_LINE
+      else if (e.deltaMode === 2) d *= panel.clientHeight; // DOM_DELTA_PAGE
+      e.preventDefault();
+      panel.scrollTop = Math.max(0, Math.min(max, panel.scrollTop + d));
     }
-    modal.addEventListener('wheel', blockOutside, { passive: false });
-    modal.addEventListener('touchmove', blockOutside, { passive: false });
+    modal.addEventListener('wheel', wheelScroll, { passive: false });
+    // タッチはパネル内なら native に任せ、背景だけ裏に流さない
+    modal.addEventListener('touchmove', function (e) {
+      if (!panel.contains(e.target)) e.preventDefault();
+    }, { passive: false });
 
     opener.addEventListener('click', open);
     modal.querySelectorAll('[data-emodal-close]').forEach(function (el) {
@@ -2777,6 +2788,25 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !modal.hidden) close();
     });
+    // キーボードでのスクロール。html が overflow:hidden なので
+    // フォーカス済みのパネルでも既定のキー動作が効かない
+    panel.addEventListener('keydown', function (e) {
+      var max = panel.scrollHeight - panel.clientHeight;
+      if (max <= 0) return;
+      var d;
+      switch (e.key) {
+        case 'ArrowDown': d = 48; break;
+        case 'ArrowUp': d = -48; break;
+        case 'PageDown': d = panel.clientHeight * 0.9; break;
+        case 'PageUp': d = -panel.clientHeight * 0.9; break;
+        case 'Home': d = -Infinity; break;
+        case 'End': d = Infinity; break;
+        default: return;
+      }
+      e.preventDefault();
+      panel.scrollTop = Math.max(0, Math.min(max, panel.scrollTop + d));
+    });
+
     // パネル内の Tab をパネル内に閉じ込める(簡易フォーカストラップ)
     panel.addEventListener('keydown', function (e) {
       if (e.key !== 'Tab') return;
