@@ -220,6 +220,17 @@
   }
   /* 一回再生し終えたら消したままにする(スクロール連動のopacity操作より優先) */
   .hero-video.is-done { opacity: 0 !important; }
+  /* 背景写真(VRChat STRAGE会場)。動画を復活させる場合は下の .hero-video と併用しない */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+    filter: saturate(0.75) contrast(1.06) brightness(0.9);
+    will-change: transform, opacity;
+  }
   .hero-shade {
     position: absolute;
     inset: 0;
@@ -1580,6 +1591,7 @@
     <source src="bg-video.mp4" type="video/mp4">
   </video>
   -->
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-shade"></div>
   <div class="hero-grid"></div>
   <div class="hero-crt" aria-hidden="true"></div>
@@ -2231,6 +2243,8 @@
         { y: 40, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-video', { opacity: 0.25, scale: 1 },
         { opacity: 0.06, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
+      .fromTo('.hero-bg', { opacity: 0.5, scale: 1 },
+        { opacity: 0.12, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-grid', { scale: 1, opacity: 0.3 },
         { scale: 1.15, opacity: 0.1, duration: 1, ease: 'none', immediateRender: false }, 0)
       .fromTo(['.hero-bottom', '.hero-frame'], { opacity: 1 },
