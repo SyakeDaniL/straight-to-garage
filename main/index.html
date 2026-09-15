@@ -881,91 +881,6 @@
     margin: 0;
   }
 
-  /* ── SCHEDULE ── */
-  #schedule { background: var(--black); overflow: hidden; }
-  .sched-ghost {
-    position: absolute;
-    top: 8%;
-    right: -2%;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(8rem, 22vw, 20rem);
-    line-height: 1;
-    letter-spacing: 0.02em;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(199,62,84,0.06);
-    pointer-events: none;
-    user-select: none;
-    white-space: nowrap;
-    will-change: transform;
-  }
-
-  /* Slim "next event" teaser that scroll-links into #events.
-     日時は #events のアコーディオンと同じJSデータから描画され重複しない。 */
-  .sched-teaser {
-    display: flex;
-    align-items: center;
-    gap: 1.8rem;
-    flex-wrap: wrap;
-    text-decoration: none;
-    border: 1px solid var(--ice-dim);
-    border-left: 3px solid var(--ice);
-    background: var(--ice-faint);
-    padding: 1.8rem 2.2rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 24px rgba(199,62,84,0.06);
-    transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
-                box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
-  }
-  .sched-teaser:hover {
-    background: rgba(199,62,84,0.14);
-    border-left-color: var(--ice);
-    box-shadow: 0 0 42px rgba(199,62,84,0.14);
-    transform: translateY(-2px);
-  }
-  .st-left { display: flex; flex-direction: column; gap: 0.5rem; }
-  .st-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 0.25em;
-    color: var(--ice);
-    text-transform: uppercase;
-    animation: badgePulse 3s ease-in-out infinite;
-  }
-  @keyframes badgePulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-  }
-  .st-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-    letter-spacing: 0.05em;
-    line-height: 1;
-    color: var(--white);
-  }
-  .st-meta {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
-    color: var(--mid);
-    text-transform: uppercase;
-  }
-  .st-meta span { color: var(--ice); }
-  .st-cta {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.66rem;
-    letter-spacing: 0.22em;
-    color: var(--ice);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .st-cta .btn-arrow { transition: transform 0.3s var(--ease); }
-  .sched-teaser:hover .st-cta .btn-arrow { transform: translateX(6px); }
-
   /* ── EVENTS (interactive accordion) ── */
   #events { background: var(--off-black); }
   .events-hint {
@@ -1768,8 +1683,6 @@
     .tl-no { font-size: 1.2rem; }
     .tl-range { font-size: 0.62rem; }
     .tl-name { font-size: 1.25rem; }
-    .sched-teaser { padding: 1.4rem 1.4rem; gap: 1rem; }
-    .st-cta { margin-left: 0; }
     .hero-cd-num { font-size: clamp(2.1rem, 12vw, 2.8rem); }
     .hero-cd-timer { gap: 0.6rem; }
     .join-box { padding: 3rem 1.5rem 2.8rem; }
@@ -1777,7 +1690,7 @@
     .footer-nav { gap: 1.5rem; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .scroll-line::after, .st-badge, .badge-upcoming, #join::before,
+    .scroll-line::after, .badge-upcoming, #join::before,
     .hero-logo::after, .hero-cd-sep { animation: none; }
   }
 </style>
@@ -1792,7 +1705,6 @@
   <div class="nav-links">
     <a href="#manifesto">About</a>
     <a href="#members">Crew</a>
-    <a href="#schedule" class="hot">Schedule</a>
     <a href="#events" class="hot">Events</a>
     <a href="#entry" class="hot">Entry</a>
     <a href="#join" class="hot">Community</a>
@@ -1978,35 +1890,12 @@
   </div>
 </section>
 
-<!-- SCHEDULE (slim "next event" teaser → scroll-links into #events) -->
-<section id="schedule" class="panel">
-  <div class="sched-ghost">NEXT</div>
-  <div class="section-inner">
-    <div class="section-head" data-num="03">
-      <p class="section-label">Next Event</p>
-      <h2 class="section-title">NEXT ON<br><em>THE FLOOR</em></h2>
-    </div>
-
-    <!-- 日付・時刻は #events のアコーディオンと同じJSデータ源から描画される(重複ズレ防止) -->
-    <a class="sched-teaser" href="#events" data-open-event="vol2">
-      <div class="st-left">
-        <div class="st-badge">Next Event</div>
-        <div class="st-title" id="st-title">STRAGE VOL.2</div>
-        <div class="st-meta" id="st-meta"><span>2026/10/13(yyyy/mm/dd)</span> · 22:00–01:00 · VRChat</div>
-      </div>
-      <div class="st-cta">View Schedule <span class="btn-arrow">→</span></div>
-    </a>
-
-    <p class="section-note" style="margin-top:1.8rem;">※ 以降のイベントは順次発表予定 / More events TBA</p>
-  </div>
-</section>
-
 <hr class="section-sep">
 
 <!-- EVENTS (select an event → its schedule expands) -->
 <section id="events" class="panel">
   <div class="section-inner">
-    <div class="section-head" data-num="04">
+    <div class="section-head" data-num="03">
       <p class="section-label">Select an Event</p>
       <h2 class="section-title">EVENTS</h2>
     </div>
@@ -2195,7 +2084,7 @@
 <!-- ENTRY (出演DJ 通年募集。応募の受け口は Discord bot の /entry モーダル) -->
 <section id="entry" class="panel">
   <div class="section-inner">
-    <div class="section-head" data-num="05">
+    <div class="section-head" data-num="04">
       <p class="section-label">Open Call — Always Open</p>
       <h2 class="section-title">PLAY AT<br><em>STRAGE VR</em></h2>
     </div>
@@ -2234,7 +2123,7 @@
 <!-- JOIN -->
 <section id="join">
   <div class="section-inner">
-    <div class="section-head center" data-num="06">
+    <div class="section-head center" data-num="05">
       <p class="section-label">Community</p>
       <h2 class="section-title">JOIN THE <em>SERVER</em></h2>
     </div>
@@ -2273,7 +2162,6 @@
   <nav class="footer-nav">
     <a href="#manifesto">About</a>
     <a href="#members">Crew</a>
-    <a href="#schedule">Schedule</a>
     <a href="#events">Events</a>
     <a href="#entry">Entry</a>
     <a href="media/">Media</a>
@@ -2657,22 +2545,6 @@
         });
     });
 
-    // Schedule: ghost date drifts, rows cascade in
-    gsap.to('.sched-ghost', {
-      yPercent: 35,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#schedule',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: true
-      }
-    });
-    gsap.from('.sched-teaser', {
-      opacity: 0, y: 36, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: '.sched-teaser', start: 'top 82%', once: true }
-    });
-
     // Events: items slide in
     gsap.utils.toArray('.event-item').forEach(function (item) {
       gsap.from(item, {
@@ -2720,7 +2592,7 @@
   mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
     if (prefersReduced) return;
     gsap.utils.toArray(
-      '.mani-line, .stat, .crew-card, .section-head, .sched-teaser, .event-item, .interlude-line, .join-box, .entry-step'
+      '.mani-line, .stat, .crew-card, .section-head, .event-item, .interlude-line, .join-box, .entry-step'
     ).forEach(function (el) {
       gsap.from(el, {
         opacity: 0, y: 26, duration: 0.7, ease: 'power2.out',
