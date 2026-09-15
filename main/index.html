@@ -1399,6 +1399,90 @@
     .entry-cta .cta-btn { width: 100%; justify-content: center; }
   }
 
+  /* ── ENTRY HOW-TO MODAL ── */
+  .emodal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+  }
+  /* hidden 属性だけでは .emodal の display:flex に負けて
+     閉じている間も透明なオーバーレイがページを覆ってしまう */
+  .emodal[hidden] { display: none; }
+  .emodal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6,3,4,0.86);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+  .emodal.is-open .emodal-backdrop { opacity: 1; }
+  .emodal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--off-black);
+    border: 1px solid var(--line);
+    padding: 3rem 3rem 2.6rem;
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+  .emodal.is-open .emodal-panel { opacity: 1; transform: none; }
+  .emodal-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ice), transparent);
+  }
+  .emodal-x {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.1rem;
+    width: 38px; height: 38px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--mid);
+    cursor: pointer;
+    transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+  }
+  .emodal-x svg { width: 16px; height: 16px; }
+  .emodal-x:hover { color: var(--white); border-color: var(--ice-dim); }
+  .emodal-head { margin-bottom: 2.4rem; }
+  .emodal-title {
+    font-family: var(--jp);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    line-height: 1.3;
+    color: var(--white);
+  }
+  .emodal-body .entry-steps { margin-bottom: 2.6rem; }
+  .emodal-body .entry-step { background: var(--black); padding: 1.8rem 1.5rem 1.6rem; }
+  .emodal-body .entry-fields { margin-bottom: 2.2rem; }
+  .emodal-body .entry-notes { margin-bottom: 2.2rem; }
+  .emodal-cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+  html.emodal-lock, html.emodal-lock body { overflow: hidden; }
+  @media (max-width: 700px) {
+    .emodal { padding: 1rem 1rem; }
+    .emodal-panel { padding: 2.6rem 1.4rem 2rem; max-height: calc(100vh - 2rem); }
+    .emodal-head { margin-bottom: 1.8rem; }
+    .emodal-cta .cta-btn { width: 100%; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .emodal-backdrop, .emodal-panel { transition: none; }
+  }
+
   /* ── INTERLUDE (EVENTS → JOIN) ── */
   .interlude {
     min-height: 85vh;
@@ -1524,6 +1608,9 @@
     margin: 0 auto 2.6rem;
   }
   .cta-btn {
+    border: none;
+    cursor: pointer;
+    text-align: left;
     display: inline-flex;
     align-items: center;
     gap: 14px;
@@ -2110,50 +2197,20 @@
   <div class="section-inner">
     <div class="section-head" data-num="05">
       <p class="section-label">Open Call — Always Open</p>
-      <h2 class="section-title">PLAY AT<br><em>STRAGE</em></h2>
+      <h2 class="section-title">PLAY AT<br><em>STRAGE VR</em></h2>
     </div>
 
     <p class="entry-lead">
-      STRAGE では出演DJを<strong>通年募集</strong>しています。締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
+      STRAGE VR では出演DJを<strong>通年募集</strong>しています。締切はありません — 届いたmixから順次、各回のラインナップを組んでいきます。<br>
       UK Garage / Speed Garage / Bassline を軸に回せる方、VRChatでのDJが初めての方も歓迎です。
     </p>
 
-    <ol class="entry-steps">
-      <li class="entry-step">
-        <span class="es-no">01</span>
-        <h3 class="es-title">Discordサーバーに参加</h3>
-        <p class="es-desc">応募の受付はすべてDiscord上で行っています。まずは下のボタンからサーバーへ。</p>
-      </li>
-      <li class="entry-step">
-        <span class="es-no">02</span>
-        <h3 class="es-title">応募フォームを開く</h3>
-        <p class="es-desc">応募チャンネルにピン留めされた <b>「🎧 mixを応募する」</b> ボタンを押すとフォームが開きます。<code>/entry</code> または <code>/mix応募</code> と打っても同じです。</p>
-      </li>
-      <li class="entry-step">
-        <span class="es-no">03</span>
-        <h3 class="es-title">5項目を入力して送信</h3>
-        <p class="es-desc">その場で入力して送信するだけ。内容は運営にだけ届き、他の応募者には見えません。</p>
-      </li>
-    </ol>
-
-    <div class="entry-fields">
-      <p class="section-label">What You'll Send — 入力する項目</p>
-      <ul class="ef-list">
-        <li><span class="ef-key">DJ名</span><span class="ef-val">表記したい名前</span></li>
-        <li><span class="ef-key">VRCID</span><span class="ef-val">VRChatのユーザー名</span></li>
-        <li><span class="ef-key">SNSアカウント</span><span class="ef-val">X / Bluesky / Instagram のURL、または <em>@ユーザー名</em></span></li>
-        <li><span class="ef-key">mixのURL</span><span class="ef-val"><em>尺は1時間まで</em> — SoundCloud / Mixcloud / YouTube / Google Drive など</span></li>
-        <li><span class="ef-key">一言（任意）</span><span class="ef-val">ジャンル、意気込みなど</span></li>
-      </ul>
-    </div>
-
-    <ul class="entry-notes">
-      <li>入力内容は運営にだけ届きます。他の応募者には見えません。</li>
-      <li>間違えたら出し直しでOKです。新しいものを有効として扱います。</li>
-      <li>Google Drive のリンクは「リンクを知っている全員が閲覧可」に設定してください。</li>
-    </ul>
-
     <div class="entry-cta">
+      <button class="cta-btn" type="button" id="entry-how-open" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 15.25a1.15 1.15 0 110-2.3 1.15 1.15 0 010 2.3zm1.4-5.1c-.55.36-.65.55-.65.95v.4h-1.5v-.55c0-1.03.38-1.55 1.2-2.08.72-.47.95-.75.95-1.25 0-.62-.48-1.05-1.2-1.05-.7 0-1.2.4-1.35 1.1l-1.45-.3C9.7 8 10.7 7.15 12.2 7.15c1.65 0 2.75.92 2.75 2.3 0 1.05-.5 1.65-1.55 2.3z"/></svg>
+        <span>エントリー方法</span>
+        <span class="btn-arrow">→</span>
+      </button>
       <a class="cta-btn" href="https://discord.gg/HdpQkAUbmz" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
         <span>Entry on Discord</span>
@@ -2224,6 +2281,66 @@
   </nav>
   <div class="footer-copy">© 2026 Straight to Garage. All rights reserved.</div>
 </footer>
+
+
+<!-- ENTRY HOW-TO (「エントリー方法」ボタンから開くポップアップ) -->
+<div class="emodal" id="entry-modal" hidden>
+  <div class="emodal-backdrop" data-emodal-close></div>
+  <div class="emodal-panel" role="dialog" aria-modal="true" aria-labelledby="emodal-title">
+    <button class="emodal-x" type="button" data-emodal-close aria-label="閉じる">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+
+    <div class="emodal-head">
+      <p class="section-label">How to Entry</p>
+      <h2 class="emodal-title" id="emodal-title">エントリー方法</h2>
+    </div>
+
+    <div class="emodal-body">
+      <ol class="entry-steps">
+        <li class="entry-step">
+          <span class="es-no">01</span>
+          <h3 class="es-title">Discordサーバーに参加</h3>
+          <p class="es-desc">エントリーの受付はすべてDiscord上で行っています。まずはサーバーへご参加ください。</p>
+        </li>
+        <li class="entry-step">
+          <span class="es-no">02</span>
+          <h3 class="es-title">「mixを応募する」ボタンを押す</h3>
+          <p class="es-desc"><b>出演エントリー</b> <code>entry-for-performing</code> チャンネルに表示されている <b>「mixを応募する」</b> ボタンを押すと、入力フォームが出てきます。</p>
+        </li>
+        <li class="entry-step">
+          <span class="es-no">03</span>
+          <h3 class="es-title">項目を入力して送信</h3>
+          <p class="es-desc">フォームに下記の項目を入力して送信するだけ。内容は運営にだけ届き、他の応募者には見えません。</p>
+        </li>
+      </ol>
+
+      <div class="entry-fields">
+        <p class="section-label">What You'll Send — 入力する項目</p>
+        <ul class="ef-list">
+          <li><span class="ef-key">DJ名</span><span class="ef-val">表記したい名前</span></li>
+          <li><span class="ef-key">VRCID</span><span class="ef-val">VRChatのユーザー名</span></li>
+          <li><span class="ef-key">SNSアカウント</span><span class="ef-val">X / Bluesky / Instagram のURL、または <em>@ユーザー名</em></span></li>
+          <li><span class="ef-key">mixのURL</span><span class="ef-val"><em>尺は1時間まで</em> — SoundCloud / Mixcloud / YouTube / Google Drive など</span></li>
+          <li><span class="ef-key">一言（任意）</span><span class="ef-val">ジャンル、意気込みなど</span></li>
+        </ul>
+      </div>
+
+      <ul class="entry-notes">
+        <li>入力内容は運営にだけ届きます。他の応募者には見えません。</li>
+        <li>間違えたら出し直しでOKです。新しいものを有効として扱います。</li>
+        <li>Google Drive のリンクは「リンクを知っている全員が閲覧可」に設定してください。</li>
+      </ul>
+
+      <div class="emodal-cta">
+        <a class="cta-btn" href="https://discord.gg/HdpQkAUbmz" target="_blank" rel="noopener">
+          <span>Discordサーバーへ</span>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
@@ -2611,6 +2728,56 @@
       });
     });
   });
+
+  // ── ENTRY: 「エントリー方法」ポップアップ ──
+  (function () {
+    var modal = document.getElementById('entry-modal');
+    var opener = document.getElementById('entry-how-open');
+    if (!modal || !opener) return;
+    var panel = modal.querySelector('.emodal-panel');
+    var closeBtn = modal.querySelector('.emodal-x');
+    var lastFocus = null;
+
+    function open() {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      document.documentElement.classList.add('emodal-lock');
+      if (lenis) lenis.stop();
+      // hidden 解除を強制リフローで確定させてからクラスを足す。
+      // requestAnimationFrame だと非アクティブなタブで発火せず開いたまま透明になる
+      void modal.offsetWidth;
+      modal.classList.add('is-open');
+      panel.scrollTop = 0;
+      closeBtn.focus();
+    }
+
+    function close() {
+      modal.classList.remove('is-open');
+      document.documentElement.classList.remove('emodal-lock');
+      if (lenis) lenis.start();
+      var done = function () { modal.hidden = true; };
+      if (prefersReduced) done();
+      else window.setTimeout(done, 350);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    opener.addEventListener('click', open);
+    modal.querySelectorAll('[data-emodal-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+    // パネル内の Tab をパネル内に閉じ込める(簡易フォーカストラップ)
+    panel.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var f = panel.querySelectorAll('a[href], button:not([disabled])');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  })();
 
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();
