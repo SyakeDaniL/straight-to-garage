@@ -57,14 +57,21 @@
 
   ::selection { background: var(--ice); color: var(--black); }
 
-  ::-webkit-scrollbar { width: 10px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb {
-    background: #2d2326;
-    border: 2px solid var(--black);
-    border-radius: 5px;
+  /* スクロールバー: 「下に続く」ことが一目で分かるよう、トラックに薄い線・つまみをブランド色で常時表示 */
+  html { scrollbar-color: #b03a50 #1a0f12; }            /* Firefox */
+  ::-webkit-scrollbar { width: 14px; }
+  ::-webkit-scrollbar-track {
+    background: #140b0e;
+    border-left: 1px solid rgba(199,62,84,0.28);
   }
-  ::-webkit-scrollbar-thumb:hover { background: var(--deep); }
+  ::-webkit-scrollbar-thumb {
+    min-height: 64px;
+    background: linear-gradient(180deg, #d4566b, #96354a);
+    border: 3px solid #140b0e;
+    border-radius: 7px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #e8687d, #b03a50); }
+  ::-webkit-scrollbar-thumb:active { background: #f3eeef; }
 
   /* film grain */
   body::after {
@@ -311,6 +318,8 @@
     justify-content: center;
     /* 固定ナビと中央コンテンツ(eyebrow)の重なり防止 */
     padding-top: calc(var(--nav-h) + 1.5rem);
+    /* 下端のスクロール誘導ぶん中央コンテンツを持ち上げて重なりを防ぐ */
+    padding-bottom: 5.5rem;
   }
   .hero-video {
     position: absolute;
@@ -419,7 +428,8 @@
     /* 画像(2000x2000)は上27%・下32%が透過余白。
        余白ぶんをネガティブマージンで相殺し、ロゴの見た目サイズを保ったまま
        レイアウト上の占有高さを抑える(countdown.htmlと同じ手法) */
-    --lw: min(940px, 94vw);
+    /* 95vh: 背の低い画面でロゴが下端のスクロール誘導に被らないよう高さでも制限 */
+    --lw: min(940px, 94vw, 95vh);
     width: var(--lw);
     height: auto;
     display: block;
@@ -537,8 +547,6 @@
   .hero-cd-links a span { display: inline-block; color: var(--ice); transition: transform 0.3s var(--ease); }
   .hero-cd-links a:hover { color: var(--white); border-color: var(--ice); }
   .hero-cd-links a:hover span { transform: translateX(4px); }
-  /* 開催後表示はリンク行の分だけ背が高く、低い画面でスクロール線と重なるため線を消す */
-  #hero:has(.hero-countdown.is-done) .scroll-line { display: none; }
   /* done 表示に切り替わったらタイマー行とラベルを隠す */
   .hero-countdown.is-done .hero-cd-timer,
   .hero-countdown.is-done .hero-cd-event { display: none; }
@@ -558,26 +566,37 @@
   .hero-frame.left  { left: 2rem;  top: 50%; transform: translateY(-50%) rotate(180deg); }
   .hero-frame.right { right: 2rem; top: 50%; transform: translateY(-50%); }
 
+  /* スクロール誘導。初見でも「下に進む」と分かるよう明るめ+日本語併記、線は画面下端まで */
   .hero-bottom {
     position: absolute;
-    bottom: 2.6rem;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.28em;
-    color: var(--muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.3em;
+    color: var(--light);
     text-transform: uppercase;
+    text-decoration: none;
+  }
+  .hero-bottom:hover { color: var(--white); }
+  .hero-bottom-jp {
+    font-family: var(--jp);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: none;
+    color: var(--mid);
+    margin-top: -4px;
   }
   .scroll-line {
     width: 1px;
-    height: 42px;
-    background: rgba(199,62,84,0.15);
+    height: 48px;
+    background: rgba(199,62,84,0.3);
     position: relative;
     overflow: hidden;
   }
@@ -2122,10 +2141,11 @@
     <!-- 一旦非表示: <p class="hero-tagline">Where Culture Meets Community.</p> -->
   </div>
 
-  <div class="hero-bottom">
-    <div class="scroll-line"></div>
-    scroll
-  </div>
+  <a class="hero-bottom" href="#manifesto" aria-label="下へスクロール">
+    <span>Scroll ↓</span>
+    <span class="hero-bottom-jp">スクロールで進みます</span>
+    <span class="scroll-line"></span>
+  </a>
 </header>
 
 <!-- MANIFESTO -->

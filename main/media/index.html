@@ -51,14 +51,21 @@
 
   ::selection { background: var(--ice); color: var(--black); }
 
-  ::-webkit-scrollbar { width: 10px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb {
-    background: #2d2326;
-    border: 2px solid var(--black);
-    border-radius: 5px;
+  /* スクロールバー: 「下に続く」ことが一目で分かるよう、トラックに薄い線・つまみをブランド色で常時表示 */
+  html { scrollbar-color: #b03a50 #1a0f12; }            /* Firefox */
+  ::-webkit-scrollbar { width: 14px; }
+  ::-webkit-scrollbar-track {
+    background: #140b0e;
+    border-left: 1px solid rgba(199,62,84,0.28);
   }
-  ::-webkit-scrollbar-thumb:hover { background: var(--deep); }
+  ::-webkit-scrollbar-thumb {
+    min-height: 64px;
+    background: linear-gradient(180deg, #d4566b, #96354a);
+    border: 3px solid #140b0e;
+    border-radius: 7px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #e8687d, #b03a50); }
+  ::-webkit-scrollbar-thumb:active { background: #f3eeef; }
 
   /* film grain */
   body::after {
