@@ -17,6 +17,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://straight-to-garage.com/main/">
 <link rel="preload" as="image" href="strage-wine.webp">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Straight to Garage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -199,8 +201,104 @@
 
   .nav-actions { display: flex; align-items: stretch; align-self: stretch; gap: 0; }
 
+  /* ── MOBILE MENU ── */
+  .nav-burger {
+    display: none;
+    width: 54px;
+    margin-left: -1px;
+    background: transparent;
+    border: 1px solid var(--ice-dim);
+    cursor: pointer;
+    position: relative;
+  }
+  .nav-burger span {
+    position: absolute;
+    left: 50%;
+    width: 20px; height: 1.5px;
+    margin-left: -10px;
+    background: var(--white);
+    transition: transform 0.35s var(--ease), top 0.35s var(--ease);
+  }
+  .nav-burger span:nth-child(1) { top: calc(50% - 4px); }
+  .nav-burger span:nth-child(2) { top: calc(50% + 3px); }
+  #nav.menu-open .nav-burger span:nth-child(1) { top: 50%; transform: rotate(45deg); }
+  #nav.menu-open .nav-burger span:nth-child(2) { top: 50%; transform: rotate(-45deg); }
+  #nav.menu-open { background: transparent; border-bottom-color: transparent; transform: none; }
+
+  .mnav {
+    position: fixed;
+    inset: 0;
+    z-index: 90; /* #nav(100)の下。×ボタンはナビ側に残す */
+    background: rgba(10,6,7,0.96);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--nav-h) + 1rem) 1.5rem 2rem;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+  .mnav[hidden] { display: none; }
+  .mnav.is-open { opacity: 1; }
+  .mnav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 80% 30%, rgba(110,18,40,0.25), transparent 70%);
+    pointer-events: none;
+  }
+  .mnav-list { list-style: none; position: relative; }
+  .mnav-list li {
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+  .mnav.is-open .mnav-list li { opacity: 1; transform: none; }
+  .mnav.is-open .mnav-list li:nth-child(2) { transition-delay: 0.04s; }
+  .mnav.is-open .mnav-list li:nth-child(3) { transition-delay: 0.08s; }
+  .mnav.is-open .mnav-list li:nth-child(4) { transition-delay: 0.12s; }
+  .mnav.is-open .mnav-list li:nth-child(5) { transition-delay: 0.16s; }
+  .mnav.is-open .mnav-list li:nth-child(6) { transition-delay: 0.2s; }
+  .mnav-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 1.1rem;
+    padding: 0.9rem 0.2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 11vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.25s, padding-left 0.3s var(--ease);
+  }
+  .mnav-list a:hover, .mnav-list a:focus-visible { color: var(--ice); padding-left: 0.6rem; }
+  .mnav-no {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--deep);
+    min-width: 1.6rem;
+  }
+  .mnav-foot {
+    position: relative;
+    margin-top: 2.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  html.mnav-lock, html.mnav-lock body { overflow: hidden; }
+
   @media (max-width: 1100px) {
     .nav-links { display: none; }
+    .nav-burger { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mnav, .mnav-list li, .nav-burger span { transition: none; }
   }
 
   /* ── HERO (pinned) ── */
@@ -396,15 +494,51 @@
       -webkit-text-fill-color: transparent;
     }
   }
-  .hero-cd-done {
-    display: none;
+  .hero-cd-done { display: none; }
+  .hero-cd-thanks {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  .hero-cd-thanks span { color: var(--ice); }
+  .hero-cd-next {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(2.2rem, 6vw, 3.4rem);
     line-height: 1;
     letter-spacing: 0.1em;
     color: var(--white);
   }
-  .hero-cd-done em { color: var(--ice); font-style: normal; }
+  .hero-cd-next em {
+    color: var(--ice);
+    font-style: normal;
+    text-shadow: 0 0 26px rgba(199,62,84,0.45);
+  }
+  .hero-cd-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.8rem;
+    margin-top: 1.3rem;
+  }
+  .hero-cd-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--light);
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--ice-dim);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .hero-cd-links a span { display: inline-block; color: var(--ice); transition: transform 0.3s var(--ease); }
+  .hero-cd-links a:hover { color: var(--white); border-color: var(--ice); }
+  .hero-cd-links a:hover span { transform: translateX(4px); }
+  /* 開催後表示はリンク行の分だけ背が高く、低い画面でスクロール線と重なるため線を消す */
+  #hero:has(.hero-countdown.is-done) .scroll-line { display: none; }
   /* done 表示に切り替わったらタイマー行とラベルを隠す */
   .hero-countdown.is-done .hero-cd-timer,
   .hero-countdown.is-done .hero-cd-event { display: none; }
@@ -493,6 +627,32 @@
     background:
       radial-gradient(ellipse 75% 65% at 50% 50%, transparent 35%, rgba(10,6,7,0.8) 80%, rgba(10,6,7,0.98) 100%),
       linear-gradient(to bottom, rgba(10,6,7,0.92) 0%, transparent 18%, transparent 82%, rgba(10,6,7,0.92) 100%);
+  }
+  /* 02〜05と揃えたセクション番号(ピン留め中も左上に固定で見える) */
+  .mani-head {
+    position: absolute;
+    top: calc(var(--nav-h) + 2.4rem);
+    left: 4rem;
+    z-index: 1;
+  }
+  .mani-head::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -0.55em;
+    left: -0.4rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(7rem, 16vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(199,62,84,0.07);
+    pointer-events: none;
+    user-select: none;
+  }
+  .mani-head .section-label { position: relative; margin-bottom: 0; }
+  @media (max-width: 900px) {
+    .mani-head { position: relative; top: auto; left: auto; margin: 0 0 3rem; }
+    .mani-pin { flex-direction: column; padding: calc(var(--nav-h) + 3rem) 1.5rem 4rem; }
+    .mani-head::before { left: -0.2rem; }
   }
   .mani-lines {
     position: relative;
@@ -730,6 +890,33 @@
     letter-spacing: 0.2em;
     color: var(--ice-dim);
   }
+  /* 直近イベントの出演者(JSがEVENTSの先頭イベントのタイムテーブルから付与) */
+  .crew-badge {
+    position: absolute;
+    top: 1.05rem; left: 1.2rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: rgba(10,6,7,0.72);
+    border: 1px solid var(--ice-dim);
+    padding: 5px 10px;
+  }
+  .crew-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ice);
+    box-shadow: 0 0 8px rgba(199,62,84,0.8);
+  }
+  .crew-card.is-featured { border-color: var(--ice-dim); }
+  .crew-card.is-featured .crew-photo { filter: grayscale(0.35) contrast(1.05); }
+  .crew-card.is-featured:hover .crew-photo { filter: grayscale(0) contrast(1); }
   .crew-info {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -1135,6 +1322,38 @@
     color: var(--light);
   }
   .ed-val strong { color: var(--ice); font-weight: 500; }
+  /* 詳細右側のフライヤー。押すと原寸を開く */
+  .event-detail-inner:has(.ed-flyer) { grid-template-columns: 150px 1fr 150px; }
+  .ed-flyer {
+    position: relative;
+    display: block;
+    border: 1px solid var(--line);
+    background: var(--dark);
+    overflow: hidden;
+    transform: rotate(1.5deg);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.5);
+    transition: transform 0.4s var(--ease), border-color 0.3s, box-shadow 0.4s var(--ease);
+  }
+  .ed-flyer img { display: block; width: 100%; height: auto; }
+  .ed-flyer:hover {
+    transform: rotate(0deg) translateY(-4px);
+    border-color: var(--ice-dim);
+    box-shadow: 0 18px 38px rgba(0,0,0,0.55), 0 0 26px rgba(199,62,84,0.18);
+  }
+  .ed-flyer-cap {
+    position: absolute;
+    right: 0; bottom: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: rgba(10,6,7,0.78);
+    padding: 4px 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .ed-flyer:hover .ed-flyer-cap, .ed-flyer:focus-visible .ed-flyer-cap { opacity: 1; }
   .ed-tba {
     font-family: 'Space Mono', monospace;
     font-size: 0.7rem;
@@ -1794,7 +2013,10 @@
     .ent-jp::before { width: 12px; margin-right: 7px; }
     .event-name { font-size: 1.6rem; }
     .event-badge { display: none; }
-    .event-detail-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 1.2rem; }
+    .event-detail-inner,
+    .event-detail-inner:has(.ed-flyer) { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 0.6rem 1.2rem; }
+    .ed-flyer { width: min(200px, 60%); transform: none; }
+    .ed-flyer-cap { opacity: 1; }
     .ed-timecol { padding-left: 1rem; }
     .ed-body { display: flex; flex-direction: column; gap: 1.1rem; }
     .ed-row { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
@@ -1835,8 +2057,24 @@
   <div class="nav-actions">
     <a class="nav-cta" href="media/">Media</a>
     <a class="nav-cta" href="#join">Discord</a>
+    <button class="nav-burger" type="button" id="nav-burger" aria-label="メニューを開く" aria-expanded="false" aria-controls="mnav">
+      <span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU (1100px以下で .nav-links の代わりに使う) -->
+<div class="mnav" id="mnav" hidden>
+  <ol class="mnav-list">
+    <li><a href="#manifesto"><span class="mnav-no">01</span>About</a></li>
+    <li><a href="#members"><span class="mnav-no">02</span>Crew</a></li>
+    <li><a href="#events"><span class="mnav-no">03</span>Events</a></li>
+    <li><a href="#entry"><span class="mnav-no">04</span>Entry</a></li>
+    <li><a href="#join"><span class="mnav-no">05</span>Community</a></li>
+    <li><a href="media/"><span class="mnav-no">↗</span>Media</a></li>
+  </ol>
+  <p class="mnav-foot">#STRAGEVR — UK Garage from VRChat</p>
+</div>
 
 <!-- HERO -->
 <header id="hero">
@@ -1870,7 +2108,15 @@
         <span class="hero-cd-sep">:</span>
         <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-s">00</span><span class="hero-cd-label">Sec</span></div>
       </div>
-      <p class="hero-cd-done" id="hero-cd-done">SEE YOU ON <em>THE FLOOR.</em></p>
+      <!-- 開催後(次回未定)の表示。次回が決まったら OPENING を書き換えればカウントダウンに戻る -->
+      <div class="hero-cd-done" id="hero-cd-done">
+        <p class="hero-cd-thanks"><span id="hero-cd-last">STRAGE VOL.2</span> — Thank you for coming</p>
+        <p class="hero-cd-next">NEXT EVENT <em>TBA</em></p>
+        <div class="hero-cd-links">
+          <a href="#events">Event Archive <span>→</span></a>
+          <a href="media/">Flyers &amp; Mixes <span>→</span></a>
+        </div>
+      </div>
     </div>
 
     <!-- 一旦非表示: <p class="hero-tagline">Where Culture Meets Community.</p> -->
@@ -1887,6 +2133,9 @@
   <div class="mani-pin">
     <div class="mani-bg"></div>
     <div class="mani-shade"></div>
+    <div class="mani-head" data-num="01">
+      <p class="section-label">About — The Collective</p>
+    </div>
     <div class="mani-lines">
       <p class="mani-line en">THE <em>SOUND</em> OF</p>
       <p class="mani-line en">THE UNDERGROUND…</p>
@@ -2053,11 +2302,15 @@
               <div class="ed-tz">JST・VRChat</div>
             </div>
             <div class="ed-body">
-              <div class="ed-row"><span class="ed-key">Date(yyyy/mm/dd)</span><span class="ed-val"><strong>2026/10/13</strong> (Tue)</span></div>
+              <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>2026/10/13</strong> (Tue)</span></div>
               <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat — Group+ (STRAGE.5862)</span></div>
               <div class="ed-row"><span class="ed-key">VJ</span><span class="ed-val">CerllaDe / Enma</span></div>
               <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STG002。全4枠、各45分持ち回り。</span></div>
             </div>
+            <a class="ed-flyer" href="media/img/flyer-20261018070741.jpg" target="_blank" rel="noopener" aria-label="STRAGE VOL.2 のフライヤーを開く">
+              <img src="img/flyer-vol2.webp" alt="STRAGE VOL.2 フライヤー" width="360" height="509" loading="lazy" decoding="async">
+              <span class="ed-flyer-cap">Flyer ↗</span>
+            </a>
           </div>
           <div class="ed-lineup">
             <span class="ed-key">Timetable</span>
@@ -2125,10 +2378,15 @@
               <div class="ed-tz">JST・VRChat</div>
             </div>
             <div class="ed-body">
-              <div class="ed-row"><span class="ed-key">Date(yyyy/mm/dd)</span><span class="ed-val"><strong>2026/09/08</strong> (Tue)</span></div>
-              <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat</span></div>
-              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STRAGE 始動を飾るオープニングイベント。全5枠、各45分持ち回りで駆け抜けます。</span></div>
+              <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>2026/09/08</strong> (Tue)</span></div>
+              <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat — Group+ (STRAGE.5862)</span></div>
+              <div class="ed-row"><span class="ed-key">VJ</span><span class="ed-val">CerllaDe / Enma</span></div>
+              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STG001。STRAGE 始動を飾るオープニングイベント。全5枠、各45分持ち回りで駆け抜けました。</span></div>
             </div>
+            <a class="ed-flyer" href="media/img/flyer-20260827003046.jpg" target="_blank" rel="noopener" aria-label="STRAIGHT TO GARAGE OPENING EVENT のフライヤーを開く">
+              <img src="img/flyer-opening.webp" alt="STRAIGHT TO GARAGE OPENING EVENT フライヤー" width="360" height="509" loading="lazy" decoding="async">
+              <span class="ed-flyer-cap">Flyer ↗</span>
+            </a>
           </div>
           <div class="ed-lineup">
             <span class="ed-key">Timetable</span>
@@ -2397,6 +2655,8 @@
     if (!wrap) return;
     var evtEl = document.getElementById('hero-cd-event');
     if (evtEl) evtEl.textContent = OPENING.name;
+    var lastEl = document.getElementById('hero-cd-last');
+    if (lastEl) lastEl.textContent = OPENING.name;
     var D = document.getElementById('hcd-d'), H = document.getElementById('hcd-h'),
         M = document.getElementById('hcd-m'), S = document.getElementById('hcd-s');
     var targetMs = new Date(OPENING.target).getTime();
@@ -2435,6 +2695,29 @@
       ? '開催まで あと<em>' + days + '</em>日'
       : 'まもなく<em>開催</em>';
     el.classList.add('is-shown');
+  })();
+
+  // ── Crew: 直近イベント(EVENTSの先頭)に出演したメンバーにバッジを付ける ──
+  // 開催前なら「Next」、開催後なら「Played」。タイムテーブルを更新すれば自動で追従する
+  (function () {
+    var latest = document.querySelector('#events-list .event-item');
+    if (!latest) return;
+    var names = Array.prototype.map.call(
+      latest.querySelectorAll('.tl-slot:not(.tl-close) .tl-name'),
+      function (n) { return n.textContent.trim().toLowerCase(); });
+    if (!names.length) return;
+    var evName = latest.querySelector('.event-name').textContent.trim();
+    var upcoming = !!latest.querySelector('.badge-upcoming');
+    var label = (upcoming ? 'Next — ' : 'Played — ') + evName.replace(/^STRAGE\s*/i, '');
+    document.querySelectorAll('.crew-card:not(.cta)').forEach(function (card) {
+      var nm = card.querySelector('.crew-name');
+      if (!nm || names.indexOf(nm.textContent.trim().toLowerCase()) < 0) return;
+      card.classList.add('is-featured');
+      var b = document.createElement('div');
+      b.className = 'crew-badge';
+      b.textContent = label;
+      card.appendChild(b);
+    });
   })();
 
   // ── Events accordion (select an event → its schedule expands) ──
@@ -2484,6 +2767,44 @@
         var target = list.querySelector('.event-item[data-event="' + id + '"]');
         if (target) setTimeout(function () { open(target); }, 620);
       });
+    });
+  })();
+
+  // ── Mobile menu ──
+  // GSAPが無い環境でも動くようフォールバックより前に置く。
+  // lenis は下で代入される(var の巻き上げでクリック時には参照できる)
+  (function () {
+    var btn = document.getElementById('nav-burger');
+    var menu = document.getElementById('mnav');
+    if (!btn || !menu) return;
+    var closeTimer = null;
+    function setOpen(on) {
+      clearTimeout(closeTimer);
+      nav.classList.toggle('menu-open', on);
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'メニューを閉じる' : 'メニューを開く');
+      document.documentElement.classList.toggle('mnav-lock', on);
+      if (on) {
+        menu.hidden = false;
+        void menu.offsetWidth;  // hidden解除を確定させてからフェード
+        menu.classList.add('is-open');
+        if (lenis) lenis.stop();
+      } else {
+        menu.classList.remove('is-open');
+        if (lenis) lenis.start();
+        closeTimer = setTimeout(function () { menu.hidden = true; }, prefersReduced ? 0 : 300);
+      }
+    }
+    btn.addEventListener('click', function () { setOpen(menu.hidden || !menu.classList.contains('is-open')); });
+    // リンクを押したら先に閉じる(Lenis を再開してからアンカースクロールさせる)
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { setOpen(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); }
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 1100 && !menu.hidden) setOpen(false);
     });
   })();
 
