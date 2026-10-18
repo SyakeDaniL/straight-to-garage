@@ -8,8 +8,15 @@
 <meta property="og:title" content="Straight to Garage">
 <meta property="og:description" content="UK Garageを愛する人が集まるVRChatサウンドコレクティブ。">
 <meta property="og:type" content="website">
-<!-- ▼ 公開時に絶対URLへ差し替え(例 https://example.com/strage.png) -->
-<meta property="og:image" content="strage.png">
+<meta property="og:url" content="https://straight-to-garage.com/main/">
+<meta property="og:site_name" content="Straight to Garage">
+<!-- SNSカードは絶対URL必須(相対パスだとX/Discordで画像が出ない)。1200x630 -->
+<meta property="og:image" content="https://straight-to-garage.com/main/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://straight-to-garage.com/main/">
+<link rel="preload" as="image" href="strage-wine.webp">
 <title>Straight to Garage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -320,7 +327,7 @@
     display: block;
     margin: calc(var(--lw) * -0.24) auto calc(var(--lw) * -0.27);
     position: relative;
-    /* 色味はstrage-wine.pngに焼き込み済み(実行時filterはコスト高のため不使用) */
+    /* 色味はstrage-wine.webpに焼き込み済み(実行時filterはコスト高のため不使用) */
   }
 
   .hero-tagline {
@@ -1849,7 +1856,7 @@
   <div class="hero-center">
     <p class="hero-eyebrow">Sound Collective — VRChat</p>
     <div class="hero-logo">
-      <img src="strage-wine.png" alt="Straight to Garage">
+      <img src="strage-wine.webp" alt="Straight to Garage" width="1200" height="1200" fetchpriority="high">
     </div>
 
     <div class="hero-countdown" id="hero-countdown">
@@ -1997,9 +2004,9 @@
         </div>
       </article>
 
-      <a class="crew-card cta" href="#join">
+      <a class="crew-card cta" href="#entry">
         <div class="crew-cta-big">AND <em>YOU?</em></div>
-        <div class="crew-cta-sub">Join via Discord →</div>
+        <div class="crew-cta-sub">DJ Entry Open →</div>
       </a>
 
     </div>
@@ -2255,11 +2262,10 @@
 
     <div class="join-box">
       <p class="join-catch">READY TO HIT <em>THE FLOOR?</em></p>
-      <!-- ▼ ここの本文はあとで差し替え(仮テキスト) -->
       <p class="join-message">
         UK Garageを愛する人が集まる場所。<br>
         音楽を語り、MIXをシェアし、同じ熱量を持つ仲間と繋がる。<br>
-       当イベントでDJをしたい方も、情報交換をしたい方も。<br>
+        当イベントでDJをしたい方も、情報交換をしたい方も。<br>
         お気軽にこちらからサーバー・グループへご参加ください。
       </p>
       <div class="join-actions">
@@ -2268,7 +2274,6 @@
         <span>Join Discord Server</span>
         <span class="btn-arrow">→</span>
       </a>
-      <!-- ▼ href をVRChatグループのURL(https://vrchat.com/home/group/grp_xxx)に差し替えてください -->
       <a class="cta-btn vrc" href="https://vrchat.com/home/group/grp_88d53329-1533-427c-8b86-1388ff189109" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 5.5h-17A2.5 2.5 0 0 0 1 8v7a2.5 2.5 0 0 0 2.5 2.5h4.1c.78 0 1.5-.36 1.97-.98l1.03-1.36a.5.5 0 0 1 .8 0l1.03 1.36c.47.62 1.19.98 1.97.98h6.1A2.5 2.5 0 0 0 23 15V8a2.5 2.5 0 0 0-2.5-2.5zM7.25 13.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm9.5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
         <span>Join VRChat Group</span>
@@ -2590,8 +2595,6 @@
         { y: -50, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-countdown', { y: 0, opacity: 1 },
         { y: 40, opacity: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0)
-      .fromTo('.hero-video', { opacity: 0.25, scale: 1 },
-        { opacity: 0.06, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-bg', { opacity: 0.5, scale: 1 },
         { opacity: 0.12, scale: 1.1, duration: 1, ease: 'none', immediateRender: false }, 0)
       .fromTo('.hero-grid', { scale: 1, opacity: 0.3 },
