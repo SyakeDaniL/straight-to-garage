@@ -1,6 +1,11 @@
 {
   "flyers": [
     {
+      "img": "img/flyer-20261018070741.jpg",
+      "title": "STRAGE FLYER Vol.2",
+      "date": "20261013"
+    },
+    {
       "img": "img/flyer-20260827003046.png",
       "title": "STRAGE FLYER GENERAL",
       "date": "202608"
