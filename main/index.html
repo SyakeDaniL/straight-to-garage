@@ -2117,7 +2117,7 @@
     </div>
 
     <div class="hero-countdown" id="hero-countdown">
-      <p class="hero-cd-event" id="hero-cd-event">STRAGE VOL.2</p>
+      <p class="hero-cd-event" id="hero-cd-event">STRAGE VOL.3</p>
       <div class="hero-cd-timer" id="hero-cd-timer" role="timer" aria-label="Countdown to next event">
         <div class="hero-cd-unit"><span class="hero-cd-num" id="hcd-d">00</span><span class="hero-cd-label">Days</span></div>
         <span class="hero-cd-sep">:</span>
@@ -2129,7 +2129,7 @@
       </div>
       <!-- 開催後(次回未定)の表示。次回が決まったら OPENING を書き換えればカウントダウンに戻る -->
       <div class="hero-cd-done" id="hero-cd-done">
-        <p class="hero-cd-thanks"><span id="hero-cd-last">STRAGE VOL.2</span> — Thank you for coming</p>
+        <p class="hero-cd-thanks"><span id="hero-cd-last">STRAGE VOL.3</span> — Thank you for coming</p>
         <p class="hero-cd-next">NEXT EVENT <em>TBA</em></p>
         <div class="hero-cd-links">
           <a href="#events">Event Archive <span>→</span></a>
@@ -2295,6 +2295,79 @@
     <p class="events-hint">イベントを選ぶとスケジュールが開きます — Tap an event to reveal its schedule</p>
 
     <div class="events-list" id="events-list">
+
+      <!-- 次回 -->
+      <div class="event-item is-next" data-event="vol3">
+        <button class="event-row" type="button" aria-expanded="false" aria-controls="ed-vol3">
+          <div class="event-date-box">
+            <div class="event-day">10</div>
+            <div class="event-month">NOV 2026</div>
+          </div>
+          <div class="event-info">
+            <div class="event-next-tag"><span class="ent-dot" aria-hidden="true"></span>Next<span class="ent-jp">次回開催</span></div>
+            <div class="event-name">STRAGE VOL.3</div>
+            <div class="event-meta">
+              <div class="event-meta-item">TIME(JST) <span>22:00–</span></div>
+              <div class="event-meta-item">VENUE <span>VRChat</span></div>
+            </div>
+            <p class="event-dleft" id="event-dleft">開催まで あと<em>--</em>日</p>
+          </div>
+          <div class="event-right">
+            <div class="event-badge badge-upcoming">Upcoming</div>
+            <svg class="event-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="event-detail" id="ed-vol3" role="region">
+          <div class="event-detail-inner">
+            <div class="ed-timecol">
+              <div class="ed-time">22:00–</div>
+              <div class="ed-tz">JST・VRChat</div>
+            </div>
+            <div class="ed-body">
+              <div class="ed-row"><span class="ed-key">Date</span><span class="ed-val"><strong>2026/11/10</strong> (Tue)</span></div>
+              <div class="ed-row"><span class="ed-key">Venue</span><span class="ed-val">VRChat — Group+ (STRAGE.5862)</span></div>
+              <div class="ed-row"><span class="ed-key">Guest DJ</span><span class="ed-val">komezi / monkin</span></div>
+              <div class="ed-row"><span class="ed-key">VJ</span><span class="ed-val">naporitan (Guest) / Enma</span></div>
+              <div class="ed-row"><span class="ed-key">Note</span><span class="ed-val">STG003。タイムテーブルは近日発表 — Timetable coming soon.</span></div>
+            </div>
+            <a class="ed-flyer" href="img/flyer-vol3.jpg" target="_blank" rel="noopener" aria-label="STRAGE VOL.3 のフライヤーを開く">
+              <img src="img/flyer-vol3.webp" alt="STRAGE VOL.3 フライヤー" width="360" height="509" loading="lazy" decoding="async">
+              <span class="ed-flyer-cap">Flyer ↗</span>
+            </a>
+          </div>
+          <div class="ed-lineup">
+            <span class="ed-key">Line-up (Timetable TBA)</span>
+            <div class="ed-timeline">
+              <div class="tl-track">
+                <div class="tl-slot">
+                  <span class="tl-no">DJ</span>
+                  <span class="tl-range"><em>TBA</em></span>
+                  <span class="tl-name">komezi</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">DJ</span>
+                  <span class="tl-range"><em>TBA</em></span>
+                  <span class="tl-name">monkin</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">DJ</span>
+                  <span class="tl-range"><em>TBA</em></span>
+                  <span class="tl-name">jokin0126</span>
+                  <span class="tl-bar"></span>
+                </div>
+                <div class="tl-slot">
+                  <span class="tl-no">DJ</span>
+                  <span class="tl-range"><em>TBA</em></span>
+                  <span class="tl-name">Stella</span>
+                  <span class="tl-bar"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- 開催済み -->
       <div class="event-item" data-event="vol2">
@@ -2665,8 +2738,8 @@
 
   // ── Shared event data (single source of truth for the next event) ──
   var OPENING = {
-    name: 'STRAGE VOL.2',
-    target: '2026-10-13T22:00:00+09:00'
+    name: 'STRAGE VOL.3',
+    target: '2026-11-10T22:00:00+09:00'
   };
 
   // ── Hero countdown (pre-release hype; runs with or without GSAP) ──
@@ -2771,7 +2844,7 @@
     });
 
     // 最新イベントはデフォルトで開いた状態にする
-    var latest = list.querySelector('.event-item[data-event="vol2"]') || items[0];
+    var latest = list.querySelector('.event-item[data-event="vol3"]') || items[0];
     if (latest) open(latest);
 
     // 開いたパネル内の高さ変化(フォント読込・リサイズ)に追従
